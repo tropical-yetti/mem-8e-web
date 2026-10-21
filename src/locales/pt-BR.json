@@ -13,13 +13,13 @@
   "simulador": {
     "titulo": "Simulador da memória",
     "descricao": "Coloque um endereço no barramento de endereços e veja os decodificadores escolherem uma posição entre 256, o dado chegar ao barramento de dados e os sinais de controle e de tempo trabalharem em conjunto.",
-    "emConstrucao": "Em construção: esta é a versão 0.1, só com a estrutura do site.",
+    "emConstrucao": "Em construção (versão {versao}): o núcleo da memória já existe, e a tela vem nas próximas versões.",
     "proximos": "Próximas etapas",
     "etapas": [
-      "Núcleo: memória 256 × 8 em matriz 16 × 16, barramentos e leitura e escrita.",
       "MAR, MDR e memória editáveis, com leitura e escrita passo a passo.",
       "Vista por dentro: decodificadores, matriz e buffers, com linha e coluna acesas.",
-      "Diagrama de tempo com o clock da CPU e wait states."
+      "Diagrama de tempo com o clock da CPU e wait states.",
+      "Sinais de controle na mão e experimentos \"e se…?\", como contenção no barramento."
     ],
     "lerPlano": "Ler o plano completo do projeto"
   },

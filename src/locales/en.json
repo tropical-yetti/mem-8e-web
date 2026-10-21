@@ -13,13 +13,13 @@
   "simulador": {
     "titulo": "Memory simulator",
     "descricao": "Put an address on the address bus and watch the decoders pick one location out of 256, the data reach the data bus, and the control and timing signals work together.",
-    "emConstrucao": "Under construction: this is version 0.1, with only the site structure.",
+    "emConstrucao": "Under construction (version {versao}): the memory core is in place, and the screen comes in the next versions.",
     "proximos": "Next steps",
     "etapas": [
-      "Core: 256 × 8 memory as a 16 × 16 array, buses, read and write.",
       "Editable MAR, MDR and memory, with step-by-step read and write.",
       "Inside view: decoders, array and buffers, with the active row and column lit.",
-      "Timing diagram with the CPU clock and wait states."
+      "Timing diagram with the CPU clock and wait states.",
+      "Control signals by hand and \"what if…?\" experiments, such as bus contention."
     ],
     "lerPlano": "Read the full project plan (in Portuguese)"
   },
