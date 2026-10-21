@@ -1,0 +1,43 @@
+{
+  "app": {
+    "titulo": "MEM-8E Web",
+    "subtitulo": "Como a memória do computador funciona por dentro"
+  },
+  "nav": {
+    "simulador": "Simulador",
+    "sobre": "Sobre"
+  },
+  "idioma": {
+    "rotulo": "Idioma"
+  },
+  "simulador": {
+    "titulo": "Simulador da memória",
+    "descricao": "Coloque um endereço no barramento de endereços e veja os decodificadores escolherem uma posição entre 256, o dado chegar ao barramento de dados e os sinais de controle e de tempo trabalharem em conjunto.",
+    "emConstrucao": "Em construção: esta é a versão 0.1, só com a estrutura do site.",
+    "proximos": "Próximas etapas",
+    "etapas": [
+      "Núcleo: memória 256 × 8 em matriz 16 × 16, barramentos e leitura e escrita.",
+      "MAR, MDR e memória editáveis, com leitura e escrita passo a passo.",
+      "Vista por dentro: decodificadores, matriz e buffers, com linha e coluna acesas.",
+      "Diagrama de tempo com o clock da CPU e wait states."
+    ],
+    "lerPlano": "Ler o plano completo do projeto"
+  },
+  "sobre": {
+    "titulo": "Sobre o MEM-8E Web",
+    "historia": "O MEM-8E Web abre a caixa-preta da memória: mostra o que acontece entre o endereço chegar ao barramento de endereços e o dado sair (ou entrar) pelo barramento de dados.",
+    "familiaTitulo": "Família 8E",
+    "familia": "É um projeto irmão do {cpu8eWeb}, versão para navegador do simulador {cpu8e}, criado no IESB por {autor} e colaboradores. A memória segue a mesma arquitetura de 8 bits e os mesmos nomes (MAR, MDR, BE, BD).",
+    "versaoTitulo": "Esta versão",
+    "licencaTitulo": "Licença",
+    "licenca": "Este programa é software livre: você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU, conforme publicada pela Free Software Foundation, versão 3 da licença ou (a seu critério) qualquer versão posterior.",
+    "garantia": "Este programa é distribuído na esperança de que seja útil, mas SEM NENHUMA GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou de ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.",
+    "lerLicenca": "Ler o texto completo da licença (GPL-3.0)"
+  },
+  "rodape": {
+    "copyright": "© 2026 colaboradores do MEM-8E Web",
+    "licenca": "Licença GPL-3.0-or-later, sem garantia",
+    "codigoFonte": "Código-fonte",
+    "versao": "Versão {versao}"
+  }
+}

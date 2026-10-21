@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Decisão de arquitetura (ADR)
+description: Proponha ou discuta uma decisão de arquitetura.
+title: 'ADR NNNN: '
+labels: ['adr']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A ADR em si fica em `docs/adr/`, num pull request. Esta issue é o lugar da discussão.
+        Veja o processo em docs/adr/README.md.
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto e motivação
+      description: Qual problema esta decisão resolve?
+    validations:
+      required: true
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: Cada alternativa com vantagens e desvantagens.
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Proposta
+      description: O que você propõe e por quê.
+    validations:
+      required: true
+  - type: textarea
+    id: impactos
+    attributes:
+      label: Impactos
+      description: Código, testes, usuário, riscos.
