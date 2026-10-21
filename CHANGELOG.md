@@ -7,6 +7,24 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-21 — Primeira tela: vista caixa-preta
+
+- Painel com a CPU (MAR, MDR, CS, RD, WR), os barramentos e a memória. O MAR
+  e o MDR são editados em hexadecimal ou bit a bit, e os bits do MAR mostram
+  qual parte escolhe a linha e qual escolhe a coluna.
+- Os fios seguem o código dos 4 níveis: 1 cheio na cor do fio (BE verde,
+  BD ciano, controle amarelo, como no CPU-8E), 0 fino e apagado, Z tracejado
+  e X vermelho. As setas do BD mostram quem está dirigindo.
+- CS, RD, WR e "MDR → BD" ligam e desligam à mão, o que permite provocar
+  conflito no barramento ou uma escrita com o BD solto.
+- Conteúdo da memória numa grade 16 × 16 (linha × coluna): com o CS ligado,
+  acendem a linha e a coluna escolhidas pelos decodificadores. Um clique põe o
+  endereço no MAR; dois cliques, Enter ou um dígito hexadecimal editam a
+  posição. A grade inteira funciona pelo teclado.
+- Leitura e escrita fase a fase, com a explicação de cada fase.
+- A memória começa com um valor diferente em cada posição, para que cada
+  leitura mostre um dado reconhecível.
+
 ### 2026-10-21 — Núcleo da memória
 
 - Sinais de 4 valores (`0`, `1`, `Z`, `X`) com portas NOT, AND, OR, buffer

@@ -12,16 +12,8 @@
   },
   "simulador": {
     "titulo": "Memory simulator",
-    "descricao": "Put an address on the address bus and watch the decoders pick one location out of 256, the data reach the data bus, and the control and timing signals work together.",
-    "emConstrucao": "Under construction (version {versao}): the memory core is in place, and the screen comes in the next versions.",
-    "proximos": "Next steps",
-    "etapas": [
-      "Editable MAR, MDR and memory, with step-by-step read and write.",
-      "Inside view: decoders, array and buffers, with the active row and column lit.",
-      "Timing diagram with the CPU clock and wait states.",
-      "Control signals by hand and \"what if…?\" experiments, such as bus contention."
-    ],
-    "lerPlano": "Read the full project plan (in Portuguese)"
+    "intro": "Flip the MAR bits and watch the selected row and column in the grid. Turn CS, RD and WR on by hand, or use Read and Write to watch a transaction phase by phase.",
+    "reiniciar": "Clear memory and registers"
   },
   "sobre": {
     "titulo": "About MEM-8E Web",
@@ -39,5 +31,108 @@
     "licenca": "GPL-3.0-or-later license, no warranty",
     "codigoFonte": "Source code",
     "versao": "Version {versao}"
+  },
+  "registrador": {
+    "valor": "{nome} in hexadecimal",
+    "bits": "{nome} bits",
+    "bit": "{nome} = {valor}"
+  },
+  "painel": {
+    "titulo": "CPU, buses and memory",
+    "cpu": "CPU",
+    "memoria": "Memory",
+    "be": "AB",
+    "bd": "DB",
+    "linha": "row {n}",
+    "coluna": "column {n}",
+    "mdrNoBd": "MDR → DB",
+    "dicas": {
+      "cs": "enables the memory",
+      "rd": "read",
+      "wr": "write"
+    },
+    "dirige": {
+      "cpu": "{valor}, driven by the CPU",
+      "memoria": "{valor}, driven by the memory",
+      "ambos": "{valor}, in contention: CPU and memory both driving",
+      "ninguem": "floating, nobody driving"
+    },
+    "resumo": "AB = {be}. DB: {bd}. CS = {cs}, RD = {rd}, WR = {wr}."
+  },
+  "legenda": {
+    "titulo": "Wire levels",
+    "1": "defined (bus carries a value)",
+    "0": "off",
+    "Z": "floating, nobody driving",
+    "X": "undefined or in contention"
+  },
+  "grade": {
+    "titulo": "Memory contents (row × column)",
+    "ajuda": "Click a location to put its address in the MAR. Double-click, Enter or a hex digit edits its contents. With CS on, the row and column chosen by the decoders light up.",
+    "linhaColuna": "Row \\ column",
+    "celula": "Address {endereco}: {valor}",
+    "editar": "New value for address {endereco}"
+  },
+  "transacao": {
+    "titulo": "Step-by-step transaction",
+    "inicio": "Pick an address in the MAR and start a read or a write. To write, put the data in the MDR first.",
+    "ler": {
+      "nome": "Read phases",
+      "endereco": {
+        "nome": "Address on AB",
+        "texto": "The MAR puts address {endereco} on the address bus (AB). The memory is still off: CS is 0, no row is selected."
+      },
+      "selecao": {
+        "nome": "CS on",
+        "texto": "The CPU turns CS on and the decoders respond: A7–A4 select row {linha} and A3–A0 select column {coluna}. The data reaches the output buffers, but they are still off: the DB is still floating."
+      },
+      "saida": {
+        "nome": "RD on",
+        "texto": "The CPU turns RD on. With CS and RD at 1, the output buffers turn on and the data {dado} appears on the data bus (DB). Now the memory is driving the DB."
+      },
+      "captura": {
+        "nome": "MDR latches",
+        "texto": "The MDR copies what is on the DB: MDR = {mdr}."
+      },
+      "liberacao": {
+        "nome": "Release",
+        "texto": "RD and CS go back to 0. The buffers turn off and the DB floats (Z), ready for the next transaction."
+      },
+      "fim": "Read done: M[{endereco}] → MDR = {mdr}."
+    },
+    "escrever": {
+      "nome": "Write phases",
+      "endereco": {
+        "nome": "Address on AB",
+        "texto": "The MAR puts address {endereco} on the address bus (AB). The memory is still off: CS is 0."
+      },
+      "dado": {
+        "nome": "Data on DB",
+        "texto": "The CPU turns its buffers on and puts the MDR ({mdr}) on the data bus. In a write, the CPU drives the DB, not the memory."
+      },
+      "selecao": {
+        "nome": "CS on",
+        "texto": "The CPU turns CS on: the decoders select row {linha} and column {coluna}. Nothing is stored yet."
+      },
+      "escrita": {
+        "nome": "WR on",
+        "texto": "The CPU turns WR on. Only the cell where row {linha} meets column {coluna} copies the DB: M[{endereco}] = {mdr}."
+      },
+      "fimEscrita": {
+        "nome": "WR off",
+        "texto": "WR goes back to 0. The cell keeps the value, even if the DB changes afterwards."
+      },
+      "liberacao": {
+        "nome": "Release",
+        "texto": "CS goes back to 0 and the CPU releases the DB, which goes to Z."
+      },
+      "fim": "Write done: M[{endereco}] = {mdr}."
+    },
+    "mdrIndefinido": "The MDR has undefined bits: set a value to write.",
+    "proxima": "Next phase",
+    "concluir": "Run to the end",
+    "encerrar": "Stop",
+    "lerBotao": "Read address {endereco}",
+    "escreverBotao": "Write {dado} to address {endereco}"
   }
 }

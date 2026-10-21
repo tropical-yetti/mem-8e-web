@@ -105,3 +105,70 @@ a {
   --selecao: #1f6feb;
   --texto-selecao: #ffffff;
 }
+
+/*
+ * Cores dos fios, herdadas do painel do CPU-8E (BE verde, BD ciano, controle
+ * amarelo), e o código dos 4 níveis: 1 cheio na cor do fio, 0 fino e
+ * apagado, Z tracejado, X vermelho.
+ */
+:root {
+  --fio-be: #17923a;
+  --fio-bd: #0a93b0;
+  --fio-controle: #c99700;
+  --fio-apagado: #b3bcc6;
+  --fio-x: #d1243f;
+  --mira: rgba(10, 147, 176, 0.13);
+  --mira-forte: rgba(10, 147, 176, 0.32);
+  --escrita: rgba(201, 151, 0, 0.45);
+  --chip: #24292f;
+  --sobre-destaque: #ffffff;
+  --chip-texto: #f0f3f6;
+  --chip-borda: #24292f;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --fio-be: #3fc463;
+    --fio-bd: #2ccde8;
+    --fio-controle: #f0c419;
+    --fio-apagado: #4b535d;
+    --fio-x: #ff5c76;
+    --mira: rgba(44, 205, 232, 0.12);
+    --mira-forte: rgba(44, 205, 232, 0.3);
+    --escrita: rgba(240, 196, 25, 0.35);
+    --chip: #2d333b;
+    --sobre-destaque: #0d1117;
+    --chip-texto: #e6edf3;
+    --chip-borda: #545d68;
+  }
+}
+
+:root[data-theme='dark'] {
+  --fio-be: #3fc463;
+  --fio-bd: #2ccde8;
+  --fio-controle: #f0c419;
+  --fio-apagado: #4b535d;
+  --fio-x: #ff5c76;
+  --mira: rgba(44, 205, 232, 0.12);
+  --mira-forte: rgba(44, 205, 232, 0.3);
+  --escrita: rgba(240, 196, 25, 0.35);
+  --chip: #2d333b;
+  --sobre-destaque: #0d1117;
+  --chip-texto: #e6edf3;
+  --chip-borda: #545d68;
+}
+
+:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
