@@ -1,42 +1,129 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { URL_CODIGO_FONTE } from '@/config'
+import ControleTransacao from '@/components/ControleTransacao.vue'
+import GradeMemoria from '@/components/GradeMemoria.vue'
+import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
+import { useSimuladorStore } from '@/stores/simulador'
 
-const { t, tm, rt } = useI18n()
-const VERSAO = __VERSAO__
+const simulador = useSimuladorStore()
+const { t } = useI18n()
 
-/** Lista de etapas vinda das mensagens (cada item é traduzido). */
-const etapas = (): string[] =>
-  (tm('simulador.etapas') as unknown[]).map((item) => rt(item as never))
+const NIVEIS = ['1', '0', 'Z', 'X'] as const
 </script>
 
 <template>
-  <section class="em-construcao">
-    <h1>{{ t('simulador.titulo') }}</h1>
-    <p>{{ t('simulador.descricao') }}</p>
-    <p class="aviso" role="status">{{ t('simulador.emConstrucao', { versao: VERSAO }) }}</p>
-    <h2>{{ t('simulador.proximos') }}</h2>
-    <ol>
-      <li v-for="etapa in etapas()" :key="etapa">{{ etapa }}</li>
-    </ol>
-    <p>
-      <a :href="`${URL_CODIGO_FONTE}/blob/main/docs/PLANO.md`" target="_blank" rel="noopener">{{
-        t('simulador.lerPlano')
-      }}</a>
-    </p>
-  </section>
+  <div class="simulador">
+    <header class="topo">
+      <h1>{{ t('simulador.titulo') }}</h1>
+      <p class="intro">{{ t('simulador.intro') }}</p>
+    </header>
+
+    <div class="principal">
+      <div class="coluna">
+        <PainelCaixaPreta />
+        <ul class="legenda" :aria-label="t('legenda.titulo')">
+          <li v-for="nivel in NIVEIS" :key="nivel">
+            <span class="amostra" :class="`nivel-${nivel}`" aria-hidden="true"></span>
+            <strong>{{ nivel }}</strong> {{ t(`legenda.${nivel}`) }}
+          </li>
+        </ul>
+        <ControleTransacao />
+      </div>
+      <div class="coluna">
+        <GradeMemoria />
+        <button type="button" class="reiniciar" @click="simulador.reiniciar()">
+          {{ t('simulador.reiniciar') }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.em-construcao {
-  max-width: 72ch;
+.simulador {
+  display: grid;
+  gap: 16px;
 }
-.aviso {
-  padding: 8px 12px;
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.intro {
+  margin: 4px 0 0;
+  max-width: 72ch;
+  color: var(--texto-suave);
+}
+.principal {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px 32px;
+  align-items: start;
+}
+.coluna {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legenda strong {
+  font-family: var(--mono);
+  color: var(--texto);
+}
+.amostra {
+  display: inline-block;
+  width: 22px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--fio-bd);
+}
+.amostra.nivel-0 {
+  height: 2px;
+  background: var(--fio-apagado);
+}
+.amostra.nivel-Z {
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--fio-apagado) 0 5px, transparent 5px 9px);
+}
+.amostra.nivel-X {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--fio-x) 0 4px,
+    color-mix(in srgb, var(--fio-x) 45%, transparent) 4px 8px
+  );
+}
+.reiniciar {
+  justify-self: start;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--texto);
+  background: none;
   border: 1px solid var(--borda);
-  border-left: 4px solid var(--destaque);
-  border-radius: 4px;
-  background: var(--fundo-painel);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.reiniciar:hover {
+  background: var(--fundo-hover);
+}
+
+@media (max-width: 1000px) {
+  .principal {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 </style>
