@@ -7,6 +7,11 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.3.0] — 2026-10-21
+
+Primeira versão com o simulador na tela: núcleo da memória (0.2) e vista
+caixa-preta (0.3), publicadas juntas.
+
 ### 2026-10-21 — Primeira tela: vista caixa-preta
 
 - Painel com a CPU (MAR, MDR, CS, RD, WR), os barramentos e a memória. O MAR
