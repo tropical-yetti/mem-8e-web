@@ -3,7 +3,7 @@
 - **Data:** 2026-10-21
 - **Proponente:** Ansone (redação com o Claude)
 - **Estado:** Proposta
-- **Discussão:** issue a abrir
+- **Discussão:** [#5](https://github.com/tropical-yetti/mem-8e-web/issues/5)
 
 ## Contexto e motivação
 
