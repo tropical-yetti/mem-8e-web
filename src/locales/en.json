@@ -1,0 +1,43 @@
+{
+  "app": {
+    "titulo": "MEM-8E Web",
+    "subtitulo": "How computer memory works inside"
+  },
+  "nav": {
+    "simulador": "Simulator",
+    "sobre": "About"
+  },
+  "idioma": {
+    "rotulo": "Language"
+  },
+  "simulador": {
+    "titulo": "Memory simulator",
+    "descricao": "Put an address on the address bus and watch the decoders pick one location out of 256, the data reach the data bus, and the control and timing signals work together.",
+    "emConstrucao": "Under construction: this is version 0.1, with only the site structure.",
+    "proximos": "Next steps",
+    "etapas": [
+      "Core: 256 × 8 memory as a 16 × 16 array, buses, read and write.",
+      "Editable MAR, MDR and memory, with step-by-step read and write.",
+      "Inside view: decoders, array and buffers, with the active row and column lit.",
+      "Timing diagram with the CPU clock and wait states."
+    ],
+    "lerPlano": "Read the full project plan (in Portuguese)"
+  },
+  "sobre": {
+    "titulo": "About MEM-8E Web",
+    "historia": "MEM-8E Web opens up the memory black box: it shows what happens between an address reaching the address bus and the data leaving (or entering) through the data bus.",
+    "familiaTitulo": "The 8E family",
+    "familia": "It is a sibling of {cpu8eWeb}, the browser version of the {cpu8e} simulator, created at IESB (Brazil) by {autor} and contributors. The memory follows the same 8-bit architecture and the same names (MAR, MDR, address bus, data bus).",
+    "versaoTitulo": "This version",
+    "licencaTitulo": "License",
+    "licenca": "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
+    "garantia": "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "lerLicenca": "Read the full license text (GPL-3.0)"
+  },
+  "rodape": {
+    "copyright": "© 2026 MEM-8E Web contributors",
+    "licenca": "GPL-3.0-or-later license, no warranty",
+    "codigoFonte": "Source code",
+    "versao": "Version {versao}"
+  }
+}

@@ -1,0 +1,107 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+:root {
+  --fundo: #ffffff;
+  --texto: #1f2328;
+  --texto-suave: #59636e;
+  --borda: #d1d9e0;
+  --destaque: #0969da;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --fundo: #0d1117;
+    --texto: #e6edf3;
+    --texto-suave: #9198a1;
+    --borda: #3d444d;
+    --destaque: #4493f8;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--destaque);
+}
+
+/* Esconde da tela, mas mantém para leitores de tela. */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Cores do simulador */
+:root {
+  --fundo-painel: #ffffff;
+  --fundo-barra: #f3f3f3;
+  --fundo-hover: #e6e6e6;
+  --fundo-tabela: #ffffff;
+  --fundo-cabecalho: #e8e8e8;
+  --fundo-alternado: #f4fbff;
+  --borda-suave: #e5e5e5;
+  --selecao: #0a246a;
+  --texto-selecao: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --fundo-painel: #161b22;
+    --fundo-barra: #1f242c;
+    --fundo-hover: #2a313c;
+    --fundo-tabela: #0d1117;
+    --fundo-cabecalho: #1f242c;
+    --fundo-alternado: #121820;
+    --borda-suave: #262c36;
+    --selecao: #1f6feb;
+    --texto-selecao: #ffffff;
+  }
+}
+
+/* Tema escolhido explicitamente pelo ambiente (data-theme) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --fundo: #0d1117;
+  --texto: #e6edf3;
+  --texto-suave: #9198a1;
+  --borda: #3d444d;
+  --destaque: #4493f8;
+  --fundo-painel: #161b22;
+  --fundo-barra: #1f242c;
+  --fundo-hover: #2a313c;
+  --fundo-tabela: #0d1117;
+  --fundo-cabecalho: #1f242c;
+  --fundo-alternado: #121820;
+  --borda-suave: #262c36;
+  --selecao: #1f6feb;
+  --texto-selecao: #ffffff;
+}
