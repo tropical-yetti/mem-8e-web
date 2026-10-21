@@ -7,6 +7,10 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-21 — ADRs aceitas
+
+- ADRs 0001 a 0004 aprovadas nas issues #2 a #5.
+
 ## [0.1.0] — 2026-10-21
 
 ### 2026-10-21 — Esqueleto do projeto
@@ -18,4 +22,4 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 - CI (formatação, lint, tipos, testes, licenças, build, testes de ponta a ponta
   com acessibilidade e Lighthouse) e publicação no GitHub Pages.
 - Plano do projeto em `docs/PLANO.md` e ADRs 0001 a 0004 em `docs/adr/`
-  (estado: propostas).
+  (aceitas no mesmo dia, issues #2 a #5).
