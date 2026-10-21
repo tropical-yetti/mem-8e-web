@@ -1,0 +1,62 @@
+# Verificações em cada pull request e em cada push na main.
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:cobertura
+      - name: Verificar licenças das dependências
+        run: npm run licencas
+      - run: npm run build
+
+  ponta-a-ponta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run test:e2e
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Lighthouse (desempenho, acessibilidade, boas práticas)
+        run: npx --yes @lhci/cli@0.15.1 autorun
+      - name: Resumo das notas (aparece nas anotações da execução)
+        if: always()
+        run: |
+          node -e '
+            const m = require("./.lighthouseci/manifest.json").filter(r => r.isRepresentativeRun)
+            for (const r of m) {
+              const notas = Object.entries(r.summary).map(([k, v]) => `${k}=${Math.round(v * 100)}`).join(" ")
+              console.log(`::notice title=Lighthouse ${r.url.replace(/^.*mem-8e-web/, "")}::${notas}`)
+            }'

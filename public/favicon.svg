@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+  <!-- Um chip de memória: matriz 4 × 4 com a célula selecionada acesa. -->
+  <rect x="5" y="5" width="22" height="22" rx="3" fill="#1f2328"/>
+  <g stroke="#1f2328" stroke-width="2">
+    <path d="M9 1v4M14 1v4M19 1v4M24 1v4M9 27v4M14 27v4M19 27v4M24 27v4"/>
+  </g>
+  <g fill="#59636e">
+    <rect x="8" y="8" width="3" height="3"/><rect x="13" y="8" width="3" height="3"/>
+    <rect x="18" y="8" width="3" height="3"/><rect x="23" y="8" width="3" height="3"/>
+    <rect x="8" y="13" width="3" height="3"/><rect x="13" y="13" width="3" height="3"/>
+    <rect x="23" y="13" width="3" height="3"/>
+    <rect x="8" y="18" width="3" height="3"/><rect x="13" y="18" width="3" height="3"/>
+    <rect x="18" y="18" width="3" height="3"/><rect x="23" y="18" width="3" height="3"/>
+  </g>
+  <rect x="18" y="13" width="3" height="3" fill="#4493f8"/>
+</svg>

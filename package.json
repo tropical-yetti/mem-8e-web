@@ -1,0 +1,51 @@
+{
+  "name": "mem-8e-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "vue-tsc -b",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "licencas": "license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"MIT;ISC;BSD-2-Clause;BSD-3-Clause;Apache-2.0;0BSD;CC0-1.0;Unlicense;BlueOak-1.0.0;MPL-2.0;PSF-2.0\"",
+    "test:e2e": "playwright test",
+    "build:previa": "vite build --config vite.config.previa.ts",
+    "test:cobertura": "vitest run --coverage"
+  },
+  "dependencies": {
+    "pinia": "^4.0.3",
+    "vue": "^3.5.42",
+    "vue-i18n": "^11.4.14",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@intlify/unplugin-vue-i18n": "^11.2.5",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitest/coverage-v8": "^5.0.4",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.11.1",
+    "jsdom": "^29.1.1",
+    "license-checker-rseidelsohn": "^4.4.2",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^5.0.4",
+    "vue-tsc": "^3.3.11"
+  },
+  "description": "Simulador educacional do funcionamento interno da memória do computador — projeto irmão do CPU-8E Web",
+  "license": "GPL-3.0-or-later"
+}
