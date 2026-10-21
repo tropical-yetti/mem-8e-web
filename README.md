@@ -16,8 +16,10 @@ construção)
 
 ## Situação
 
-Versão 0.1: só a estrutura do site. Veja o [plano do projeto](docs/PLANO.md)
-e as [decisões de arquitetura](docs/adr/).
+Já dá para editar o MAR, o MDR e a memória, ligar CS, RD e WR à mão e ver
+leituras e escritas fase a fase. A vista por dentro da memória e o diagrama de
+tempo vêm a seguir. Veja o [plano do projeto](docs/PLANO.md) e as
+[decisões de arquitetura](docs/adr/).
 
 ## Desenvolvimento
 

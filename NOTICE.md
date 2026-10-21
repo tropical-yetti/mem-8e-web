@@ -40,7 +40,11 @@ CPU-8E Simulator
 Copyright 2009/10 Joel Guilherme da Silva Filho (http://lattes.cnpq.br/7746085908957322)
 ```
 
-Na versão atual, nenhum arquivo deriva do original.
+Na versão atual, nenhum arquivo de código deriva do original. Estes arquivos
+do CPU-8E original estão incluídos sem modificação, como dados de teste:
+
+- `tests/fixtures/teste.bin` e `tests/fixtures/allopcodes.bin`: programas de
+  exemplo, usados para conferir o carregamento de programas.
 
 ## Modificações
 

@@ -12,16 +12,8 @@
   },
   "simulador": {
     "titulo": "Simulador da memória",
-    "descricao": "Coloque um endereço no barramento de endereços e veja os decodificadores escolherem uma posição entre 256, o dado chegar ao barramento de dados e os sinais de controle e de tempo trabalharem em conjunto.",
-    "emConstrucao": "Em construção: esta é a versão 0.1, só com a estrutura do site.",
-    "proximos": "Próximas etapas",
-    "etapas": [
-      "Núcleo: memória 256 × 8 em matriz 16 × 16, barramentos e leitura e escrita.",
-      "MAR, MDR e memória editáveis, com leitura e escrita passo a passo.",
-      "Vista por dentro: decodificadores, matriz e buffers, com linha e coluna acesas.",
-      "Diagrama de tempo com o clock da CPU e wait states."
-    ],
-    "lerPlano": "Ler o plano completo do projeto"
+    "intro": "Mude os bits do MAR e veja a linha e a coluna escolhidas na grade. Ligue CS, RD e WR à mão, ou use Ler e Escrever para ver uma transação fase a fase.",
+    "reiniciar": "Zerar memória e registradores"
   },
   "sobre": {
     "titulo": "Sobre o MEM-8E Web",
@@ -39,5 +31,108 @@
     "licenca": "Licença GPL-3.0-or-later, sem garantia",
     "codigoFonte": "Código-fonte",
     "versao": "Versão {versao}"
+  },
+  "registrador": {
+    "valor": "{nome} em hexadecimal",
+    "bits": "Bits do {nome}",
+    "bit": "{nome} = {valor}"
+  },
+  "painel": {
+    "titulo": "CPU, barramentos e memória",
+    "cpu": "CPU",
+    "memoria": "Memória",
+    "be": "BE",
+    "bd": "BD",
+    "linha": "linha {n}",
+    "coluna": "coluna {n}",
+    "mdrNoBd": "MDR → BD",
+    "dicas": {
+      "cs": "liga a memória",
+      "rd": "leitura",
+      "wr": "escrita"
+    },
+    "dirige": {
+      "cpu": "{valor}, dirigido pela CPU",
+      "memoria": "{valor}, dirigido pela memória",
+      "ambos": "{valor}, em conflito: CPU e memória dirigindo",
+      "ninguem": "solto, ninguém dirigindo"
+    },
+    "resumo": "BE = {be}. BD: {bd}. CS = {cs}, RD = {rd}, WR = {wr}."
+  },
+  "legenda": {
+    "titulo": "Níveis dos fios",
+    "1": "definido (barramento com valor)",
+    "0": "desligado",
+    "Z": "solto, ninguém dirigindo",
+    "X": "indefinido ou em conflito"
+  },
+  "grade": {
+    "titulo": "Conteúdo da memória (linha × coluna)",
+    "ajuda": "Clique numa posição para pôr o endereço dela no MAR. Dois cliques, Enter ou um dígito hexadecimal editam o conteúdo. Com o CS ligado, acendem a linha e a coluna que os decodificadores escolheram.",
+    "linhaColuna": "Linha \\ coluna",
+    "celula": "Endereço {endereco}: {valor}",
+    "editar": "Novo valor para o endereço {endereco}"
+  },
+  "transacao": {
+    "titulo": "Transação passo a passo",
+    "inicio": "Escolha um endereço no MAR e comece uma leitura ou uma escrita. Para escrever, ponha antes o dado no MDR.",
+    "ler": {
+      "nome": "Fases da leitura",
+      "endereco": {
+        "nome": "Endereço no BE",
+        "texto": "O MAR põe o endereço {endereco} no barramento de endereços (BE). A memória ainda está desligada: CS em 0, nenhuma linha escolhida."
+      },
+      "selecao": {
+        "nome": "CS liga",
+        "texto": "A CPU liga o CS e os decodificadores respondem: A7–A4 escolhem a linha {linha} e A3–A0 escolhem a coluna {coluna}. O dado chega aos buffers de saída, mas eles continuam desligados: o BD segue solto."
+      },
+      "saida": {
+        "nome": "RD liga",
+        "texto": "A CPU liga o RD. Com CS e RD em 1, os buffers de saída ligam e o dado {dado} aparece no barramento de dados (BD). Agora quem dirige o BD é a memória."
+      },
+      "captura": {
+        "nome": "MDR captura",
+        "texto": "O MDR copia o que está no BD: MDR = {mdr}."
+      },
+      "liberacao": {
+        "nome": "Liberação",
+        "texto": "RD e CS voltam a 0. Os buffers desligam e o BD fica solto (Z), pronto para a próxima transação."
+      },
+      "fim": "Leitura concluída: M[{endereco}] → MDR = {mdr}."
+    },
+    "mdrIndefinido": "O MDR tem bits indefinidos: defina um valor para escrever.",
+    "proxima": "Próxima fase",
+    "concluir": "Ir até o fim",
+    "encerrar": "Encerrar",
+    "lerBotao": "Ler o endereço {endereco}",
+    "escreverBotao": "Escrever {dado} no endereço {endereco}",
+    "escrever": {
+      "nome": "Fases da escrita",
+      "endereco": {
+        "nome": "Endereço no BE",
+        "texto": "O MAR põe o endereço {endereco} no barramento de endereços (BE). A memória ainda está desligada: CS em 0."
+      },
+      "dado": {
+        "nome": "Dado no BD",
+        "texto": "A CPU liga os seus buffers e põe o MDR ({mdr}) no barramento de dados. Na escrita, quem dirige o BD é a CPU, não a memória."
+      },
+      "selecao": {
+        "nome": "CS liga",
+        "texto": "A CPU liga o CS: os decodificadores escolhem a linha {linha} e a coluna {coluna}. Nada é gravado ainda."
+      },
+      "escrita": {
+        "nome": "WR liga",
+        "texto": "A CPU liga o WR. Só a célula no cruzamento da linha {linha} com a coluna {coluna} copia o BD: M[{endereco}] = {mdr}."
+      },
+      "fimEscrita": {
+        "nome": "WR desliga",
+        "texto": "WR volta a 0. A célula guarda o valor, mesmo que o BD mude depois."
+      },
+      "liberacao": {
+        "nome": "Liberação",
+        "texto": "CS volta a 0 e a CPU solta o BD, que fica em Z."
+      },
+      "fim": "Escrita concluída: M[{endereco}] = {mdr}."
+    }
   }
 }
