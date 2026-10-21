@@ -7,6 +7,20 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-21 — Vista por dentro da memória
+
+- A grade 16 × 16 passa a ser a matriz, com os blocos desenhados em volta:
+  decodificador de coluna acima (A3–A0, habilitado por CS), decodificador de
+  linha à esquerda (A7–A4), e abaixo as linhas de bit, o seletor de coluna e
+  os buffers de saída (CS · RD). Cada saída de decodificador cai sobre a sua
+  linha ou coluna e segue o código dos 4 níveis.
+- As linhas de bit mostram os 16 bytes da linha ativa: a linha inteira é lida,
+  e o seletor escolhe um.
+- A liberação da escrita (CS · WR) aparece com o valor que a célula do
+  cruzamento vai copiar.
+- Botão para alternar entre "Por dentro" e "Só o conteúdo"; a escolha é
+  lembrada no navegador.
+
 ## [0.3.0] — 2026-10-21
 
 Primeira versão com o simulador na tela: núcleo da memória (0.2) e vista
