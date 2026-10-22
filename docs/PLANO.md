@@ -193,8 +193,8 @@ O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 | 0.3       | Vista caixa-preta + MAR/MDR/memória editáveis + sinais de controle manuais + ler/escrever.                                              | feito    |
 | 0.4       | Vista "por dentro" (decodificadores, matriz, linhas de bit, seletor, buffers).                                                          | feito    |
 | 0.5       | Detalhe em portas (decodificador, célula de 1 bit). Prévia do site no CI.                                                               | feito    |
-| 0.6       | Diagrama de tempo + clock da CPU + wait states (modo assíncrono).                                                                       | em curso |
-| 0.7       | Guia de primeiro acesso com balões e ajuda contextual ([#17](https://github.com/tropical-yetti/mem-8e-web/issues/17)).                  |          |
+| 0.6       | Diagrama de tempo + clock da CPU + wait states (modo assíncrono).                                                                       | feito    |
+| 0.7       | Guia de primeiro acesso com balões e ajuda contextual ([#17](https://github.com/tropical-yetti/mem-8e-web/issues/17)).                  | feito    |
 | 0.8       | Documentação no site, pt/en: como a memória funciona + roteiro de aula ([#18](https://github.com/tropical-yetti/mem-8e-web/issues/18)). |          |
 | 0.9       | Experimentos "e se…?" guiados; carregar e salvar `.bin`.                                                                                |          |
 | 1.0       | Revisão final de acessibilidade, testes e lançamento.                                                                                   |          |

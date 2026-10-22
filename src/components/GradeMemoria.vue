@@ -24,6 +24,7 @@ import { useSimuladorStore } from '@/stores/simulador'
 import DecodificadorColuna from './porDentro/DecodificadorColuna.vue'
 import DecodificadorLinha from './porDentro/DecodificadorLinha.vue'
 import SaidaMemoria from './porDentro/SaidaMemoria.vue'
+import BotaoAjuda from '@/guia/BotaoAjuda.vue'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -171,9 +172,9 @@ function rotulo(endereco: number): string {
 </script>
 
 <template>
-  <section class="grade" :aria-labelledby="'titulo-grade'">
+  <section class="grade" :aria-labelledby="'titulo-grade'" data-guia="grade">
     <div class="cabeca">
-      <h2 id="titulo-grade">{{ t('grade.titulo') }}</h2>
+      <h2 id="titulo-grade">{{ t('grade.titulo') }} <BotaoAjuda passo="grade" /></h2>
       <div class="vistas" role="radiogroup" :aria-label="t('grade.vista')">
         <button
           v-for="opcao in ['porDentro', 'conteudo'] as const"

@@ -64,8 +64,11 @@ const quemDirige = computed(() =>
     <div class="bloco bloco-cpu" aria-hidden="true"></div>
     <div class="bloco bloco-memoria" aria-hidden="true"></div>
 
+    <!-- Área dos sinais (MDR → BD, CS, RD, WR e os fios), só para o guia apontar -->
+    <div class="alvo-sinais" data-guia="sinais" aria-hidden="true"></div>
+
     <!-- MAR → BE -->
-    <div class="cpu linha-be">
+    <div class="cpu linha-be" data-guia="mar">
       <EditorRegistrador
         nome="MAR"
         prefixo="A"
@@ -202,6 +205,13 @@ h2 {
 }
 .titulo-memoria {
   color: var(--chip-texto);
+}
+.alvo-sinais {
+  grid-row: 3 / 7;
+  grid-column: 1 / 3;
+  align-self: stretch;
+  visibility: hidden;
+  pointer-events: none;
 }
 .cpu,
 .pino,

@@ -9,6 +9,8 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4173/mem-8e-web/',
     locale: 'pt-BR',
+    // Os testes começam com o guia de primeiro acesso já visto; os do guia limpam isto.
+    storageState: 'tests/e2e/sem-guia.json',
     // Permite usar um Chromium já instalado (CHROMIUM_PATH) em vez do baixado pelo Playwright.
     launchOptions: process.env.CHROMIUM_PATH
       ? { executablePath: process.env.CHROMIUM_PATH, args: ['--no-sandbox'] }
