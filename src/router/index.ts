@@ -14,7 +14,11 @@ export const router = createRouter({
   scrollBehavior: (destino) => (destino.hash ? { el: destino.hash } : { top: 0 }),
   routes: [
     { path: '/', name: 'simulador', component: SimuladorView },
+    {
+      path: '/documentacao/:pagina?',
+      name: 'documentacao',
+      component: () => import('@/views/DocumentacaoView.vue'),
+    },
     { path: '/sobre', name: 'sobre', component: () => import('@/views/SobreView.vue') },
-    // A documentação chega na 0.8.
   ],
 })

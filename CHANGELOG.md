@@ -7,6 +7,73 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.8.0] — 2026-10-22
+
+Diagrama de tempo e wait states (0.6), guia de primeiro acesso (0.7) e
+documentação no site com legendas dos componentes (0.8), publicados juntos.
+
+### 2026-10-22 — Documentação
+
+- Documentação dentro do site, em português e inglês, com sete páginas:
+  primeiros passos, como a memória funciona, os quatro níveis (0, 1, Z, X),
+  leitura, escrita e tempo, em portas lógicas, roteiro de aula com exercícios
+  e respostas, e siglas.
+- A tabela de siglas é gerada das mesmas mensagens das legendas.
+- Os balões do guia têm um link "Ler mais" para a seção correspondente.
+- O README ganhou uma seção de uso e uma captura de tela nova.
+- Testes conferem que os dois idiomas têm as mesmas páginas e âncoras e que
+  todos os links internos levam a uma página e uma seção que existem.
+
+### 2026-10-22 — Legendas e commit no rodapé
+
+- Legendas com o nome dos componentes: ao apontar, focar ou tocar nos fios e
+  rótulos BE, BD, CS, RD, WR, nos pinos A7–A0 e D7–D0, no MAR, no MDR, no
+  botão "MDR → BD" e nos nomes dos sinais do diagrama de tempo (CLK, READY…)
+  aparece o nome completo e para que serve. A legenda também é a descrição
+  acessível do elemento, e Esc a fecha.
+- O rodapé mostra o commit de onde o site foi gerado, com link para ele no
+  GitHub, para saber qual código está na tela.
+
+### 2026-10-22 — Guia de primeiro acesso
+
+- Na primeira visita, um guia de 8 balões apresenta cada parte da tela: MAR,
+  sinais de controle, memória por dentro, transação passo a passo, portas
+  lógicas e diagrama de tempo. Cada balão diz o que a parte faz e sugere algo
+  para experimentar.
+- O balão não bloqueia a página: dá para seguir a sugestão sem fechá-lo. A
+  parte explicada fica em destaque, e o resto da tela escurece.
+- Próximo, Voltar e Pular; Esc fecha. O navegador lembra que o guia já foi
+  visto, e o botão "Ver o guia" o abre de novo.
+- Ajuda contextual: um botão "?" no título de cada seção abre só o balão
+  daquela parte.
+- Funciona pelo teclado e com leitor de tela (o foco vai para o balão e volta
+  para onde estava), respeita a preferência por menos movimento e se ajusta ao
+  celular.
+
+### 2026-10-22 — CI mais rápido
+
+- Os testes de ponta a ponta rodam na imagem oficial do Playwright, que já
+  traz os navegadores e as bibliotecas de sistema. A instalação, que às vezes
+  levava mais de 15 minutos, deixa de existir.
+- `@playwright/test` fixado numa versão exata, e um teste confere se ela é a
+  mesma da imagem.
+
+### 2026-10-22 — Diagrama de tempo e wait states
+
+- Modelo de tempo no núcleo (ADR 0003), com tempos genéricos e didáticos:
+  t_AA, t_OE e t_WP, três memórias de exemplo (rápida, média, lenta) e o
+  clock da CPU (10, 25, 50 ou 100 MHz).
+- A CPU trabalha em estados de clock (T1, T2, T3). Quando a memória é mais
+  lenta, ela segura o READY em 0 e a CPU insere wait states (Tw).
+- Sem wait states, uma memória lenta demais dá errado: a leitura captura X
+  no MDR, e a escrita com pulso de WR curto demais deixa a célula em X.
+- Diagrama de tempo com CLK, BE, CS, RD, WR, READY, BD e MDR (ou a célula),
+  faixas para os estados de clock, marcas de "dado válido" e "captura" (ou
+  do pulso mínimo de WR) e um cursor que acompanha a fase da transação.
+  Sem transação, ele mostra uma prévia da leitura do endereço do MAR.
+- A fase "Wait state" aparece na transação passo a passo quando há espera,
+  e os textos explicam quando e por que a transação deu errado.
+
 ## [0.5.0] — 2026-10-22
 
 Vista por dentro da memória (0.4) e detalhe em portas lógicas (0.5),

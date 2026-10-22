@@ -5,7 +5,8 @@
   },
   "nav": {
     "simulador": "Simulador",
-    "sobre": "Sobre"
+    "sobre": "Sobre",
+    "documentacao": "Documentação"
   },
   "idioma": {
     "rotulo": "Idioma"
@@ -30,7 +31,8 @@
     "copyright": "© 2026 colaboradores do MEM-8E Web",
     "licenca": "Licença GPL-3.0-or-later, sem garantia",
     "codigoFonte": "Código-fonte",
-    "versao": "Versão {versao}"
+    "versao": "Versão {versao}",
+    "commit": "Commit de onde este site foi gerado"
   },
   "registrador": {
     "valor": "{nome} em hexadecimal",
@@ -93,17 +95,23 @@
       },
       "saida": {
         "nome": "RD liga",
-        "texto": "A CPU liga o RD. Com CS e RD em 1, os buffers de saída ligam e o dado {dado} aparece no barramento de dados (BD). Agora quem dirige o BD é a memória."
+        "texto": "A CPU liga o RD. Com CS e RD em 1, os buffers de saída ligam e o dado {dado} aparece no barramento de dados (BD). Agora quem dirige o BD é a memória. O diagrama de tempo mostra quanto ele demora para ficar válido."
       },
       "captura": {
         "nome": "MDR captura",
-        "texto": "O MDR copia o que está no BD: MDR = {mdr}."
+        "texto": "O MDR copia o que está no BD: MDR = {mdr}.",
+        "textoErrado": "A CPU não espera a memória: no fim de T2 o MDR copia o BD, mas o dado ainda não ficou válido. MDR = {mdr}: a leitura deu errado. Ligue os wait states ou use uma memória mais rápida."
       },
       "liberacao": {
         "nome": "Liberação",
         "texto": "RD e CS voltam a 0. Os buffers desligam e o BD fica solto (Z), pronto para a próxima transação."
       },
-      "fim": "Leitura concluída: M[{endereco}] → MDR = {mdr}."
+      "fim": "Leitura concluída: M[{endereco}] → MDR = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "A memória ainda não terminou: o dado não está válido no BD. Ela segura o READY em 0, e a CPU espera {n} de clock sem fazer nada. São os wait states: o ciclo de memória é mais longo que o da CPU."
+      },
+      "fimErrado": "Leitura errada: M[{endereco}] não chegou ao MDR a tempo (MDR = {mdr})."
     },
     "mdrIndefinido": "O MDR tem bits indefinidos: defina um valor para escrever.",
     "proxima": "Próxima fase",
@@ -131,13 +139,19 @@
       },
       "fimEscrita": {
         "nome": "WR desliga",
-        "texto": "WR volta a 0. A célula guarda o valor, mesmo que o BD mude depois."
+        "texto": "WR volta a 0. A célula guarda o valor, mesmo que o BD mude depois.",
+        "textoErrado": "WR desliga depois de só {periodo} ns, menos que os {twp} ns de que a célula precisa. Não dá para saber o que ela guardou: a célula fica indefinida (X)."
       },
       "liberacao": {
         "nome": "Liberação",
         "texto": "CS volta a 0 e a CPU solta o BD, que fica em Z."
       },
-      "fim": "Escrita concluída: M[{endereco}] = {mdr}."
+      "fim": "Escrita concluída: M[{endereco}] = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "O pulso de WR precisa durar pelo menos t_WP = {twp} ns, mais que um ciclo de clock ({periodo} ns). A memória segura o READY em 0, e a CPU mantém o WR ligado por mais {n}."
+      },
+      "fimErrado": "Escrita errada: o pulso de WR foi curto demais, e M[{endereco}] ficou indefinida."
     }
   },
   "porDentro": {
@@ -176,5 +190,146 @@
     "descCelula": "Bit {bit} do endereço {endereco} em portas lógicas: a célula guarda {q}; escrita liberada = {libera}; saída para o BD = {saida}.",
     "lin": "lin {n}",
     "col": "col {n}"
+  },
+  "tempo": {
+    "nome": "Diagrama de tempo",
+    "titulo": {
+      "previa": "Prévia: leitura do endereço {endereco}. Comece uma transação para o cursor seguir as fases.",
+      "ler": "Leitura do endereço {endereco}",
+      "escrever": "Escrita no endereço {endereco}"
+    },
+    "clock": "Clock da CPU",
+    "periodo": "período {ns} ns",
+    "memoria": "Memória",
+    "memorias": {
+      "rapida": "rápida",
+      "media": "média",
+      "lenta": "lenta"
+    },
+    "esperar": "A CPU espera a memória (wait states)",
+    "resumo": {
+      "leitura": "O dado fica válido em {valido}, e a CPU o captura em {captura}. Com {esperas}, o ciclo de leitura leva {fim} ({ciclos} ciclos de clock).",
+      "leituraErrada": "Leitura errada: a CPU captura em {captura}, antes de o dado ficar válido ({valido}). O MDR fica com X.",
+      "escrita": "A célula precisa de um pulso de WR de pelo menos {twp}; com {esperas}, o pulso dura {pulso}, e o ciclo de escrita leva {fim} ({ciclos} ciclos de clock).",
+      "escritaErrada": "Escrita errada: o pulso de WR dura só {pulso}, menos que os {twp} de que a célula precisa. Ela fica indefinida (X)."
+    },
+    "marcas": {
+      "dadoValido": "dado válido ({t})",
+      "captura": "MDR captura ({t})",
+      "pulsoMinimo": "t_WP cumprido ({t})",
+      "fimPulso": "WR desliga ({t})"
+    },
+    "esperas": "nenhum wait state | 1 wait state | {n} wait states",
+    "ciclos": "nenhum ciclo | 1 ciclo | {n} ciclos"
+  },
+  "guia": {
+    "rever": "Ver o guia",
+    "contador": "{n} de {total}",
+    "experimente": "Experimente:",
+    "proximo": "Próximo",
+    "voltar": "Voltar",
+    "pular": "Pular o guia",
+    "concluir": "Começar",
+    "fechar": "Fechar",
+    "entendi": "Entendi",
+    "ajuda": "Ajuda",
+    "ajudaDe": "Ajuda: {parte}",
+    "passos": {
+      "boasVindas": {
+        "titulo": "A memória, aberta",
+        "texto": "Aqui você vê o que acontece dentro da memória quando a CPU lê ou escreve: o endereço escolhe uma linha e uma coluna, e o dado sai (ou entra) pelo barramento de dados. São 256 posições de 8 bits, como na CPU-8E. Este guia mostra cada parte da tela em um minuto."
+      },
+      "mar": {
+        "titulo": "MAR: o endereço",
+        "texto": "O MAR guarda o endereço que a CPU quer acessar e o põe no barramento de endereços (BE). Os 4 bits da esquerda (A7–A4) escolhem a linha da matriz; os 4 da direita (A3–A0), a coluna.",
+        "experimente": "clique num bit do MAR ou digite um valor em hexadecimal. O contorno na grade vai para o novo endereço."
+      },
+      "sinais": {
+        "titulo": "Sinais de controle",
+        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. \"MDR → BD\" faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
+        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também \"MDR → BD\" para ver um conflito."
+      },
+      "grade": {
+        "titulo": "A memória por dentro",
+        "texto": "A grade 16 × 16 é a própria matriz: o decodificador de coluna fica em cima, o de linha à esquerda, e embaixo estão as linhas de bit, o seletor e os buffers de saída. Repare que a linha inteira é lida: os 16 bytes descem, e o seletor escolhe um.",
+        "experimente": "clique numa posição para pôr o endereço dela no MAR; dê dois cliques para mudar o conteúdo."
+      },
+      "transacao": {
+        "titulo": "Ler e escrever, fase a fase",
+        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em \"Próxima fase\" muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
+        "experimente": "clique em \"Ler o endereço\" e avance as fases até o MDR receber o dado."
+      },
+      "portas": {
+        "titulo": "Em portas lógicas",
+        "texto": "Aqui o mesmo circuito aparece em portas AND, OR e NOT: um bit da posição do MAR (o latch que guarda o bit e o caminho até o BD) ou um decodificador 4 → 16. Os fios mudam junto com o resto da tela.",
+        "experimente": "abra a aba \"Decodificador de linha\" e mude um bit do MAR: outra porta acende."
+      },
+      "tempo": {
+        "titulo": "Diagrama de tempo",
+        "texto": "A memória tem o próprio tempo de acesso, e a CPU tem o próprio clock. Quando a memória é mais lenta, a CPU espera ciclos extras: os wait states. Sem esperar, a leitura captura um dado ainda inválido (X).",
+        "experimente": "troque para a memória lenta e desligue \"A CPU espera a memória\". O resumo e o diagrama mostram a leitura dando errado."
+      },
+      "fim": {
+        "titulo": "Pronto",
+        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios."
+      }
+    },
+    "lerMais": "Ler mais na documentação"
+  },
+  "siglas": {
+    "be": {
+      "sigla": "BE",
+      "nome": "Barramento de endereços: leva o endereço do MAR até a memória."
+    },
+    "bd": {
+      "sigla": "BD",
+      "nome": "Barramento de dados: leva o dado entre a memória e o MDR, nos dois sentidos."
+    },
+    "cs": {
+      "sigla": "CS",
+      "nome": "Chip select (seleção do chip): liga a memória."
+    },
+    "rd": {
+      "sigla": "RD",
+      "nome": "Read (leitura): liga os buffers de saída da memória."
+    },
+    "wr": {
+      "sigla": "WR",
+      "nome": "Write (escrita): a célula escolhida copia o BD."
+    },
+    "mar": {
+      "sigla": "MAR",
+      "nome": "Memory Address Register: registrador de endereço da memória."
+    },
+    "mdr": {
+      "sigla": "MDR",
+      "nome": "Memory Data Register: registrador de dados da memória. Também é chamado de MBR (Memory Buffer Register)."
+    },
+    "mdrBd": {
+      "sigla": "MDR → BD",
+      "nome": "A CPU liga os seus buffers e põe o MDR no barramento de dados."
+    },
+    "pinosA": {
+      "sigla": "A7–A0",
+      "nome": "Pinos de endereço da memória (8 bits)."
+    },
+    "pinosD": {
+      "sigla": "D7–D0",
+      "nome": "Pinos de dados da memória (8 bits)."
+    },
+    "ready": {
+      "sigla": "READY",
+      "nome": "Pronto: a memória avisa que terminou; em 0, a CPU espera."
+    },
+    "clk": {
+      "sigla": "CLK",
+      "nome": "Clock da CPU."
+    }
+  },
+  "docs": {
+    "menu": "Páginas da documentação",
+    "paginacao": "Página anterior e próxima",
+    "sigla": "Sigla",
+    "significado": "O que é"
   }
 }

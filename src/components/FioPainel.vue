@@ -13,6 +13,8 @@ import type { Nivel } from '@/core'
 
 const props = defineProps<{
   nome: string
+  /** Chave da legenda (siglas.<chave> nas mensagens). */
+  sigla?: string
   /** Nível resumido: num barramento, `1` quer dizer "tem um valor definido". */
   nivel: Nivel
   /** Valor mostrado sobre o fio (por exemplo, "3A"). */
@@ -32,7 +34,7 @@ const classes = computed(() => [
 </script>
 
 <template>
-  <div class="fio" :class="classes" aria-hidden="true">
+  <div class="fio" :class="classes" aria-hidden="true" :data-sigla="sigla">
     <span class="rotulo">
       <span class="nome">{{ nome }}</span>
       <span v-if="valor" class="valor">{{ valor }}</span>

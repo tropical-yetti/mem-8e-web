@@ -17,3 +17,8 @@ export const AUTOR_CPU8E = {
   nome: 'Joel Guilherme da Silva Filho',
   lattes: 'http://lattes.cnpq.br/7746085908957322',
 }
+
+/** Endereço de um commit no GitHub. */
+export function urlDoCommit(commit: string): string {
+  return `${URL_CODIGO_FONTE}/commit/${commit}`
+}

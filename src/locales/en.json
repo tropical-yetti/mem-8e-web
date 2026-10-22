@@ -5,7 +5,8 @@
   },
   "nav": {
     "simulador": "Simulator",
-    "sobre": "About"
+    "sobre": "About",
+    "documentacao": "Documentation"
   },
   "idioma": {
     "rotulo": "Language"
@@ -30,7 +31,8 @@
     "copyright": "© 2026 MEM-8E Web contributors",
     "licenca": "GPL-3.0-or-later license, no warranty",
     "codigoFonte": "Source code",
-    "versao": "Version {versao}"
+    "versao": "Version {versao}",
+    "commit": "Commit this site was built from"
   },
   "registrador": {
     "valor": "{nome} in hexadecimal",
@@ -93,17 +95,23 @@
       },
       "saida": {
         "nome": "RD on",
-        "texto": "The CPU turns RD on. With CS and RD at 1, the output buffers turn on and the data {dado} appears on the data bus (DB). Now the memory is driving the DB."
+        "texto": "The CPU turns RD on. With CS and RD at 1, the output buffers turn on and the data {dado} appears on the data bus (DB). Now the memory is driving the DB. The timing diagram shows how long it takes to become valid."
       },
       "captura": {
         "nome": "MDR latches",
-        "texto": "The MDR copies what is on the DB: MDR = {mdr}."
+        "texto": "The MDR copies what is on the DB: MDR = {mdr}.",
+        "textoErrado": "The CPU does not wait for the memory: at the end of T2 the MDR copies the DB, but the data is not valid yet. MDR = {mdr}: the read went wrong. Turn wait states on or use a faster memory."
       },
       "liberacao": {
         "nome": "Release",
         "texto": "RD and CS go back to 0. The buffers turn off and the DB floats (Z), ready for the next transaction."
       },
-      "fim": "Read done: M[{endereco}] → MDR = {mdr}."
+      "fim": "Read done: M[{endereco}] → MDR = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "The memory is not done yet: the data on the DB is not valid. It holds READY at 0, and the CPU waits {n} doing nothing. These are wait states: the memory cycle is longer than the CPU's."
+      },
+      "fimErrado": "Read went wrong: M[{endereco}] did not reach the MDR in time (MDR = {mdr})."
     },
     "escrever": {
       "nome": "Write phases",
@@ -125,13 +133,19 @@
       },
       "fimEscrita": {
         "nome": "WR off",
-        "texto": "WR goes back to 0. The cell keeps the value, even if the DB changes afterwards."
+        "texto": "WR goes back to 0. The cell keeps the value, even if the DB changes afterwards.",
+        "textoErrado": "WR goes off after only {periodo} ns, less than the {twp} ns the cell needs. There is no telling what it stored: the cell is undefined (X)."
       },
       "liberacao": {
         "nome": "Release",
         "texto": "CS goes back to 0 and the CPU releases the DB, which goes to Z."
       },
-      "fim": "Write done: M[{endereco}] = {mdr}."
+      "fim": "Write done: M[{endereco}] = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "The WR pulse must last at least t_WP = {twp} ns, longer than one clock cycle ({periodo} ns). The memory holds READY at 0, and the CPU keeps WR on for {n} more."
+      },
+      "fimErrado": "Write went wrong: the WR pulse was too short, and M[{endereco}] is undefined."
     },
     "mdrIndefinido": "The MDR has undefined bits: set a value to write.",
     "proxima": "Next phase",
@@ -176,5 +190,146 @@
     "descCelula": "Bit {bit} of address {endereco} in logic gates: the cell holds {q}; write enabled = {libera}; output to the DB = {saida}.",
     "lin": "row {n}",
     "col": "col {n}"
+  },
+  "tempo": {
+    "nome": "Timing diagram",
+    "titulo": {
+      "previa": "Preview: read of address {endereco}. Start a transaction for the cursor to follow the phases.",
+      "ler": "Read of address {endereco}",
+      "escrever": "Write to address {endereco}"
+    },
+    "clock": "CPU clock",
+    "periodo": "period {ns} ns",
+    "memoria": "Memory",
+    "memorias": {
+      "rapida": "fast",
+      "media": "medium",
+      "lenta": "slow"
+    },
+    "esperar": "The CPU waits for the memory (wait states)",
+    "resumo": {
+      "leitura": "The data becomes valid at {valido}, and the CPU latches it at {captura}. With {esperas}, the read cycle takes {fim} ({ciclos} clock cycles).",
+      "leituraErrada": "Read went wrong: the CPU latches at {captura}, before the data is valid ({valido}). The MDR gets X.",
+      "escrita": "The cell needs a WR pulse of at least {twp}; with {esperas}, the pulse lasts {pulso}, and the write cycle takes {fim} ({ciclos} clock cycles).",
+      "escritaErrada": "Write went wrong: the WR pulse lasts only {pulso}, less than the {twp} the cell needs. It becomes undefined (X)."
+    },
+    "marcas": {
+      "dadoValido": "data valid ({t})",
+      "captura": "MDR latches ({t})",
+      "pulsoMinimo": "t_WP met ({t})",
+      "fimPulso": "WR off ({t})"
+    },
+    "esperas": "no wait states | 1 wait state | {n} wait states",
+    "ciclos": "no cycles | 1 cycle | {n} cycles"
+  },
+  "guia": {
+    "rever": "Show the guide",
+    "contador": "{n} of {total}",
+    "experimente": "Try it:",
+    "proximo": "Next",
+    "voltar": "Back",
+    "pular": "Skip the guide",
+    "concluir": "Start",
+    "fechar": "Close",
+    "entendi": "Got it",
+    "ajuda": "Help",
+    "ajudaDe": "Help: {parte}",
+    "passos": {
+      "boasVindas": {
+        "titulo": "Memory, opened up",
+        "texto": "Here you see what happens inside the memory when the CPU reads or writes: the address picks a row and a column, and the data leaves (or enters) through the data bus. There are 256 locations of 8 bits, as in the CPU-8E. This guide shows each part of the screen in a minute."
+      },
+      "mar": {
+        "titulo": "MAR: the address",
+        "texto": "The MAR holds the address the CPU wants and puts it on the address bus (AB). The 4 bits on the left (A7–A4) pick the row of the array; the 4 on the right (A3–A0), the column.",
+        "experimente": "click a MAR bit or type a hex value. The outline in the grid moves to the new address."
+      },
+      "sinais": {
+        "titulo": "Control signals",
+        "texto": "CS enables the memory, RD asks for a read and WR for a write. \"MDR → DB\" makes the CPU put the MDR on the data bus. The wires show each level: thick is 1, thin is 0, dashed is floating (Z) and red is contention or undefined (X).",
+        "experimente": "turn CS on, then RD. The row and column light up, and the data appears on the DB. Turn \"MDR → DB\" on too to see a contention."
+      },
+      "grade": {
+        "titulo": "Inside the memory",
+        "texto": "The 16 × 16 grid is the array itself: the column decoder is on top, the row decoder on the left, and below are the bit lines, the selector and the output buffers. Notice that the whole row is read: all 16 bytes go down, and the selector picks one.",
+        "experimente": "click a location to put its address in the MAR; double-click to change its contents."
+      },
+      "transacao": {
+        "titulo": "Read and write, phase by phase",
+        "texto": "Instead of setting the signals by hand, ask for a complete read or write. Each click on \"Next phase\" changes one signal, in the right order, and the text explains what just happened.",
+        "experimente": "click \"Read address\" and step through the phases until the MDR gets the data."
+      },
+      "portas": {
+        "titulo": "In logic gates",
+        "texto": "Here the same circuit appears as AND, OR and NOT gates: one bit of the MAR location (the latch that holds it and the path to the DB) or a 4 → 16 decoder. The wires change along with the rest of the screen.",
+        "experimente": "open the \"Row decoder\" tab and change a MAR bit: another gate lights up."
+      },
+      "tempo": {
+        "titulo": "Timing diagram",
+        "texto": "The memory has its own access time, and the CPU has its own clock. When the memory is slower, the CPU waits extra cycles: wait states. Without waiting, the read latches data that is not valid yet (X).",
+        "experimente": "switch to the slow memory and uncheck \"The CPU waits for the memory\". The summary and the diagram show the read going wrong."
+      },
+      "fim": {
+        "titulo": "Done",
+        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises."
+      }
+    },
+    "lerMais": "Read more in the documentation"
+  },
+  "siglas": {
+    "be": {
+      "sigla": "AB",
+      "nome": "Address bus: carries the address from the MAR to the memory."
+    },
+    "bd": {
+      "sigla": "DB",
+      "nome": "Data bus: carries the data between the memory and the MDR, both ways."
+    },
+    "cs": {
+      "sigla": "CS",
+      "nome": "Chip select: enables the memory."
+    },
+    "rd": {
+      "sigla": "RD",
+      "nome": "Read: turns the memory output buffers on."
+    },
+    "wr": {
+      "sigla": "WR",
+      "nome": "Write: the selected cell copies the DB."
+    },
+    "mar": {
+      "sigla": "MAR",
+      "nome": "Memory Address Register."
+    },
+    "mdr": {
+      "sigla": "MDR",
+      "nome": "Memory Data Register. Also called MBR (Memory Buffer Register)."
+    },
+    "mdrBd": {
+      "sigla": "MDR → DB",
+      "nome": "The CPU turns its buffers on and puts the MDR on the data bus."
+    },
+    "pinosA": {
+      "sigla": "A7–A0",
+      "nome": "Memory address pins (8 bits)."
+    },
+    "pinosD": {
+      "sigla": "D7–D0",
+      "nome": "Memory data pins (8 bits)."
+    },
+    "ready": {
+      "sigla": "READY",
+      "nome": "Ready: the memory signals it is done; at 0, the CPU waits."
+    },
+    "clk": {
+      "sigla": "CLK",
+      "nome": "CPU clock."
+    }
+  },
+  "docs": {
+    "menu": "Documentation pages",
+    "paginacao": "Previous and next page",
+    "sigla": "Abbreviation",
+    "significado": "What it is"
   }
 }

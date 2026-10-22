@@ -31,7 +31,7 @@ export interface Sistema {
   /** Memory Address Register: endereço posto no BE. */
   mar: number
   /**
-   * Memory Data Register (o MBR do Stallings): dado lido da memória ou a
+   * Memory Data Register (também chamado de MBR, Memory Buffer Register): dado lido da memória ou a
    * escrever nela. Guarda fios, e não um número, porque pode capturar um
    * barramento solto ou em conflito e ficar com bits indefinidos.
    */

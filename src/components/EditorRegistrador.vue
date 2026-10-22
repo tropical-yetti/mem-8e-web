@@ -14,6 +14,8 @@ import { paraHex, type Nivel } from '@/core'
 
 const props = defineProps<{
   nome: string
+  /** Chave da legenda do registrador (siglas.<chave>). */
+  sigla?: string
   /** Prefixo dos bits: "A" no MAR, "D" no MDR. */
   prefixo: string
   bits: readonly Nivel[]
@@ -66,7 +68,7 @@ function rotuloBit(bit: number): string {
 
 <template>
   <div class="registrador">
-    <label class="cabeca">
+    <label class="cabeca" :data-sigla="sigla">
       <span class="nome">{{ nome }}</span>
       <input
         class="hex"
