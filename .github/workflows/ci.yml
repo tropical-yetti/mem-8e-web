@@ -27,6 +27,15 @@ jobs:
         run: npm run licencas
       - run: npm run build
 
+      # Prévia: o site inteiro num único index.html, para abrir no navegador
+      # sem servidor. Fica nos "Artifacts" da execução, em cada pull request.
+      - run: npm run build:previa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: previa-mem-8e-web
+          path: dist-previa/index.html
+          retention-days: 14
+
   ponta-a-ponta:
     runs-on: ubuntu-latest
     steps:
