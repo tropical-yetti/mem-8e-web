@@ -74,6 +74,46 @@ describe('edições à mão', () => {
   })
 })
 
+describe('tempo', () => {
+  it('sem transação, o diagrama é uma prévia da leitura do MAR', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarMar(0x3a)
+    expect(simulador.linhaDoTempo.tipo).toBe('ler')
+    expect(simulador.linhaDoTempo.esperas).toBe(1)
+    expect(simulador.instanteAtual).toBeNull()
+  })
+
+  it('o cursor acompanha a fase, e a fase de espera aparece', () => {
+    const simulador = useSimuladorStore()
+    simulador.iniciarLeitura()
+    expect(simulador.instanteAtual).toBe(0)
+    simulador.proximaFase()
+    simulador.proximaFase()
+    simulador.proximaFase()
+    expect(simulador.fases!.lista[simulador.fases!.indice]).toBe('espera')
+    expect(simulador.instanteAtual).toBe(40)
+  })
+
+  it('sem wait states, uma memória lenta faz a leitura falhar', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarMemoria('lenta')
+    simulador.mudarEspera(false)
+    simulador.iniciarLeitura()
+    simulador.concluir()
+    expect(simulador.linhaDoTempo.certo).toBe(false)
+    expect(simulador.podeEscrever).toBe(false)
+  })
+
+  it('mudar o clock interrompe a transação e muda as esperas', () => {
+    const simulador = useSimuladorStore()
+    simulador.iniciarEscrita()
+    simulador.mudarClock(10)
+    expect(simulador.fases).toBeNull()
+    expect(simulador.linhaDoTempo.esperas).toBe(0)
+    expect(simulador.tempo.periodo).toBe(100)
+  })
+})
+
 describe('transações passo a passo', () => {
   it('leitura: uma fase por vez, até o fim', () => {
     const simulador = useSimuladorStore()
@@ -83,7 +123,8 @@ describe('transações passo a passo', () => {
     expect(simulador.proximaFase()).toBe(true)
     expect(simulador.fases!.indice).toBe(1)
     simulador.concluir()
-    expect(simulador.fases).toMatchObject({ indice: 4, terminou: true })
+    // Com os tempos padrão (50 MHz, memória média) há uma fase de espera.
+    expect(simulador.fases).toMatchObject({ indice: 5, terminou: true })
     expect(simulador.proximaFase()).toBe(false)
     expect(paraNumero(simulador.mdr)).toBe(CONTEUDO_INICIAL[0x3a])
   })
@@ -94,7 +135,7 @@ describe('transações passo a passo', () => {
     simulador.mudarMdr(0x3e)
     simulador.iniciarEscrita()
     simulador.concluir()
-    expect(simulador.fases).toMatchObject({ tipo: 'escrever', indice: 5, terminou: true })
+    expect(simulador.fases).toMatchObject({ tipo: 'escrever', indice: 6, terminou: true })
     expect(paraNumero(simulador.celulas[0xc4]!)).toBe(0x3e)
   })
 

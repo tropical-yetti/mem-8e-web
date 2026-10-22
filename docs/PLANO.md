@@ -186,18 +186,22 @@ O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 
 ## 9. Marcos
 
-| Versão    | Entrega                                                                             |
-| --------- | ----------------------------------------------------------------------------------- |
-| 0.1       | Esqueleto: Vite/Vue/TS, i18n, estilo do CPU-8E, CI, Pages, licença, ADRs 0001–0004. |
-| 0.2       | Núcleo: sinais de 4 valores, memória 16×16, barramento, transações + testes.        |
-| 0.3       | Vista caixa-preta + MAR/MDR/memória editáveis + ler/escrever passo a passo.         |
-| 0.4       | Vista "por dentro" (matriz, linha/coluna acesas, cores por nível).                  |
-| 0.5       | Detalhe em portas (decodificador, célula de 1 bit).                                 |
-| 0.6       | Diagrama de tempo + clock da CPU + wait states (modo assíncrono).                   |
-| 0.7       | Sinais de controle manuais, experimentos "e se…?", carregar/salvar `.bin`.          |
-| 0.8       | Documentação pt/en (como a memória funciona + roteiro de aula).                     |
-| 1.0       | Acessibilidade completa, e2e, lançamento.                                           |
-| 1.x / 2.0 | Modos síncrono e DDR simplificados.                                                 |
+| Versão    | Entrega                                                                                                                                 | Situação |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| 0.1       | Esqueleto: Vite/Vue/TS, i18n, estilo do CPU-8E, CI, Pages, licença, ADRs 0001–0004.                                                     | feito    |
+| 0.2       | Núcleo: sinais de 4 valores, memória 16×16, barramento, transações + testes.                                                            | feito    |
+| 0.3       | Vista caixa-preta + MAR/MDR/memória editáveis + sinais de controle manuais + ler/escrever.                                              | feito    |
+| 0.4       | Vista "por dentro" (decodificadores, matriz, linhas de bit, seletor, buffers).                                                          | feito    |
+| 0.5       | Detalhe em portas (decodificador, célula de 1 bit). Prévia do site no CI.                                                               | feito    |
+| 0.6       | Diagrama de tempo + clock da CPU + wait states (modo assíncrono).                                                                       | em curso |
+| 0.7       | Guia de primeiro acesso com balões e ajuda contextual ([#17](https://github.com/tropical-yetti/mem-8e-web/issues/17)).                  |          |
+| 0.8       | Documentação no site, pt/en: como a memória funciona + roteiro de aula ([#18](https://github.com/tropical-yetti/mem-8e-web/issues/18)). |          |
+| 0.9       | Experimentos "e se…?" guiados; carregar e salvar `.bin`.                                                                                |          |
+| 1.0       | Revisão final de acessibilidade, testes e lançamento.                                                                                   |          |
+| 1.x / 2.0 | Modos síncrono e DDR simplificados.                                                                                                     |          |
+
+O guia de primeiro acesso e a documentação vieram para antes dos experimentos
+porque o site já está publicado: quem chega precisa entender o que fazer.
 
 ## 10. Ideias para depois
 
