@@ -301,7 +301,7 @@
     },
     "mdr": {
       "sigla": "MDR",
-      "nome": "Memory Data Register (Stallings calls it MBR)."
+      "nome": "Memory Data Register. Also called MBR (Memory Buffer Register)."
     },
     "mdrBd": {
       "sigla": "MDR → DB",
