@@ -71,6 +71,7 @@ const quemDirige = computed(() =>
     <div class="cpu linha-be" data-guia="mar">
       <EditorRegistrador
         nome="MAR"
+        sigla="mar"
         prefixo="A"
         :bits="marBits"
         :grupos="grupoMar"
@@ -81,18 +82,20 @@ const quemDirige = computed(() =>
     <FioPainel
       class="fio linha-be"
       :nome="t('painel.be')"
+      sigla="be"
       :nivel="resumo(be)"
       :valor="paraHex(be)"
       cor="be"
       largo
       direcao="cpu"
     />
-    <div class="pino linha-be">A7–A0</div>
+    <div class="pino linha-be" data-sigla="pinosA">A7–A0</div>
 
     <!-- MDR ↔ BD -->
     <div class="cpu linha-bd">
       <EditorRegistrador
         nome="MDR"
+        sigla="mdr"
         prefixo="D"
         :bits="simulador.mdr"
         @valor="simulador.mudarMdr"
@@ -101,6 +104,7 @@ const quemDirige = computed(() =>
       <button
         type="button"
         class="chave"
+        data-sigla="mdrBd"
         :aria-pressed="simulador.sinais.cpuDirigeDados === 1"
         @click="simulador.alternarSinal('cpuDirigeDados')"
       >
@@ -111,13 +115,14 @@ const quemDirige = computed(() =>
     <FioPainel
       class="fio linha-bd"
       :nome="t('painel.bd')"
+      sigla="bd"
       :nivel="resumo(bd)"
       :valor="paraHex(bd)"
       cor="bd"
       largo
       :direcao="direcaoBd"
     />
-    <div class="pino linha-bd">D7–D0</div>
+    <div class="pino linha-bd" data-sigla="pinosD">D7–D0</div>
 
     <!-- Sinais de controle -->
     <template v-for="(controle, i) in CONTROLES" :key="controle.sinal">
@@ -125,6 +130,7 @@ const quemDirige = computed(() =>
         <button
           type="button"
           class="chave"
+          :data-sigla="controle.sinal"
           :aria-pressed="simulador.sinais[controle.sinal] === 1"
           :aria-describedby="`dica-${controle.sinal}`"
           @click="simulador.alternarSinal(controle.sinal)"
@@ -140,11 +146,14 @@ const quemDirige = computed(() =>
         class="fio"
         :style="{ gridRow: 4 + i }"
         :nome="controle.nome"
+        :sigla="controle.sinal"
         :nivel="simulador.sinais[controle.sinal]"
         cor="controle"
         direcao="cpu"
       />
-      <div class="pino" :style="{ gridRow: 4 + i }">{{ controle.nome }}</div>
+      <div class="pino" :style="{ gridRow: 4 + i }" :data-sigla="controle.sinal">
+        {{ controle.nome }}
+      </div>
     </template>
 
     <p class="visualmente-oculto" role="status">

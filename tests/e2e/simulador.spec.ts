@@ -190,3 +190,37 @@ test.describe('diagrama de tempo', () => {
     await expect(page.getByText(/com 3 wait states, o pulso dura 40 ns/)).toBeVisible()
   })
 })
+
+test.describe('legendas das siglas', () => {
+  test('apontar para o fio BE mostra o nome do barramento', async ({ page }) => {
+    await page.locator('[data-sigla="be"]').first().hover()
+    const legenda = page.getByRole('tooltip')
+    await expect(legenda).toBeVisible()
+    await expect(legenda).toContainText('Barramento de endereços')
+    await page.mouse.move(0, 0)
+    await expect(legenda).toBeHidden()
+  })
+
+  test('com o teclado: o foco no CS mostra a legenda, que vira a descrição do botão', async ({
+    page,
+  }) => {
+    const cs = page.getByRole('button', { name: /^CS/ })
+    await cs.focus()
+    await expect(page.getByRole('tooltip')).toContainText('Chip select')
+    await expect(cs).toHaveAttribute('aria-describedby', /legenda-sigla/)
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('tooltip')).toBeHidden()
+    await expect(cs).not.toHaveAttribute('aria-describedby', /legenda-sigla/)
+  })
+
+  test('MAR e MDR também têm legenda', async ({ page }) => {
+    await page.getByText('MAR', { exact: true }).hover()
+    await expect(page.getByRole('tooltip')).toContainText('Memory Address Register')
+    await page.getByText('MDR', { exact: true }).first().hover()
+    await expect(page.getByRole('tooltip')).toContainText('MBR (Memory Buffer Register)')
+  })
+})
+
+test('o rodapé mostra a versão', async ({ page }) => {
+  await expect(page.getByRole('contentinfo')).toContainText(/Versão \d+\.\d+\.\d+/)
+})

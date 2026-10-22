@@ -30,7 +30,8 @@
     "copyright": "© 2026 MEM-8E Web contributors",
     "licenca": "GPL-3.0-or-later license, no warranty",
     "codigoFonte": "Source code",
-    "versao": "Version {versao}"
+    "versao": "Version {versao}",
+    "commit": "Commit this site was built from"
   },
   "registrador": {
     "valor": "{nome} in hexadecimal",
@@ -271,6 +272,56 @@
         "titulo": "Done",
         "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part."
       }
+    }
+  },
+  "siglas": {
+    "be": {
+      "sigla": "AB",
+      "nome": "Address bus: carries the address from the MAR to the memory."
+    },
+    "bd": {
+      "sigla": "DB",
+      "nome": "Data bus: carries the data between the memory and the MDR, both ways."
+    },
+    "cs": {
+      "sigla": "CS",
+      "nome": "Chip select: enables the memory."
+    },
+    "rd": {
+      "sigla": "RD",
+      "nome": "Read: turns the memory output buffers on."
+    },
+    "wr": {
+      "sigla": "WR",
+      "nome": "Write: the selected cell copies the DB."
+    },
+    "mar": {
+      "sigla": "MAR",
+      "nome": "Memory Address Register."
+    },
+    "mdr": {
+      "sigla": "MDR",
+      "nome": "Memory Data Register. Also called MBR (Memory Buffer Register)."
+    },
+    "mdrBd": {
+      "sigla": "MDR → DB",
+      "nome": "The CPU turns its buffers on and puts the MDR on the data bus."
+    },
+    "pinosA": {
+      "sigla": "A7–A0",
+      "nome": "Memory address pins (8 bits)."
+    },
+    "pinosD": {
+      "sigla": "D7–D0",
+      "nome": "Memory data pins (8 bits)."
+    },
+    "ready": {
+      "sigla": "READY",
+      "nome": "Ready: the memory signals it is done; at 0, the CPU waits."
+    },
+    "clk": {
+      "sigla": "CLK",
+      "nome": "CPU clock."
     }
   }
 }
