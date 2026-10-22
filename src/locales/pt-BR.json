@@ -151,5 +151,30 @@
     "buffersDesligados": "desligados: saída em Z",
     "escritaLiberada": "escrita liberada: a célula do cruzamento copia o BD ({valor}).",
     "escritaBloqueada": "escrita bloqueada: nenhuma célula muda."
+  },
+  "portas": {
+    "titulo": "Em portas lógicas",
+    "abas": {
+      "celula": "Bit do endereço {endereco}",
+      "linha": "Decodificador de linha",
+      "coluna": "Decodificador de coluna"
+    },
+    "escolherBit": "Escolher o bit",
+    "bit": "Bit:",
+    "explicaCelula": "O caminho de um bit do endereço {endereco} (D{bit}). Em cima, a escrita: só com CS, WR, a linha e a coluna em 1 o latch copia o BD. Embaixo, a leitura: o bit passa pela linha de bit e pelo seletor, e o buffer tri-state só o põe no BD com CS e RD em 1.",
+    "explicaDecodificador": "Cada porta AND recebe o EN e, de cada bit do endereço, o fio direto ou o invertido (pela porta NOT). Só a porta cuja combinação bate com o endereço fica com todas as entradas em 1.",
+    "escrita": "escrita",
+    "latch": "latch D (a célula)",
+    "outrasLinhas": "outras 15 linhas",
+    "outrasColunas": "outras 15 colunas",
+    "linhaDeBit": "linha de bit (coluna {c}, D{bit})",
+    "seletor": "seletor de coluna",
+    "saidaLinha": "linha",
+    "saidaColuna": "coluna",
+    "nenhuma": "nenhuma",
+    "descDecodificador": "Decodificador em portas lógicas: entradas {entradas}, EN = {en}. Saída de {saida} em 1: {ativas}.",
+    "descCelula": "Bit {bit} do endereço {endereco} em portas lógicas: a célula guarda {q}; escrita liberada = {libera}; saída para o BD = {saida}.",
+    "lin": "lin {n}",
+    "col": "col {n}"
   }
 }

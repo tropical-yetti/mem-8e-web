@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
 import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
+import DetalhePortas from '@/components/portas/DetalhePortas.vue'
 import { useSimuladorStore } from '@/stores/simulador'
 
 const simulador = useSimuladorStore()
@@ -29,6 +30,7 @@ const NIVEIS = ['1', '0', 'Z', 'X'] as const
           </li>
         </ul>
         <ControleTransacao />
+        <DetalhePortas />
       </div>
       <div class="coluna">
         <GradeMemoria />
