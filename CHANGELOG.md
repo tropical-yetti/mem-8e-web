@@ -7,6 +7,11 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.5.0] — 2026-10-22
+
+Vista por dentro da memória (0.4) e detalhe em portas lógicas (0.5),
+publicados juntos, além da prévia do site no CI.
+
 ### 2026-10-22 — Em portas lógicas
 
 - Novo painel "Em portas lógicas", com três abas que acompanham o estado ao
