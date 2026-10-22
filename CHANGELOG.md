@@ -7,6 +7,14 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — CI mais rápido
+
+- Os testes de ponta a ponta rodam na imagem oficial do Playwright, que já
+  traz os navegadores e as bibliotecas de sistema. A instalação, que às vezes
+  levava mais de 15 minutos, deixa de existir.
+- `@playwright/test` fixado numa versão exata, e um teste confere se ela é a
+  mesma da imagem.
+
 ### 2026-10-22 — Diagrama de tempo e wait states
 
 - Modelo de tempo no núcleo (ADR 0003), com tempos genéricos e didáticos:
