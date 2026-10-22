@@ -9,6 +9,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { colunaDe, linhaDe, paraHex } from '@/core'
 import { useSimuladorStore } from '@/stores/simulador'
+import BotaoAjuda from '@/guia/BotaoAjuda.vue'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -55,8 +56,8 @@ const resultado = computed(() => {
 </script>
 
 <template>
-  <section class="transacao" aria-labelledby="titulo-transacao">
-    <h2 id="titulo-transacao">{{ t('transacao.titulo') }}</h2>
+  <section class="transacao" aria-labelledby="titulo-transacao" data-guia="transacao">
+    <h2 id="titulo-transacao">{{ t('transacao.titulo') }} <BotaoAjuda passo="transacao" /></h2>
 
     <div class="botoes">
       <template v-if="!fases || fases.terminou">

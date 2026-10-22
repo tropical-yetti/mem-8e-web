@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n'
 import { useSimuladorStore } from '@/stores/simulador'
 import PortasCelula from './PortasCelula.vue'
 import PortasDecodificador from './PortasDecodificador.vue'
+import BotaoAjuda from '@/guia/BotaoAjuda.vue'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -35,8 +36,8 @@ function teclaAba(evento: KeyboardEvent) {
 </script>
 
 <template>
-  <section class="detalhe" aria-labelledby="titulo-detalhe">
-    <h2 id="titulo-detalhe">{{ t('portas.titulo') }}</h2>
+  <section class="detalhe" aria-labelledby="titulo-detalhe" data-guia="portas">
+    <h2 id="titulo-detalhe">{{ t('portas.titulo') }} <BotaoAjuda passo="portas" /></h2>
     <div class="abas" role="tablist" :aria-label="t('portas.titulo')" @keydown="teclaAba">
       <button
         v-for="opcao in ABAS"

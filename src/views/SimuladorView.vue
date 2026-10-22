@@ -1,5 +1,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
@@ -7,11 +8,20 @@ import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
 import DetalhePortas from '@/components/portas/DetalhePortas.vue'
 import DiagramaTempo from '@/components/DiagramaTempo.vue'
 import { useSimuladorStore } from '@/stores/simulador'
+import BalaoGuia from '@/guia/BalaoGuia.vue'
+import { guiaJaVisto, useGuia } from '@/guia/guia'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
 
 const NIVEIS = ['1', '0', 'Z', 'X'] as const
+
+const guia = useGuia()
+
+// No primeiro acesso, o guia abre sozinho.
+onMounted(() => {
+  if (!guiaJaVisto()) guia.iniciar()
+})
 </script>
 
 <template>
@@ -19,6 +29,9 @@ const NIVEIS = ['1', '0', 'Z', 'X'] as const
     <header class="topo">
       <h1>{{ t('simulador.titulo') }}</h1>
       <p class="intro">{{ t('simulador.intro') }}</p>
+      <button type="button" class="rever" data-guia="rever-guia" @click="guia.iniciar()">
+        {{ t('guia.rever') }}
+      </button>
     </header>
 
     <div class="principal">
@@ -42,6 +55,7 @@ const NIVEIS = ['1', '0', 'Z', 'X'] as const
     </div>
 
     <DiagramaTempo />
+    <BalaoGuia />
   </div>
 </template>
 
@@ -58,6 +72,20 @@ h1 {
   margin: 4px 0 0;
   max-width: 72ch;
   color: var(--texto-suave);
+}
+.rever {
+  margin-top: 8px;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--texto);
+  background: var(--fundo-tabela);
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.rever:hover {
+  background: var(--fundo-hover);
 }
 .principal {
   display: grid;

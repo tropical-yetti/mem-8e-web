@@ -22,6 +22,7 @@ import {
   type Trecho,
 } from '@/core'
 import { useSimuladorStore } from '@/stores/simulador'
+import BotaoAjuda from '@/guia/BotaoAjuda.vue'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -153,9 +154,9 @@ function aoMudarEspera(evento: Event) {
 </script>
 
 <template>
-  <section class="tempo" aria-labelledby="titulo-tempo">
+  <section class="tempo" aria-labelledby="titulo-tempo" data-guia="tempo">
     <div class="cabeca">
-      <h2 id="titulo-tempo">{{ t('tempo.nome') }}</h2>
+      <h2 id="titulo-tempo">{{ t('tempo.nome') }} <BotaoAjuda passo="tempo" /></h2>
       <p class="subtitulo">{{ titulo }}</p>
     </div>
 

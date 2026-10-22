@@ -7,6 +7,22 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Guia de primeiro acesso
+
+- Na primeira visita, um guia de 8 balões apresenta cada parte da tela: MAR,
+  sinais de controle, memória por dentro, transação passo a passo, portas
+  lógicas e diagrama de tempo. Cada balão diz o que a parte faz e sugere algo
+  para experimentar.
+- O balão não bloqueia a página: dá para seguir a sugestão sem fechá-lo. A
+  parte explicada fica em destaque, e o resto da tela escurece.
+- Próximo, Voltar e Pular; Esc fecha. O navegador lembra que o guia já foi
+  visto, e o botão "Ver o guia" o abre de novo.
+- Ajuda contextual: um botão "?" no título de cada seção abre só o balão
+  daquela parte.
+- Funciona pelo teclado e com leitor de tela (o foco vai para o balão e volta
+  para onde estava), respeita a preferência por menos movimento e se ajusta ao
+  celular.
+
 ### 2026-10-22 — CI mais rápido
 
 - Os testes de ponta a ponta rodam na imagem oficial do Playwright, que já

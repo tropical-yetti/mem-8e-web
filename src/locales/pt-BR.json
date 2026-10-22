@@ -219,5 +219,58 @@
     },
     "esperas": "nenhum wait state | 1 wait state | {n} wait states",
     "ciclos": "nenhum ciclo | 1 ciclo | {n} ciclos"
+  },
+  "guia": {
+    "rever": "Ver o guia",
+    "contador": "{n} de {total}",
+    "experimente": "Experimente:",
+    "proximo": "Próximo",
+    "voltar": "Voltar",
+    "pular": "Pular o guia",
+    "concluir": "Começar",
+    "fechar": "Fechar",
+    "entendi": "Entendi",
+    "ajuda": "Ajuda",
+    "ajudaDe": "Ajuda: {parte}",
+    "passos": {
+      "boasVindas": {
+        "titulo": "A memória, aberta",
+        "texto": "Aqui você vê o que acontece dentro da memória quando a CPU lê ou escreve: o endereço escolhe uma linha e uma coluna, e o dado sai (ou entra) pelo barramento de dados. São 256 posições de 8 bits, como na CPU-8E. Este guia mostra cada parte da tela em um minuto."
+      },
+      "mar": {
+        "titulo": "MAR: o endereço",
+        "texto": "O MAR guarda o endereço que a CPU quer acessar e o põe no barramento de endereços (BE). Os 4 bits da esquerda (A7–A4) escolhem a linha da matriz; os 4 da direita (A3–A0), a coluna.",
+        "experimente": "clique num bit do MAR ou digite um valor em hexadecimal. O contorno na grade vai para o novo endereço."
+      },
+      "sinais": {
+        "titulo": "Sinais de controle",
+        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. \"MDR → BD\" faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
+        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também \"MDR → BD\" para ver um conflito."
+      },
+      "grade": {
+        "titulo": "A memória por dentro",
+        "texto": "A grade 16 × 16 é a própria matriz: o decodificador de coluna fica em cima, o de linha à esquerda, e embaixo estão as linhas de bit, o seletor e os buffers de saída. Repare que a linha inteira é lida: os 16 bytes descem, e o seletor escolhe um.",
+        "experimente": "clique numa posição para pôr o endereço dela no MAR; dê dois cliques para mudar o conteúdo."
+      },
+      "transacao": {
+        "titulo": "Ler e escrever, fase a fase",
+        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em \"Próxima fase\" muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
+        "experimente": "clique em \"Ler o endereço\" e avance as fases até o MDR receber o dado."
+      },
+      "portas": {
+        "titulo": "Em portas lógicas",
+        "texto": "Aqui o mesmo circuito aparece em portas AND, OR e NOT: um bit da posição do MAR (o latch que guarda o bit e o caminho até o BD) ou um decodificador 4 → 16. Os fios mudam junto com o resto da tela.",
+        "experimente": "abra a aba \"Decodificador de linha\" e mude um bit do MAR: outra porta acende."
+      },
+      "tempo": {
+        "titulo": "Diagrama de tempo",
+        "texto": "A memória tem o próprio tempo de acesso, e a CPU tem o próprio clock. Quando a memória é mais lenta, a CPU espera ciclos extras: os wait states. Sem esperar, a leitura captura um dado ainda inválido (X).",
+        "experimente": "troque para a memória lenta e desligue \"A CPU espera a memória\". O resumo e o diagrama mostram a leitura dando errado."
+      },
+      "fim": {
+        "titulo": "Pronto",
+        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte."
+      }
+    }
   }
 }
