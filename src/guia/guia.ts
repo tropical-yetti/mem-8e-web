@@ -20,17 +20,19 @@ export interface Passo {
   id: IdPasso
   /** Valor do atributo `data-guia` do elemento apontado; sem alvo, o balão fica no centro. */
   alvo?: string
+  /** Página (e seção) da documentação com mais detalhes: "memoria#matriz". */
+  doc?: string
 }
 
 export const PASSOS: readonly Passo[] = [
-  { id: 'boasVindas' },
-  { id: 'mar', alvo: 'mar' },
-  { id: 'sinais', alvo: 'sinais' },
-  { id: 'grade', alvo: 'grade' },
-  { id: 'transacao', alvo: 'transacao' },
-  { id: 'portas', alvo: 'portas' },
-  { id: 'tempo', alvo: 'tempo' },
-  { id: 'fim', alvo: 'rever-guia' },
+  { id: 'boasVindas', doc: 'primeiros-passos' },
+  { id: 'mar', alvo: 'mar', doc: 'memoria#mar' },
+  { id: 'sinais', alvo: 'sinais', doc: 'memoria#controle' },
+  { id: 'grade', alvo: 'grade', doc: 'memoria#matriz' },
+  { id: 'transacao', alvo: 'transacao', doc: 'tempo#fases' },
+  { id: 'portas', alvo: 'portas', doc: 'portas' },
+  { id: 'tempo', alvo: 'tempo', doc: 'tempo#wait-states' },
+  { id: 'fim', alvo: 'rever-guia', doc: 'roteiro' },
 ]
 
 const CHAVE = 'mem8e.guiaVisto'

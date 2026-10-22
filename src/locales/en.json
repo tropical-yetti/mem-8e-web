@@ -5,7 +5,8 @@
   },
   "nav": {
     "simulador": "Simulator",
-    "sobre": "About"
+    "sobre": "About",
+    "documentacao": "Documentation"
   },
   "idioma": {
     "rotulo": "Language"
@@ -270,9 +271,10 @@
       },
       "fim": {
         "titulo": "Done",
-        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part."
+        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises."
       }
-    }
+    },
+    "lerMais": "Read more in the documentation"
   },
   "siglas": {
     "be": {
@@ -323,5 +325,11 @@
       "sigla": "CLK",
       "nome": "CPU clock."
     }
+  },
+  "docs": {
+    "menu": "Documentation pages",
+    "paginacao": "Previous and next page",
+    "sigla": "Abbreviation",
+    "significado": "What it is"
   }
 }

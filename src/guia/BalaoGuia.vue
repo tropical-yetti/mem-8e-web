@@ -213,6 +213,12 @@ const recorte = computed(() => {
         {{ t(`guia.passos.${guia.passo.value.id}.experimente`) }}
       </p>
 
+      <p v-if="guia.passo.value.doc" class="mais">
+        <RouterLink :to="`/documentacao/${guia.passo.value.doc}`" @click="guia.fechar()">
+          {{ t('guia.lerMais') }}
+        </RouterLink>
+      </p>
+
       <div class="botoes">
         <template v-if="guia.unico.value">
           <button type="button" class="principal" @click="guia.fechar()">
@@ -331,6 +337,10 @@ h2:focus-visible {
   border-left: 3px solid var(--fio-controle);
   background: color-mix(in srgb, var(--fio-controle) 10%, transparent);
   border-radius: 0 6px 6px 0;
+}
+.mais {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
 }
 .botoes {
   display: flex;
