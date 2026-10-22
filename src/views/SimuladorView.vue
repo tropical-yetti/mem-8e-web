@@ -56,7 +56,7 @@ h1 {
 }
 .principal {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-columns: minmax(24rem, 1fr) auto;
   gap: 24px 32px;
   align-items: start;
 }
@@ -121,7 +121,7 @@ h1 {
   background: var(--fundo-hover);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1080px) {
   .principal {
     grid-template-columns: minmax(0, 1fr);
   }

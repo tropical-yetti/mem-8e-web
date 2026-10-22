@@ -67,11 +67,16 @@
     "X": "undefined or in contention"
   },
   "grade": {
-    "titulo": "Memory contents (row × column)",
+    "titulo": "Inside the memory (row × column)",
     "ajuda": "Click a location to put its address in the MAR. Double-click, Enter or a hex digit edits its contents. With CS on, the row and column chosen by the decoders light up.",
     "linhaColuna": "Row \\ column",
     "celula": "Address {endereco}: {valor}",
-    "editar": "New value for address {endereco}"
+    "editar": "New value for address {endereco}",
+    "vista": "How to show the memory",
+    "vistas": {
+      "porDentro": "Inside",
+      "conteudo": "Contents only"
+    }
   },
   "transacao": {
     "titulo": "Step-by-step transaction",
@@ -134,5 +139,17 @@
     "encerrar": "Stop",
     "lerBotao": "Read address {endereco}",
     "escreverBotao": "Write {dado} to address {endereco}"
+  },
+  "porDentro": {
+    "decColuna": "Column decoder 4 → 16",
+    "decLinha": "Row decoder 4 → 16",
+    "linhasDeBit": "bit lines",
+    "seletor": "Column selector 16 → 1",
+    "escolhe": "output: {valor}",
+    "buffers": "Output buffers (tri-state)",
+    "buffersLigados": "on: {valor} goes to the DB",
+    "buffersDesligados": "off: output is Z",
+    "escritaLiberada": "write enabled: the cell at the crossing copies the DB ({valor}).",
+    "escritaBloqueada": "write blocked: no cell changes."
   }
 }

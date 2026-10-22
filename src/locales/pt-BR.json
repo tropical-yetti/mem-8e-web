@@ -67,11 +67,16 @@
     "X": "indefinido ou em conflito"
   },
   "grade": {
-    "titulo": "Conteúdo da memória (linha × coluna)",
+    "titulo": "Memória por dentro (linha × coluna)",
     "ajuda": "Clique numa posição para pôr o endereço dela no MAR. Dois cliques, Enter ou um dígito hexadecimal editam o conteúdo. Com o CS ligado, acendem a linha e a coluna que os decodificadores escolheram.",
     "linhaColuna": "Linha \\ coluna",
     "celula": "Endereço {endereco}: {valor}",
-    "editar": "Novo valor para o endereço {endereco}"
+    "editar": "Novo valor para o endereço {endereco}",
+    "vista": "Como mostrar a memória",
+    "vistas": {
+      "porDentro": "Por dentro",
+      "conteudo": "Só o conteúdo"
+    }
   },
   "transacao": {
     "titulo": "Transação passo a passo",
@@ -134,5 +139,17 @@
       },
       "fim": "Escrita concluída: M[{endereco}] = {mdr}."
     }
+  },
+  "porDentro": {
+    "decColuna": "Decodificador de coluna 4 → 16",
+    "decLinha": "Decodificador de linha 4 → 16",
+    "linhasDeBit": "linhas de bit",
+    "seletor": "Seletor de coluna 16 → 1",
+    "escolhe": "saída: {valor}",
+    "buffers": "Buffers de saída (tri-state)",
+    "buffersLigados": "ligados: {valor} vai para o BD",
+    "buffersDesligados": "desligados: saída em Z",
+    "escritaLiberada": "escrita liberada: a célula do cruzamento copia o BD ({valor}).",
+    "escritaBloqueada": "escrita bloqueada: nenhuma célula muda."
   }
 }
