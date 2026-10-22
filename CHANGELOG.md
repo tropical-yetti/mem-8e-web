@@ -7,6 +7,11 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.8.0] — 2026-10-22
+
+Diagrama de tempo e wait states (0.6), guia de primeiro acesso (0.7) e
+documentação no site com legendas dos componentes (0.8), publicados juntos.
+
 ### 2026-10-22 — Documentação
 
 - Documentação dentro do site, em português e inglês, com sete páginas:
