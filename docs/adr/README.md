@@ -20,11 +20,11 @@ Uma ADR aceita não é editada depois. Se a decisão mudar, uma nova ADR a
 
 ## Índice
 
-| Nº                                             | Decisão                                               | Estado   |
-| ---------------------------------------------- | ----------------------------------------------------- | -------- |
-| [0001](0001-modelo-funcional-por-bloco.md)     | Modelo funcional por bloco, com sinais de 4 valores   | Aceita   |
-| [0002](0002-matriz-16x16.md)                   | Memória 256 × 8 organizada em matriz 16 × 16          | Aceita   |
-| [0003](0003-modelo-de-tempo.md)                | Modelo de tempo genérico e modos de memória abstratos | Aceita   |
-| [0004](0004-reaproveitamento-do-cpu-8e-web.md) | Reaproveitamento de código e estilo do CPU-8E Web     | Aceita   |
-| [0005](0005-experimentos-guiados.md)           | Experimentos "e se…?" guiados                         | Proposta |
-| [0006](0006-arquivo-de-memoria-em-texto.md)    | Conteúdo da memória em arquivo de texto               | Proposta |
+| Nº                                             | Decisão                                               | Estado |
+| ---------------------------------------------- | ----------------------------------------------------- | ------ |
+| [0001](0001-modelo-funcional-por-bloco.md)     | Modelo funcional por bloco, com sinais de 4 valores   | Aceita |
+| [0002](0002-matriz-16x16.md)                   | Memória 256 × 8 organizada em matriz 16 × 16          | Aceita |
+| [0003](0003-modelo-de-tempo.md)                | Modelo de tempo genérico e modos de memória abstratos | Aceita |
+| [0004](0004-reaproveitamento-do-cpu-8e-web.md) | Reaproveitamento de código e estilo do CPU-8E Web     | Aceita |
+| [0005](0005-experimentos-guiados.md)           | Experimentos "e se…?" guiados                         | Aceita |
+| [0006](0006-arquivo-de-memoria-em-texto.md)    | Conteúdo da memória em arquivo de texto               | Aceita |

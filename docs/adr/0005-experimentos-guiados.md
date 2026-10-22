@@ -2,7 +2,7 @@
 
 - **Data:** 2026-10-22
 - **Proponente:** Ansone (redação com o Claude)
-- **Estado:** Proposta
+- **Estado:** Aceita (2026-10-22)
 - **Discussão:** [#30](https://github.com/tropical-yetti/mem-8e-web/issues/30)
 
 ## Contexto e motivação

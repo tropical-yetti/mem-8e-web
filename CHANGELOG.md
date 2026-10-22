@@ -10,7 +10,7 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 ### 2026-10-22 — Plano da 0.9
 
 - ADR 0005 (experimentos "e se…?" guiados) e ADR 0006 (conteúdo da memória
-  em arquivo de texto) propostas nas issues #30 e #31. O formato `.bin` do
+  em arquivo de texto) aprovadas nas issues #30 e #31. O formato `.bin` do
   CPU-8E sai do plano.
 
 ## [0.8.0] — 2026-10-22
