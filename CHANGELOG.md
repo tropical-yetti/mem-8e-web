@@ -7,6 +7,18 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Documentação
+
+- Documentação dentro do site, em português e inglês, com sete páginas:
+  primeiros passos, como a memória funciona, os quatro níveis (0, 1, Z, X),
+  leitura, escrita e tempo, em portas lógicas, roteiro de aula com exercícios
+  e respostas, e siglas.
+- A tabela de siglas é gerada das mesmas mensagens das legendas.
+- Os balões do guia têm um link "Ler mais" para a seção correspondente.
+- O README ganhou uma seção de uso e uma captura de tela nova.
+- Testes conferem que os dois idiomas têm as mesmas páginas e âncoras e que
+  todos os links internos levam a uma página e uma seção que existem.
+
 ### 2026-10-22 — Legendas e commit no rodapé
 
 - Legendas com o nome dos componentes: ao apontar, focar ou tocar nos fios e

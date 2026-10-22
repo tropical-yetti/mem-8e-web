@@ -5,7 +5,8 @@
   },
   "nav": {
     "simulador": "Simulador",
-    "sobre": "Sobre"
+    "sobre": "Sobre",
+    "documentacao": "Documentação"
   },
   "idioma": {
     "rotulo": "Idioma"
@@ -270,9 +271,10 @@
       },
       "fim": {
         "titulo": "Pronto",
-        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte."
+        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios."
       }
-    }
+    },
+    "lerMais": "Ler mais na documentação"
   },
   "siglas": {
     "be": {
@@ -323,5 +325,11 @@
       "sigla": "CLK",
       "nome": "Clock da CPU."
     }
+  },
+  "docs": {
+    "menu": "Páginas da documentação",
+    "paginacao": "Página anterior e próxima",
+    "sigla": "Sigla",
+    "significado": "O que é"
   }
 }

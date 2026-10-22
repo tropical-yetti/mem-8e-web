@@ -24,6 +24,7 @@ function aoTrocarIdioma(evento: Event) {
     </div>
     <nav class="navegacao">
       <RouterLink to="/">{{ t('nav.simulador') }}</RouterLink>
+      <RouterLink to="/documentacao">{{ t('nav.documentacao') }}</RouterLink>
       <RouterLink to="/sobre">{{ t('nav.sobre') }}</RouterLink>
     </nav>
     <label class="idioma">
