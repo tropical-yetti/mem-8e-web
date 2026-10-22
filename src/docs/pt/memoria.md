@@ -5,9 +5,9 @@ A CPU nunca mexe na memória diretamente. Ela põe um endereço num registrador,
 ## Os dois registradores: MAR e MDR {#mar}
 
 - O **MAR** (_Memory Address Register_) guarda o **endereço** da posição que vai ser lida ou escrita. Ele está sempre ligado ao barramento de endereços.
-- O **MDR** (_Memory Data Register_) guarda o **dado**: o que veio da memória numa leitura, ou o que vai para ela numa escrita.
+- O **MDR** (_Memory Data Register_) guarda o **dado**: o que veio da memória numa leitura, ou o que vai para ela numa escrita. (Nota: em algumas literaturas, o MDR também é chamado de **MBR**, ou _Memory Buffer Register_, tratando-se exatamente do mesmo registrador.)
 
-O Stallings chama o MDR de **MBR** (_Memory Buffer Register_): é o mesmo registrador. Já na Mic-1, do Tanenbaum, existem os dois, com papéis diferentes. O MAR e o MDR leem e escrevem palavras de dados, e o PC e o MBR (_Memory Byte Register_) buscam o programa byte a byte.
+O MAR e o MDR operam em conjunto para transferir palavras de dados de e para a memória, enquanto o PC (_Program Counter_) gerencia o fluxo de controle, apontando para as instruções do programa.
 
 ## Três grupos de fios {#barramentos}
 

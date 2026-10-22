@@ -5,9 +5,9 @@ The CPU never touches the memory directly. It puts an address in a register, tur
 ## The two registers: MAR and MDR {#mar}
 
 - The **MAR** (_Memory Address Register_) holds the **address** of the location to read or write. It is always connected to the address bus.
-- The **MDR** (_Memory Data Register_) holds the **data**: what came from the memory in a read, or what goes to it in a write.
+- The **MDR** (_Memory Data Register_) holds the **data**: what came from the memory in a read, or what goes to it in a write. (Note: some texts also call the MDR the **MBR**, or _Memory Buffer Register_; it is exactly the same register.)
 
-Stallings calls the MDR the **MBR** (_Memory Buffer Register_): it is the same register. Tanenbaum's Mic-1, however, has both, with different roles. The MAR and the MDR read and write data words, and the PC and the MBR (_Memory Byte Register_) fetch the program byte by byte.
+The MAR and the MDR work together to move data words to and from the memory, while the PC (_Program Counter_) manages the flow of control, pointing to the program instructions.
 
 ## Three groups of wires {#barramentos}
 
