@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
 import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
+import DetalhePortas from '@/components/portas/DetalhePortas.vue'
 import { useSimuladorStore } from '@/stores/simulador'
 
 const simulador = useSimuladorStore()
@@ -29,6 +30,7 @@ const NIVEIS = ['1', '0', 'Z', 'X'] as const
           </li>
         </ul>
         <ControleTransacao />
+        <DetalhePortas />
       </div>
       <div class="coluna">
         <GradeMemoria />
@@ -56,7 +58,7 @@ h1 {
 }
 .principal {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-columns: minmax(24rem, 1fr) auto;
   gap: 24px 32px;
   align-items: start;
 }
@@ -121,7 +123,7 @@ h1 {
   background: var(--fundo-hover);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1080px) {
   .principal {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -7,6 +7,42 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.5.0] — 2026-10-22
+
+Vista por dentro da memória (0.4) e detalhe em portas lógicas (0.5),
+publicados juntos, além da prévia do site no CI.
+
+### 2026-10-22 — Em portas lógicas
+
+- Novo painel "Em portas lógicas", com três abas que acompanham o estado ao
+  vivo:
+  - **Bit do endereço**: um bit da posição do MAR, da escrita (AND de CS, WR,
+    linha e coluna liberando o latch D) à leitura (linha de palavra, linha de
+    bit, seletor de coluna e buffer tri-state ligado por CS · RD);
+  - **Decodificador de linha** e **de coluna**: 4 portas NOT, a entrada EN e
+    16 portas AND de 5 entradas, com a porta escolhida acesa.
+- Os fios seguem o código dos 4 níveis, e cada desenho tem uma descrição em
+  texto para leitores de tela.
+
+### 2026-10-22 — Prévia no CI
+
+- Cada execução do CI guarda o site num único `index.html`
+  (artifact `previa-mem-8e-web`), para abrir no navegador sem servidor.
+
+### 2026-10-21 — Vista por dentro da memória
+
+- A grade 16 × 16 passa a ser a matriz, com os blocos desenhados em volta:
+  decodificador de coluna acima (A3–A0, habilitado por CS), decodificador de
+  linha à esquerda (A7–A4), e abaixo as linhas de bit, o seletor de coluna e
+  os buffers de saída (CS · RD). Cada saída de decodificador cai sobre a sua
+  linha ou coluna e segue o código dos 4 níveis.
+- As linhas de bit mostram os 16 bytes da linha ativa: a linha inteira é lida,
+  e o seletor escolhe um.
+- A liberação da escrita (CS · WR) aparece com o valor que a célula do
+  cruzamento vai copiar.
+- Botão para alternar entre "Por dentro" e "Só o conteúdo"; a escolha é
+  lembrada no navegador.
+
 ## [0.3.0] — 2026-10-21
 
 Primeira versão com o simulador na tela: núcleo da memória (0.2) e vista

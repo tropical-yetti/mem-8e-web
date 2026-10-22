@@ -17,8 +17,9 @@ construção)
 ## Situação
 
 Já dá para editar o MAR, o MDR e a memória, ligar CS, RD e WR à mão e ver
-leituras e escritas fase a fase. A vista por dentro da memória e o diagrama de
-tempo vêm a seguir. Veja o [plano do projeto](docs/PLANO.md) e as
+leituras e escritas fase a fase, com a memória aberta: decodificadores,
+matriz, seletor e buffers, e o detalhe em portas lógicas de um bit e dos
+decodificadores. O diagrama de tempo vem a seguir. Veja o [plano do projeto](docs/PLANO.md) e as
 [decisões de arquitetura](docs/adr/).
 
 ## Desenvolvimento

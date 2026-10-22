@@ -104,3 +104,59 @@ for (const tema of ['light', 'dark'] as const) {
     ).toEqual([])
   })
 }
+
+test.describe('vista por dentro', () => {
+  test('mostra os decodificadores, a linha de bits, o seletor e os buffers', async ({ page }) => {
+    await porNoMar(page, '3A')
+    await expect(page.getByText('A3–A0 = 1010 (A)')).toBeVisible()
+    await page.getByRole('button', { name: /^CS/ }).click()
+    await expect(page.getByText(`saída: ${M3A}`)).toBeVisible()
+    await expect(page.getByText('desligados: saída em Z')).toBeVisible()
+    await page.getByRole('button', { name: /^RD/ }).click()
+    await expect(page.getByText(`ligados: ${M3A} vai para o BD`)).toBeVisible()
+    await expect(page.getByText(`D7–D0 → BD = ${M3A}`)).toBeVisible()
+  })
+
+  test('a escolha da vista é lembrada', async ({ page }) => {
+    await page.getByRole('radio', { name: 'Só o conteúdo' }).click()
+    await expect(page.getByText('Seletor de coluna 16 → 1')).toBeHidden()
+    await page.reload()
+    await expect(page.getByRole('radio', { name: 'Só o conteúdo' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+    await page.getByRole('radio', { name: 'Por dentro' }).click()
+    await expect(page.getByText('Seletor de coluna 16 → 1')).toBeVisible()
+  })
+})
+
+test.describe('em portas lógicas', () => {
+  test('o decodificador de linha mostra a porta do endereço em 1', async ({ page }) => {
+    await porNoMar(page, '3A')
+    await page.getByRole('button', { name: /^CS/ }).click()
+    await page.getByRole('tab', { name: 'Decodificador de linha' }).click()
+    await expect(
+      page.getByRole('img', { name: /entradas 0011, EN = 1\. Saída de linha em 1: 3\./ }),
+    ).toBeVisible()
+    await page.getByRole('tab', { name: 'Decodificador de linha' }).press('ArrowRight')
+    await expect(page.getByRole('tab', { name: 'Decodificador de coluna' })).toBeFocused()
+    await expect(
+      page.getByRole('img', { name: /entradas 1010, EN = 1\. Saída de coluna em 1: A\./ }),
+    ).toBeVisible()
+  })
+
+  test('o bit da célula acompanha a escrita', async ({ page }) => {
+    await porNoMar(page, '00')
+    const mdr = page.getByRole('textbox', { name: 'MDR em hexadecimal' })
+    await mdr.fill('01')
+    await mdr.press('Enter')
+    await page.getByRole('button', { name: 'D0', exact: true }).click()
+    await page.getByRole('button', { name: /^Escrever/ }).click()
+    for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Próxima fase' }).click()
+    await expect(
+      page.getByRole('img', {
+        name: /Bit 0 do endereço 00 .*guarda 1; escrita liberada = 1; saída para o BD = Z/,
+      }),
+    ).toBeVisible()
+  })
+})

@@ -67,11 +67,16 @@
     "X": "undefined or in contention"
   },
   "grade": {
-    "titulo": "Memory contents (row × column)",
+    "titulo": "Inside the memory (row × column)",
     "ajuda": "Click a location to put its address in the MAR. Double-click, Enter or a hex digit edits its contents. With CS on, the row and column chosen by the decoders light up.",
     "linhaColuna": "Row \\ column",
     "celula": "Address {endereco}: {valor}",
-    "editar": "New value for address {endereco}"
+    "editar": "New value for address {endereco}",
+    "vista": "How to show the memory",
+    "vistas": {
+      "porDentro": "Inside",
+      "conteudo": "Contents only"
+    }
   },
   "transacao": {
     "titulo": "Step-by-step transaction",
@@ -134,5 +139,42 @@
     "encerrar": "Stop",
     "lerBotao": "Read address {endereco}",
     "escreverBotao": "Write {dado} to address {endereco}"
+  },
+  "porDentro": {
+    "decColuna": "Column decoder 4 → 16",
+    "decLinha": "Row decoder 4 → 16",
+    "linhasDeBit": "bit lines",
+    "seletor": "Column selector 16 → 1",
+    "escolhe": "output: {valor}",
+    "buffers": "Output buffers (tri-state)",
+    "buffersLigados": "on: {valor} goes to the DB",
+    "buffersDesligados": "off: output is Z",
+    "escritaLiberada": "write enabled: the cell at the crossing copies the DB ({valor}).",
+    "escritaBloqueada": "write blocked: no cell changes."
+  },
+  "portas": {
+    "titulo": "In logic gates",
+    "abas": {
+      "celula": "Bit of address {endereco}",
+      "linha": "Row decoder",
+      "coluna": "Column decoder"
+    },
+    "escolherBit": "Choose the bit",
+    "bit": "Bit:",
+    "explicaCelula": "The path of one bit of address {endereco} (D{bit}). Top, the write: the latch copies the DB only with CS, WR, the row and the column at 1. Bottom, the read: the bit goes through the bit line and the selector, and the tri-state buffer only puts it on the DB with CS and RD at 1.",
+    "explicaDecodificador": "Each AND gate gets EN and, for each address bit, either the direct wire or the inverted one (through the NOT gate). Only the gate whose combination matches the address has all inputs at 1.",
+    "escrita": "write",
+    "latch": "D latch (the cell)",
+    "outrasLinhas": "other 15 rows",
+    "outrasColunas": "other 15 columns",
+    "linhaDeBit": "bit line (column {c}, D{bit})",
+    "seletor": "column selector",
+    "saidaLinha": "row",
+    "saidaColuna": "column",
+    "nenhuma": "none",
+    "descDecodificador": "Decoder in logic gates: inputs {entradas}, EN = {en}. {saida} output at 1: {ativas}.",
+    "descCelula": "Bit {bit} of address {endereco} in logic gates: the cell holds {q}; write enabled = {libera}; output to the DB = {saida}.",
+    "lin": "row {n}",
+    "col": "col {n}"
   }
 }

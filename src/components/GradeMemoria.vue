@@ -10,6 +10,10 @@
   espaço põe o endereço no MAR. Mouse: um clique põe o endereço no MAR,
   dois cliques editam.
 
+  Na vista "por dentro", os blocos da memória aparecem em volta da grade, e
+  ela mesma passa a ser a matriz: decodificador de coluna acima,
+  decodificador de linha à esquerda, linhas de bit, seletor e buffers abaixo.
+
   SPDX-License-Identifier: GPL-3.0-or-later
 -->
 <script setup lang="ts">
@@ -17,6 +21,9 @@ import { computed, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { COLUNAS, enderecoDe, LINHAS, paraHex, type Nivel } from '@/core'
 import { useSimuladorStore } from '@/stores/simulador'
+import DecodificadorColuna from './porDentro/DecodificadorColuna.vue'
+import DecodificadorLinha from './porDentro/DecodificadorLinha.vue'
+import SaidaMemoria from './porDentro/SaidaMemoria.vue'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -25,6 +32,32 @@ const HEX = Array.from({ length: 16 }, (_, i) => i.toString(16).toUpperCase())
 const indices = (n: number) => Array.from({ length: n }, (_, i) => i)
 
 const interno = computed(() => simulador.avaliacao.interno)
+
+// -------------------------------------------------------------------------
+// Vista: só o conteúdo, ou por dentro (com os blocos em volta)
+// -------------------------------------------------------------------------
+
+const CHAVE_VISTA = 'mem8e.vista'
+type Vista = 'conteudo' | 'porDentro'
+
+function vistaSalva(): Vista {
+  try {
+    return localStorage.getItem(CHAVE_VISTA) === 'conteudo' ? 'conteudo' : 'porDentro'
+  } catch {
+    return 'porDentro'
+  }
+}
+
+const vista = ref<Vista>(vistaSalva())
+
+function mudarVista(nova: Vista) {
+  vista.value = nova
+  try {
+    localStorage.setItem(CHAVE_VISTA, nova)
+  } catch {
+    // Sem armazenamento, a escolha vale só para esta visita.
+  }
+}
 const escritos = computed(() => new Set(simulador.avaliacao.escritos))
 
 /** Endereço com o foco do teclado (uma só parada de Tab para a grade toda). */
@@ -139,10 +172,38 @@ function rotulo(endereco: number): string {
 
 <template>
   <section class="grade" :aria-labelledby="'titulo-grade'">
-    <h2 id="titulo-grade">{{ t('grade.titulo') }}</h2>
+    <div class="cabeca">
+      <h2 id="titulo-grade">{{ t('grade.titulo') }}</h2>
+      <div class="vistas" role="radiogroup" :aria-label="t('grade.vista')">
+        <button
+          v-for="opcao in ['porDentro', 'conteudo'] as const"
+          :key="opcao"
+          type="button"
+          role="radio"
+          :aria-checked="vista === opcao"
+          @click="mudarVista(opcao)"
+        >
+          {{ t(`grade.vistas.${opcao}`) }}
+        </button>
+      </div>
+    </div>
     <p id="ajuda-grade" class="ajuda">{{ t('grade.ajuda') }}</p>
-    <div class="moldura">
-      <table aria-describedby="ajuda-grade">
+    <div class="moldura" :class="{ 'por-dentro': vista === 'porDentro' }">
+      <DecodificadorColuna
+        v-if="vista === 'porDentro'"
+        class="dec-coluna"
+        :entradas="interno.enderecoColuna"
+        :habilita="simulador.sinais.cs"
+        :saidas="interno.colunas"
+      />
+      <DecodificadorLinha
+        v-if="vista === 'porDentro'"
+        class="dec-linha"
+        :entradas="interno.enderecoLinha"
+        :habilita="simulador.sinais.cs"
+        :saidas="interno.linhas"
+      />
+      <table class="matriz" aria-describedby="ajuda-grade">
         <thead>
           <tr>
             <th scope="col" class="canto">
@@ -196,17 +257,59 @@ function rotulo(endereco: number): string {
           </tr>
         </tbody>
       </table>
+      <SaidaMemoria
+        v-if="vista === 'porDentro'"
+        class="saida"
+        :interno="interno"
+        :bd="simulador.avaliacao.bd"
+        :cs="simulador.sinais.cs"
+        :rd="simulador.sinais.rd"
+        :wr="simulador.sinais.wr"
+      />
     </div>
   </section>
 </template>
 
 <style scoped>
 .grade {
+  --cel-l: 1.95rem;
+  --cel-a: 1.7rem;
   min-width: 0;
 }
+.cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin-bottom: 4px;
+}
 h2 {
-  margin: 0 0 2px;
+  margin: 0;
   font-size: 0.95rem;
+}
+.vistas {
+  display: inline-flex;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.vistas button {
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+  background: var(--fundo-tabela);
+  border: 0;
+  cursor: pointer;
+}
+.vistas button + button {
+  border-left: 1px solid var(--borda);
+}
+.vistas button[aria-checked='true'] {
+  color: var(--texto);
+  font-weight: 600;
+  background: var(--fundo-hover);
 }
 .ajuda {
   margin: 0 0 8px;
@@ -216,8 +319,33 @@ h2 {
 }
 .moldura {
   overflow-x: auto;
+  padding-bottom: 4px;
+}
+.moldura.por-dentro {
+  display: grid;
+  /* A matriz tem a largura exata de 17 células (cabeçalho + 16) mais a borda. */
+  grid-template-columns: auto calc(17 * var(--cel-l) + 2px);
+  grid-template-areas:
+    '. coluna'
+    'linha matriz'
+    '. saida';
+  justify-content: start;
+}
+.dec-coluna {
+  grid-area: coluna;
+}
+.dec-linha {
+  grid-area: linha;
+}
+.matriz {
+  grid-area: matriz;
+}
+.saida {
+  grid-area: saida;
 }
 table {
+  width: calc(17 * var(--cel-l) + 2px);
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   font: 0.85rem/1 var(--mono);
@@ -227,8 +355,8 @@ table {
 }
 th,
 td {
-  width: 1.95rem;
-  height: 1.7rem;
+  width: var(--cel-l);
+  height: var(--cel-a);
   padding: 0;
   text-align: center;
 }
@@ -300,10 +428,9 @@ td:focus-visible {
 }
 
 @media (max-width: 480px) {
-  th,
-  td {
-    width: 1.3rem;
-    height: 1.45rem;
+  .grade {
+    --cel-l: 1.3rem;
+    --cel-a: 1.45rem;
   }
   table {
     font-size: 0.68rem;
