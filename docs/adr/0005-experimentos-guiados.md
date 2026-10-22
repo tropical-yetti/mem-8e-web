@@ -89,10 +89,18 @@ isso continua assim:
 - **Com "MDR → BD" ligado**, há contenção: onde o MDR e a célula discordam, o
   BD fica em X, e a célula guarda o X.
 
-A explicação diz que chips reais costumam evitar o conflito: em muitas SRAMs,
-WR ativo desliga a saída, e o controlador da CPU nunca liga os dois. A
-alternativa seria dar prioridade ao WR no modelo, que é mais fiel a esses
-chips, mas esconderia o conflito que o experimento quer mostrar.
+A alternativa seria dar prioridade ao WR no modelo, que é mais fiel a muitos
+chips, mas esconderia o conflito que o experimento quer mostrar. Para não
+ensinar algo diferente do que acontece fora do simulador, o resultado do
+experimento e a página "Como a memória funciona" trazem uma observação sobre
+memórias reais:
+
+- em muitas SRAMs assíncronas, WR ativo desliga os buffers de saída, e o chip
+  só escreve;
+- o controlador de memória da CPU nunca liga RD e WR ao mesmo tempo, e esse é
+  o jeito certo de evitar o conflito;
+- o modelo didático não dá prioridade a nenhum dos dois justamente para que o
+  conflito fique visível.
 
 ### 3. Mudar o MAR no meio de uma leitura não cancela mais a transação
 
