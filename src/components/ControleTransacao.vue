@@ -28,18 +28,29 @@ const valores = computed(() => ({
   coluna: colunaDe(simulador.mar).toString(16).toUpperCase(),
   dado: fases.value?.tipo === 'ler' ? paraHex(simulador.avaliacao.bd) : paraHex(simulador.mdr),
   mdr: paraHex(simulador.mdr),
+  n: t('tempo.ciclos', simulador.linhaDoTempo.esperas),
+  twp: simulador.tempo.tWP,
+  periodo: simulador.tempo.periodo,
 }))
+
+/** A transação vai dar errado por causa do tempo (CPU que não espera uma memória lenta). */
+const errada = computed(() => !simulador.linhaDoTempo.certo)
+
+/** Fases cujo texto muda quando a transação dá errado. */
+const FASES_QUE_ERRAM = ['captura', 'fimEscrita']
 
 const explicacao = computed(() => {
   const f = fases.value
   if (!f || !faseAtual.value) return t('transacao.inicio')
-  return t(`transacao.${f.tipo}.${faseAtual.value}.texto`, valores.value)
+  const variante =
+    errada.value && FASES_QUE_ERRAM.includes(faseAtual.value) ? 'textoErrado' : 'texto'
+  return t(`transacao.${f.tipo}.${faseAtual.value}.${variante}`, valores.value)
 })
 
 const resultado = computed(() => {
   const f = fases.value
   if (!f?.terminou) return null
-  return t(`transacao.${f.tipo}.fim`, valores.value)
+  return t(`transacao.${f.tipo}.${errada.value ? 'fimErrado' : 'fim'}`, valores.value)
 })
 </script>
 
@@ -87,7 +98,9 @@ const resultado = computed(() => {
 
     <p class="explicacao" aria-live="polite">
       {{ explicacao }}
-      <strong v-if="resultado" class="resultado">{{ resultado }}</strong>
+      <strong v-if="resultado" class="resultado" :class="{ errado: errada }">{{
+        resultado
+      }}</strong>
     </p>
   </section>
 </template>
@@ -187,5 +200,8 @@ button:disabled {
 .resultado {
   display: block;
   margin-top: 4px;
+}
+.resultado.errado {
+  color: var(--fio-x);
 }
 </style>

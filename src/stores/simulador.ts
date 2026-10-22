@@ -22,9 +22,18 @@ import {
   definirMdr,
   editarCelula,
   escrever,
-  FASES_ESCRITA,
-  FASES_LEITURA,
+  fasesEscrita,
+  fasesLeitura,
   ler,
+  linhaDoTempoEscrita,
+  linhaDoTempoLeitura,
+  MEMORIAS,
+  paraFios,
+  paraHex,
+  periodoDe,
+  type LinhaDoTempo,
+  type ParametrosTempo,
+  type TipoMemoria,
   LARGURA,
   lerCelula,
   paraNumero,
@@ -43,9 +52,13 @@ export type Sinal = 'cs' | 'rd' | 'wr' | 'cpuDirigeDados'
 interface Transacao {
   tipo: TipoTransacao
   gerador: Generator<Passo<FaseLeitura> | Passo<FaseEscrita>, unknown>
+  /** Todas as fases desta transação (com ou sem espera, conforme o tempo). */
+  lista: readonly (FaseLeitura | FaseEscrita)[]
   /** Fases já mostradas (a última é a atual). */
   passos: (Passo<FaseLeitura> | Passo<FaseEscrita>)[]
   terminou: boolean
+  /** O diagrama de tempo desta transação, calculado quando ela começou. */
+  linha: LinhaDoTempo
 }
 
 /**
@@ -65,6 +78,16 @@ export const useSimuladorStore = defineStore('simulador', () => {
   /** Muda a cada alteração do sistema; os `computed` dependem dela. */
   const versao = ref(0)
   const transacao = shallowRef<Transacao | null>(null)
+
+  // Tempo (ADR 0003): clock da CPU, memória e wait states.
+  const clockMhz = ref(50)
+  const tipoMemoria = ref<TipoMemoria>('media')
+  const esperar = ref(true)
+  const tempo = computed<ParametrosTempo>(() => ({
+    periodo: periodoDe(clockMhz.value),
+    ...MEMORIAS[tipoMemoria.value],
+    esperar: esperar.value,
+  }))
 
   function atualizar(nova?: Avaliacao) {
     avaliacao.value = nova ?? propagar(sistema)
@@ -113,10 +136,9 @@ export const useSimuladorStore = defineStore('simulador', () => {
     const atual = transacao.value
     if (!atual) return null
     void versao.value
-    const lista = atual.tipo === 'ler' ? FASES_LEITURA : FASES_ESCRITA
     return {
       tipo: atual.tipo,
-      lista,
+      lista: atual.lista,
       indice: atual.passos.length - 1,
       terminou: atual.terminou,
     }
@@ -187,12 +209,77 @@ export const useSimuladorStore = defineStore('simulador', () => {
   // ---------------------------------------------------------------------
 
   function iniciar(tipo: TipoTransacao) {
-    const gerador =
+    const p = tempo.value
+    const endereco = sistema.mar
+    const celula = paraHex(lerCelula(sistema.memoria, endereco))
+    const enderecoHex = paraHex(paraFios(endereco, 8))
+    const transacaoNova: Transacao =
       tipo === 'ler'
-        ? ler(sistema, sistema.mar)
-        : escrever(sistema, sistema.mar, paraNumero(sistema.mdr) ?? 0)
-    transacao.value = { tipo, gerador, passos: [], terminou: false }
+        ? {
+            tipo,
+            gerador: ler(sistema, endereco, p),
+            lista: fasesLeitura(p),
+            passos: [],
+            terminou: false,
+            linha: linhaDoTempoLeitura(p, {
+              endereco: enderecoHex,
+              dado: celula,
+              mdrAntes: paraHex(sistema.mdr),
+            }),
+          }
+        : {
+            tipo,
+            gerador: escrever(sistema, endereco, paraNumero(sistema.mdr) ?? 0, p),
+            lista: fasesEscrita(p),
+            passos: [],
+            terminou: false,
+            linha: linhaDoTempoEscrita(p, {
+              endereco: enderecoHex,
+              dado: paraHex(sistema.mdr),
+              celulaAntes: celula,
+            }),
+          }
+    transacao.value = transacaoNova
     proximaFase()
+  }
+
+  /**
+   * O diagrama de tempo: o da transação em andamento ou, sem transação, uma
+   * prévia da leitura do endereço do MAR com os tempos escolhidos.
+   */
+  const linhaDoTempo = computed<LinhaDoTempo>(() => {
+    void versao.value
+    if (transacao.value) return transacao.value.linha
+    return linhaDoTempoLeitura(tempo.value, {
+      endereco: paraHex(paraFios(sistema.mar, 8)),
+      dado: paraHex(lerCelula(sistema.memoria, sistema.mar)),
+      mdrAntes: paraHex(sistema.mdr),
+    })
+  })
+
+  /** Instante da fase mostrada, no diagrama de tempo (ou nada, sem transação). */
+  const instanteAtual = computed<number | null>(() => {
+    const f = fases.value
+    if (!f || f.indice < 0) return null
+    return linhaDoTempo.value.instantes[f.lista[f.indice]!] ?? null
+  })
+
+  function mudarClock(mhz: number) {
+    interromper()
+    clockMhz.value = mhz
+    versao.value++
+  }
+
+  function mudarMemoria(tipo: TipoMemoria) {
+    interromper()
+    tipoMemoria.value = tipo
+    versao.value++
+  }
+
+  function mudarEspera(valor: boolean) {
+    interromper()
+    esperar.value = valor
+    versao.value++
   }
 
   /** Mostra a próxima fase. Devolve `false` se não havia mais nenhuma. */
@@ -207,8 +294,7 @@ export const useSimuladorStore = defineStore('simulador', () => {
     }
     atual.passos.push(proximo.value)
     // Depois da última fase, a transação já terminou: não há o que avançar.
-    const total = atual.tipo === 'ler' ? FASES_LEITURA.length : FASES_ESCRITA.length
-    if (atual.passos.length === total) {
+    if (atual.passos.length === atual.lista.length) {
       atual.gerador.next()
       atual.terminou = true
     }
@@ -237,6 +323,12 @@ export const useSimuladorStore = defineStore('simulador', () => {
     fases,
     podeEscrever,
     largura: LARGURA,
+    tempo,
+    clockMhz,
+    tipoMemoria,
+    esperar,
+    linhaDoTempo,
+    instanteAtual,
     // comandos
     mudarMar,
     alternarBitMar,
@@ -251,5 +343,8 @@ export const useSimuladorStore = defineStore('simulador', () => {
     proximaFase,
     concluir,
     encerrar,
+    mudarClock,
+    mudarMemoria,
+    mudarEspera,
   }
 })

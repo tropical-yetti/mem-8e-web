@@ -93,17 +93,23 @@
       },
       "saida": {
         "nome": "RD on",
-        "texto": "The CPU turns RD on. With CS and RD at 1, the output buffers turn on and the data {dado} appears on the data bus (DB). Now the memory is driving the DB."
+        "texto": "The CPU turns RD on. With CS and RD at 1, the output buffers turn on and the data {dado} appears on the data bus (DB). Now the memory is driving the DB. The timing diagram shows how long it takes to become valid."
       },
       "captura": {
         "nome": "MDR latches",
-        "texto": "The MDR copies what is on the DB: MDR = {mdr}."
+        "texto": "The MDR copies what is on the DB: MDR = {mdr}.",
+        "textoErrado": "The CPU does not wait for the memory: at the end of T2 the MDR copies the DB, but the data is not valid yet. MDR = {mdr}: the read went wrong. Turn wait states on or use a faster memory."
       },
       "liberacao": {
         "nome": "Release",
         "texto": "RD and CS go back to 0. The buffers turn off and the DB floats (Z), ready for the next transaction."
       },
-      "fim": "Read done: M[{endereco}] → MDR = {mdr}."
+      "fim": "Read done: M[{endereco}] → MDR = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "The memory is not done yet: the data on the DB is not valid. It holds READY at 0, and the CPU waits {n} doing nothing. These are wait states: the memory cycle is longer than the CPU's."
+      },
+      "fimErrado": "Read went wrong: M[{endereco}] did not reach the MDR in time (MDR = {mdr})."
     },
     "escrever": {
       "nome": "Write phases",
@@ -125,13 +131,19 @@
       },
       "fimEscrita": {
         "nome": "WR off",
-        "texto": "WR goes back to 0. The cell keeps the value, even if the DB changes afterwards."
+        "texto": "WR goes back to 0. The cell keeps the value, even if the DB changes afterwards.",
+        "textoErrado": "WR goes off after only {periodo} ns, less than the {twp} ns the cell needs. There is no telling what it stored: the cell is undefined (X)."
       },
       "liberacao": {
         "nome": "Release",
         "texto": "CS goes back to 0 and the CPU releases the DB, which goes to Z."
       },
-      "fim": "Write done: M[{endereco}] = {mdr}."
+      "fim": "Write done: M[{endereco}] = {mdr}.",
+      "espera": {
+        "nome": "Wait state",
+        "texto": "The WR pulse must last at least t_WP = {twp} ns, longer than one clock cycle ({periodo} ns). The memory holds READY at 0, and the CPU keeps WR on for {n} more."
+      },
+      "fimErrado": "Write went wrong: the WR pulse was too short, and M[{endereco}] is undefined."
     },
     "mdrIndefinido": "The MDR has undefined bits: set a value to write.",
     "proxima": "Next phase",
@@ -176,5 +188,36 @@
     "descCelula": "Bit {bit} of address {endereco} in logic gates: the cell holds {q}; write enabled = {libera}; output to the DB = {saida}.",
     "lin": "row {n}",
     "col": "col {n}"
+  },
+  "tempo": {
+    "nome": "Timing diagram",
+    "titulo": {
+      "previa": "Preview: read of address {endereco}. Start a transaction for the cursor to follow the phases.",
+      "ler": "Read of address {endereco}",
+      "escrever": "Write to address {endereco}"
+    },
+    "clock": "CPU clock",
+    "periodo": "period {ns} ns",
+    "memoria": "Memory",
+    "memorias": {
+      "rapida": "fast",
+      "media": "medium",
+      "lenta": "slow"
+    },
+    "esperar": "The CPU waits for the memory (wait states)",
+    "resumo": {
+      "leitura": "The data becomes valid at {valido}, and the CPU latches it at {captura}. With {esperas}, the read cycle takes {fim} ({ciclos} clock cycles).",
+      "leituraErrada": "Read went wrong: the CPU latches at {captura}, before the data is valid ({valido}). The MDR gets X.",
+      "escrita": "The cell needs a WR pulse of at least {twp}; with {esperas}, the pulse lasts {pulso}, and the write cycle takes {fim} ({ciclos} clock cycles).",
+      "escritaErrada": "Write went wrong: the WR pulse lasts only {pulso}, less than the {twp} the cell needs. It becomes undefined (X)."
+    },
+    "marcas": {
+      "dadoValido": "data valid ({t})",
+      "captura": "MDR latches ({t})",
+      "pulsoMinimo": "t_WP met ({t})",
+      "fimPulso": "WR off ({t})"
+    },
+    "esperas": "no wait states | 1 wait state | {n} wait states",
+    "ciclos": "no cycles | 1 cycle | {n} cycles"
   }
 }

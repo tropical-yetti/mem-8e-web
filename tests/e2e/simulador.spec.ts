@@ -160,3 +160,33 @@ test.describe('em portas lógicas', () => {
     ).toBeVisible()
   })
 })
+
+test.describe('diagrama de tempo', () => {
+  test('com os tempos padrão, a leitura tem um wait state e dá certo', async ({ page }) => {
+    await expect(page.getByText(/Com 1 wait state, o ciclo de leitura leva 80 ns/)).toBeVisible()
+    await page.getByRole('button', { name: /^Ler o endereço/ }).click()
+    for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Próxima fase' }).click()
+    await expect(page.getByRole('listitem').filter({ hasText: 'Wait state' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    await page.getByRole('button', { name: 'Ir até o fim' }).click()
+    await expect(page.getByText(/^Leitura concluída/)).toBeVisible()
+  })
+
+  test('sem wait states, uma memória lenta faz a leitura dar errado', async ({ page }) => {
+    await page.getByLabel('Memória', { exact: true }).selectOption('lenta')
+    await page.getByRole('checkbox', { name: 'A CPU espera a memória (wait states)' }).uncheck()
+    await expect(page.getByText(/^Leitura errada: a CPU captura em 40 ns/)).toBeVisible()
+    await page.getByRole('button', { name: /^Ler o endereço/ }).click()
+    await page.getByRole('button', { name: 'Ir até o fim' }).click()
+    await expect(page.getByText(/não chegou ao MDR a tempo \(MDR = XX\)/)).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Escrever/ })).toBeDisabled()
+  })
+
+  test('clock mais rápido, mais wait states na escrita', async ({ page }) => {
+    await page.getByLabel('Clock da CPU', { exact: true }).selectOption('100')
+    await page.getByRole('button', { name: /^Escrever/ }).click()
+    await expect(page.getByText(/com 3 wait states, o pulso dura 40 ns/)).toBeVisible()
+  })
+})

@@ -5,6 +5,7 @@ import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
 import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
 import DetalhePortas from '@/components/portas/DetalhePortas.vue'
+import DiagramaTempo from '@/components/DiagramaTempo.vue'
 import { useSimuladorStore } from '@/stores/simulador'
 
 const simulador = useSimuladorStore()
@@ -39,6 +40,8 @@ const NIVEIS = ['1', '0', 'Z', 'X'] as const
         </button>
       </div>
     </div>
+
+    <DiagramaTempo />
   </div>
 </template>
 
