@@ -7,6 +7,16 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Legendas e commit no rodapé
+
+- Legendas com o nome dos componentes: ao apontar, focar ou tocar nos fios e
+  rótulos BE, BD, CS, RD, WR, nos pinos A7–A0 e D7–D0, no MAR, no MDR, no
+  botão "MDR → BD" e nos nomes dos sinais do diagrama de tempo (CLK, READY…)
+  aparece o nome completo e para que serve. A legenda também é a descrição
+  acessível do elemento, e Esc a fecha.
+- O rodapé mostra o commit de onde o site foi gerado, com link para ele no
+  GitHub, para saber qual código está na tela.
+
 ### 2026-10-22 — Guia de primeiro acesso
 
 - Na primeira visita, um guia de 8 balões apresenta cada parte da tela: MAR,

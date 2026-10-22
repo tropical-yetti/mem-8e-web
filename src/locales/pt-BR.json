@@ -30,7 +30,8 @@
     "copyright": "© 2026 colaboradores do MEM-8E Web",
     "licenca": "Licença GPL-3.0-or-later, sem garantia",
     "codigoFonte": "Código-fonte",
-    "versao": "Versão {versao}"
+    "versao": "Versão {versao}",
+    "commit": "Commit de onde este site foi gerado"
   },
   "registrador": {
     "valor": "{nome} em hexadecimal",
@@ -271,6 +272,56 @@
         "titulo": "Pronto",
         "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte."
       }
+    }
+  },
+  "siglas": {
+    "be": {
+      "sigla": "BE",
+      "nome": "Barramento de endereços: leva o endereço do MAR até a memória."
+    },
+    "bd": {
+      "sigla": "BD",
+      "nome": "Barramento de dados: leva o dado entre a memória e o MDR, nos dois sentidos."
+    },
+    "cs": {
+      "sigla": "CS",
+      "nome": "Chip select (seleção do chip): liga a memória."
+    },
+    "rd": {
+      "sigla": "RD",
+      "nome": "Read (leitura): liga os buffers de saída da memória."
+    },
+    "wr": {
+      "sigla": "WR",
+      "nome": "Write (escrita): a célula escolhida copia o BD."
+    },
+    "mar": {
+      "sigla": "MAR",
+      "nome": "Memory Address Register: registrador de endereço da memória."
+    },
+    "mdr": {
+      "sigla": "MDR",
+      "nome": "Memory Data Register: registrador de dados da memória (o MBR do Stallings)."
+    },
+    "mdrBd": {
+      "sigla": "MDR → BD",
+      "nome": "A CPU liga os seus buffers e põe o MDR no barramento de dados."
+    },
+    "pinosA": {
+      "sigla": "A7–A0",
+      "nome": "Pinos de endereço da memória (8 bits)."
+    },
+    "pinosD": {
+      "sigla": "D7–D0",
+      "nome": "Pinos de dados da memória (8 bits)."
+    },
+    "ready": {
+      "sigla": "READY",
+      "nome": "Pronto: a memória avisa que terminou; em 0, a CPU espera."
+    },
+    "clk": {
+      "sigla": "CLK",
+      "nome": "Clock da CPU."
     }
   }
 }

@@ -229,7 +229,13 @@ function aoMudarEspera(evento: Event) {
 
         <!-- Sinais -->
         <g v-for="(sinal, i) in linha.sinais" :key="sinal.id" :class="classeSinal(sinal.id)">
-          <text :x="X0 - 10" :y="meioDaLinha(i) + 4" text-anchor="end" class="nome-sinal">
+          <text
+            :x="X0 - 10"
+            :y="meioDaLinha(i) + 4"
+            text-anchor="end"
+            class="nome-sinal"
+            :data-sigla="sinal.id === 'celula' ? undefined : sinal.id"
+          >
             {{ nome(sinal.id) }}
           </text>
           <path v-if="sinal.tipo === 'bit'" class="onda" :d="caminhoBit(sinal, i)" />
