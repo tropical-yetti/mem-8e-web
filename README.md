@@ -19,7 +19,7 @@ construção)
 Já dá para editar o MAR, o MDR e a memória, ligar CS, RD e WR à mão e ver
 leituras e escritas fase a fase, com a memória aberta: decodificadores,
 matriz, seletor e buffers, e o detalhe em portas lógicas de um bit e dos
-decodificadores. O diagrama de tempo vem a seguir. Veja o [plano do projeto](docs/PLANO.md) e as
+decodificadores, e o diagrama de tempo com o clock da CPU e os wait states. Veja o [plano do projeto](docs/PLANO.md) e as
 [decisões de arquitetura](docs/adr/).
 
 ## Desenvolvimento

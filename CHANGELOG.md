@@ -7,6 +7,22 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Diagrama de tempo e wait states
+
+- Modelo de tempo no núcleo (ADR 0003), com tempos genéricos e didáticos:
+  t_AA, t_OE e t_WP, três memórias de exemplo (rápida, média, lenta) e o
+  clock da CPU (10, 25, 50 ou 100 MHz).
+- A CPU trabalha em estados de clock (T1, T2, T3). Quando a memória é mais
+  lenta, ela segura o READY em 0 e a CPU insere wait states (Tw).
+- Sem wait states, uma memória lenta demais dá errado: a leitura captura X
+  no MDR, e a escrita com pulso de WR curto demais deixa a célula em X.
+- Diagrama de tempo com CLK, BE, CS, RD, WR, READY, BD e MDR (ou a célula),
+  faixas para os estados de clock, marcas de "dado válido" e "captura" (ou
+  do pulso mínimo de WR) e um cursor que acompanha a fase da transação.
+  Sem transação, ele mostra uma prévia da leitura do endereço do MAR.
+- A fase "Wait state" aparece na transação passo a passo quando há espera,
+  e os textos explicam quando e por que a transação deu errado.
+
 ## [0.5.0] — 2026-10-22
 
 Vista por dentro da memória (0.4) e detalhe em portas lógicas (0.5),
