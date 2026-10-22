@@ -217,7 +217,7 @@ test.describe('legendas das siglas', () => {
     await page.getByText('MAR', { exact: true }).hover()
     await expect(page.getByRole('tooltip')).toContainText('Memory Address Register')
     await page.getByText('MDR', { exact: true }).first().hover()
-    await expect(page.getByRole('tooltip')).toContainText('MBR do Stallings')
+    await expect(page.getByRole('tooltip')).toContainText('MBR (Memory Buffer Register)')
   })
 })
 

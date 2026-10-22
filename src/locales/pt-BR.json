@@ -303,7 +303,7 @@
     },
     "mdr": {
       "sigla": "MDR",
-      "nome": "Memory Data Register: registrador de dados da memória (o MBR do Stallings)."
+      "nome": "Memory Data Register: registrador de dados da memória. Também é chamado de MBR (Memory Buffer Register)."
     },
     "mdrBd": {
       "sigla": "MDR → BD",
