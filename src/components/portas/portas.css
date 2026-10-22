@@ -1,0 +1,69 @@
+/*
+ * Cores dos fios e das portas nos desenhos em portas lógicas, no mesmo código
+ * dos 4 níveis do painel: 1 aceso, 0 fino e apagado, Z tracejado, X vermelho.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.portas {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  overflow: visible;
+}
+.portas .fio {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: var(--fio-bd);
+}
+.portas .fio.nivel-0 {
+  stroke: var(--fio-apagado);
+  stroke-width: 1.3;
+}
+.portas .fio.nivel-Z {
+  stroke: var(--fio-apagado);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+.portas .fio.nivel-X {
+  stroke: var(--fio-x);
+}
+.portas .porta {
+  fill: var(--fundo-painel);
+  stroke: var(--texto-suave);
+  stroke-width: 1.5;
+}
+.portas .porta.saida-1 {
+  stroke: var(--fio-bd);
+  stroke-width: 2;
+}
+.portas .porta.saida-X {
+  stroke: var(--fio-x);
+}
+.portas .ponto {
+  fill: var(--texto-suave);
+}
+.portas .ponto.nivel-1 {
+  fill: var(--fio-bd);
+}
+.portas .ponto.nivel-X {
+  fill: var(--fio-x);
+}
+.portas text {
+  fill: var(--texto);
+}
+.portas .suave {
+  fill: var(--texto-suave);
+}
+.portas .forte {
+  font-weight: 700;
+}
+.portas .bloco {
+  fill: var(--fundo-painel);
+  stroke: var(--texto-suave);
+  stroke-width: 1.5;
+}

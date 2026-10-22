@@ -129,3 +129,34 @@ test.describe('vista por dentro', () => {
     await expect(page.getByText('Seletor de coluna 16 → 1')).toBeVisible()
   })
 })
+
+test.describe('em portas lógicas', () => {
+  test('o decodificador de linha mostra a porta do endereço em 1', async ({ page }) => {
+    await porNoMar(page, '3A')
+    await page.getByRole('button', { name: /^CS/ }).click()
+    await page.getByRole('tab', { name: 'Decodificador de linha' }).click()
+    await expect(
+      page.getByRole('img', { name: /entradas 0011, EN = 1\. Saída de linha em 1: 3\./ }),
+    ).toBeVisible()
+    await page.getByRole('tab', { name: 'Decodificador de linha' }).press('ArrowRight')
+    await expect(page.getByRole('tab', { name: 'Decodificador de coluna' })).toBeFocused()
+    await expect(
+      page.getByRole('img', { name: /entradas 1010, EN = 1\. Saída de coluna em 1: A\./ }),
+    ).toBeVisible()
+  })
+
+  test('o bit da célula acompanha a escrita', async ({ page }) => {
+    await porNoMar(page, '00')
+    const mdr = page.getByRole('textbox', { name: 'MDR em hexadecimal' })
+    await mdr.fill('01')
+    await mdr.press('Enter')
+    await page.getByRole('button', { name: 'D0', exact: true }).click()
+    await page.getByRole('button', { name: /^Escrever/ }).click()
+    for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Próxima fase' }).click()
+    await expect(
+      page.getByRole('img', {
+        name: /Bit 0 do endereço 00 .*guarda 1; escrita liberada = 1; saída para o BD = Z/,
+      }),
+    ).toBeVisible()
+  })
+})

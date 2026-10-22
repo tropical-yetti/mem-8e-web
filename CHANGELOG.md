@@ -7,6 +7,23 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Em portas lógicas
+
+- Novo painel "Em portas lógicas", com três abas que acompanham o estado ao
+  vivo:
+  - **Bit do endereço**: um bit da posição do MAR, da escrita (AND de CS, WR,
+    linha e coluna liberando o latch D) à leitura (linha de palavra, linha de
+    bit, seletor de coluna e buffer tri-state ligado por CS · RD);
+  - **Decodificador de linha** e **de coluna**: 4 portas NOT, a entrada EN e
+    16 portas AND de 5 entradas, com a porta escolhida acesa.
+- Os fios seguem o código dos 4 níveis, e cada desenho tem uma descrição em
+  texto para leitores de tela.
+
+### 2026-10-22 — Prévia no CI
+
+- Cada execução do CI guarda o site num único `index.html`
+  (artifact `previa-mem-8e-web`), para abrir no navegador sem servidor.
+
 ### 2026-10-21 — Vista por dentro da memória
 
 - A grade 16 × 16 passa a ser a matriz, com os blocos desenhados em volta:
