@@ -7,6 +7,12 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Guia com as novidades da 0.9
+
+- O guia de primeiro acesso ganhou dois balões, e agora tem dez: um para
+  guardar e compartilhar a memória em texto e outro para os experimentos
+  "e se…?". O último balão sugere os experimentos como próximo passo (#36).
+
 ### 2026-10-23 — Regra de lançamentos
 
 - A `main` passa a receber só lançamentos, que juntam várias versões menores
