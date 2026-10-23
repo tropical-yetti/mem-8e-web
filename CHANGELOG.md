@@ -7,6 +7,15 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.0.0] — 2026-10-23
+
+Primeira versão estável, e a primeira publicada pela regra de lançamentos:
+chega ao site junto com a 0.9.0 (experimentos “e se…?” e memória em texto).
+A 1.0 é a revisão final (#36): o guia apresenta as novidades, a memória é
+lida pelo leitor de tela uma célula por vez, tudo funciona só com o teclado
+e em telas de 320 px, e os testes cobrem também a store, os experimentos e o
+guia.
+
 ### 2026-10-23 — Revisão dos textos e README
 
 - Aspas padronizadas no estilo tipográfico (“ ”) em toda a interface e na
