@@ -8,8 +8,8 @@ import { readFile } from 'node:fs/promises'
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
-const celula = (page: Page, endereco: string) =>
-  page.getByRole('cell', { name: new RegExp(`^Endereço ${endereco}:`) })
+/** Uma posição da grade (o leitor de tela só vê a do foco; o teste encontra todas). */
+const celula = (page: Page, endereco: string) => page.locator(`td[data-endereco="${endereco}"]`)
 
 async function semViolacoes(page: Page) {
   const resultado = await new AxeBuilder({ page })
@@ -40,14 +40,14 @@ test('colar um texto substitui a memória', async ({ page }) => {
   await expect(page.getByRole('status').filter({ hasText: 'posições' })).toHaveText(
     '3 posições vieram do texto; as outras ficaram em 00.',
   )
-  await expect(celula(page, '10')).toHaveAttribute('aria-label', 'Endereço 10: AB')
-  await expect(celula(page, '11')).toHaveAttribute('aria-label', 'Endereço 11: CD')
-  await expect(celula(page, '12')).toHaveAttribute('aria-label', /^Endereço 12: XX/)
-  await expect(celula(page, '00')).toHaveAttribute('aria-label', 'Endereço 00: 00')
+  await expect(celula(page, '10')).toHaveText('AB')
+  await expect(celula(page, '11')).toHaveText('CD')
+  await expect(celula(page, '12')).toHaveText('XX')
+  await expect(celula(page, '00')).toHaveText('00')
 })
 
 test('um texto com erro mostra linha e coluna e não muda a memória', async ({ page }) => {
-  const antes = await celula(page, '10').getAttribute('aria-label')
+  const antes = (await celula(page, '10').textContent())!.trim()
   await page.getByRole('button', { name: 'Colar texto…' }).click()
   const janela = page.getByRole('dialog', { name: 'Colar o conteúdo da memória' })
   await janela.getByRole('textbox').fill('10: 01\n20: 02 G7')
@@ -61,17 +61,17 @@ test('um texto com erro mostra linha e coluna e não muda a memória', async ({ 
 
   await janela.getByRole('button', { name: 'Cancelar' }).click()
   await expect(janela).toBeHidden()
-  await expect(celula(page, '10')).toHaveAttribute('aria-label', antes!)
+  await expect(celula(page, '10')).toHaveText(antes)
 })
 
 test('Esc fecha a janela de colar sem mudar nada', async ({ page }) => {
-  const antes = await celula(page, '00').getAttribute('aria-label')
+  const antes = (await celula(page, '00').textContent())!.trim()
   await page.getByRole('button', { name: 'Colar texto…' }).click()
   const janela = page.getByRole('dialog', { name: 'Colar o conteúdo da memória' })
   await janela.getByRole('textbox').fill('00: 11')
   await page.keyboard.press('Escape')
   await expect(janela).toBeHidden()
-  await expect(celula(page, '00')).toHaveAttribute('aria-label', antes!)
+  await expect(celula(page, '00')).toHaveText(antes)
 })
 
 test('salvar e abrir de volta dá a mesma memória', async ({ page }) => {
@@ -86,20 +86,20 @@ test('salvar e abrir de volta dá a mesma memória', async ({ page }) => {
     /^# MEM-8E Web: conteúdo da memória \(256 × 8\)\n# salvo em \d{4}-\d\d-\d\d, versão /,
   )
   expect(texto.split('\n').filter((l) => /^[0-9A-F]{2}: /.test(l))).toHaveLength(16)
-  const antes = await celula(page, '3A').getAttribute('aria-label')
+  const antes = (await celula(page, '3A').textContent())!.trim()
 
   await page.getByRole('button', { name: 'Zerar memória e registradores' }).click()
-  await expect(celula(page, '3A')).toHaveAttribute('aria-label', 'Endereço 3A: 00')
+  await expect(celula(page, '3A')).toHaveText('00')
 
   await page.getByTestId('arquivo-entrada').setInputFiles(caminho)
   await expect(page.getByRole('status').filter({ hasText: 'posições' })).toHaveText(
     '256 posições vieram do texto; as outras ficaram em 00.',
   )
-  await expect(celula(page, '3A')).toHaveAttribute('aria-label', antes!)
+  await expect(celula(page, '3A')).toHaveText(antes)
 })
 
 test('abrir um arquivo com erro avisa e não muda a memória', async ({ page }) => {
-  const antes = await celula(page, 'FF').getAttribute('aria-label')
+  const antes = (await celula(page, 'FF').textContent())!.trim()
   await page.getByTestId('arquivo-entrada').setInputFiles({
     name: 'errado.txt',
     mimeType: 'text/plain',
@@ -108,7 +108,7 @@ test('abrir um arquivo com erro avisa e não muda a memória', async ({ page }) 
   await expect(page.getByRole('status').filter({ hasText: 'Linha' })).toHaveText(
     'Linha 1, coluna 8: “02” passa do endereço FF, o último da memória. A memória não mudou.',
   )
-  await expect(celula(page, 'FF')).toHaveAttribute('aria-label', antes!)
+  await expect(celula(page, 'FF')).toHaveText(antes)
 })
 
 test('copiar põe o texto da memória na área de transferência', async ({
