@@ -11,10 +11,9 @@ de dados e os sinais de controle (CS, RD, WR) e de tempo trabalharem juntos.
 a memória tem a mesma arquitetura de 8 bits e os mesmos nomes (MAR, MDR, BE, BD)
 da CPU-8E, mas aqui ela deixa de ser uma caixa-preta.
 
-**Use no navegador:** <https://tropical-yetti.github.io/mem-8e-web/> (em
-construção)
+**Use no navegador:** <https://tropical-yetti.github.io/mem-8e-web/>
 
-![Leitura do endereço 3A na fase de wait state: a linha 3 e a coluna A escolhidas e o dado C9 no barramento de dados](.github/captura.png)
+![O experimento “E se a CPU e a memória dirigirem o BD juntas?”: o MAR em 3A, a linha 3 e a coluna A escolhidas, e o barramento de dados em conflito (XX), com o balão explicando o resultado e como as memórias reais evitam isso](.github/captura.png)
 
 ## O que dá para fazer
 
@@ -26,6 +25,7 @@ construção)
 - **Comparar o ciclo de memória com o da CPU** no diagrama de tempo, com wait states.
 - **Editar a memória** pela grade, com o mouse ou o teclado.
 - **Guardar e compartilhar a memória** num arquivo de texto, com endereço e bytes em hex, ou colando e copiando o mesmo texto.
+- **Fazer experimentos “e se…?”**: cinco situações que dão errado de propósito (contenção no BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera, CS desligado), cada uma com pergunta, passos e explicação.
 
 Na primeira visita, um guia com balões apresenta cada parte da tela. A
 [documentação](https://tropical-yetti.github.io/mem-8e-web/#/documentacao),

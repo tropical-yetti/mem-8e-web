@@ -50,7 +50,7 @@ In a write, WR turns on at the start of T2 and off at the start of T3: a pulse o
 
 ## Without wait states {#sem-espera}
 
-Uncheck **"The CPU waits for the memory"** and pick a slow memory:
+Uncheck **“The CPU waits for the memory”** and pick a slow memory:
 
 - in a **read**, the CPU latches at the end of T2 anyway, with the data still invalid: the **MDR gets X**;
 - in a **write**, the WR pulse is too short, and the **cell becomes undefined (X)**.

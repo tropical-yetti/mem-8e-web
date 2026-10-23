@@ -24,7 +24,7 @@ Exercícios para fazer no simulador, do mais simples ao mais elaborado. As respo
 1. Com o clock de 50 MHz e a memória média, quantos wait states tem uma leitura? Quanto dura o ciclo?
 2. Troque o clock para 10 MHz. E agora?
 3. Com a memória lenta e o clock de 100 MHz, quantos wait states há? O que isso diz sobre usar uma CPU rápida com uma memória lenta?
-4. Desmarque **"A CPU espera a memória"**, mantenha a memória lenta e leia um endereço. O que o MDR recebe?
+4. Desmarque **“A CPU espera a memória”**, mantenha a memória lenta e leia um endereço. O que o MDR recebe?
 
 ## 5. Em portas lógicas {#ex-portas}
 

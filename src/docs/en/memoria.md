@@ -60,11 +60,11 @@ Both decoders work only with **CS** on (the EN input). The row decoder turns on 
 
 ## Bit lines and selector {#linhas-de-bit}
 
-When a word line turns on, **the whole row is read**: its 16 bytes go down the **bit lines**, one per column. In the "Inside" view, below the grid, you see these 16 bytes.
+When a word line turns on, **the whole row is read**: its 16 bytes go down the **bit lines**, one per column. In the “Inside” view, below the grid, you see these 16 bytes.
 
 The **column selector** (a 16 → 1 multiplexer) uses the column decoder output to pick one of these 16 bytes. Only that byte goes on.
 
-Reading the whole row looks wasteful, but that is how real memories work, and it is the basis of synchronous memories and DDR: once a row is "open", reading other columns of the same row is fast.
+Reading the whole row looks wasteful, but that is how real memories work, and it is the basis of synchronous memories and DDR: once a row is “open”, reading other columns of the same row is fast.
 
 ## Output buffers (tri-state) {#buffers}
 
