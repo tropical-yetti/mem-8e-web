@@ -29,42 +29,50 @@ const ultimo = computed(() => guia.indice.value === guia.total - 1)
     descricao="guia-texto"
     @fechar="guia.fechar()"
   >
-    <p v-if="!guia.unico.value" class="contador">
-      {{ t('guia.contador', { n: guia.indice.value! + 1, total: guia.total }) }}
-    </p>
-    <h2 id="guia-titulo" tabindex="-1" data-foco>
-      {{ t(`guia.passos.${guia.passo.value.id}.titulo`) }}
-    </h2>
-    <p id="guia-texto" class="texto">{{ t(`guia.passos.${guia.passo.value.id}.texto`) }}</p>
-    <p v-if="te(`guia.passos.${guia.passo.value.id}.experimente`)" class="experimente">
-      <strong>{{ t('guia.experimente') }}</strong>
-      {{ t(`guia.passos.${guia.passo.value.id}.experimente`) }}
-    </p>
+    <template #default="{ irParaAlvo }">
+      <p v-if="!guia.unico.value" class="contador">
+        {{ t('guia.contador', { n: guia.indice.value! + 1, total: guia.total }) }}
+      </p>
+      <h2 id="guia-titulo" tabindex="-1" data-foco>
+        {{ t(`guia.passos.${guia.passo.value.id}.titulo`) }}
+      </h2>
+      <p id="guia-texto" class="texto">{{ t(`guia.passos.${guia.passo.value.id}.texto`) }}</p>
+      <p v-if="te(`guia.passos.${guia.passo.value.id}.experimente`)" class="experimente">
+        <strong>{{ t('guia.experimente') }}</strong>
+        {{ t(`guia.passos.${guia.passo.value.id}.experimente`) }}
+      </p>
 
-    <p v-if="guia.passo.value.doc" class="mais">
-      <RouterLink :to="`/documentacao/${guia.passo.value.doc}`" @click="guia.fechar()">
-        {{ t('guia.lerMais') }}
-      </RouterLink>
-    </p>
+      <p v-if="guia.passo.value.doc" class="mais">
+        <RouterLink :to="`/documentacao/${guia.passo.value.doc}`" @click="guia.fechar()">
+          {{ t('guia.lerMais') }}
+        </RouterLink>
+      </p>
 
-    <div class="botoes">
-      <template v-if="guia.unico.value">
-        <button type="button" class="principal" @click="guia.fechar()">
-          {{ t('guia.entendi') }}
+      <p v-if="guia.passo.value.alvo && !guia.unico.value" class="ir">
+        <button type="button" class="ir-para" aria-keyshortcuts="F6" @click="irParaAlvo()">
+          {{ t('guia.irPara') }}
         </button>
-      </template>
-      <template v-else>
-        <button type="button" class="pular" @click="guia.fechar()">
-          {{ ultimo ? t('guia.fechar') : t('guia.pular') }}
-        </button>
-        <span class="espaco"></span>
-        <button v-if="guia.indice.value! > 0" type="button" @click="guia.anterior()">
-          {{ t('guia.voltar') }}
-        </button>
-        <button type="button" class="principal" @click="guia.proximo()">
-          {{ ultimo ? t('guia.concluir') : t('guia.proximo') }}
-        </button>
-      </template>
-    </div>
+      </p>
+
+      <div class="botoes">
+        <template v-if="guia.unico.value">
+          <button type="button" class="principal" @click="guia.fechar()">
+            {{ t('guia.entendi') }}
+          </button>
+        </template>
+        <template v-else>
+          <button type="button" class="pular" @click="guia.fechar()">
+            {{ ultimo ? t('guia.fechar') : t('guia.pular') }}
+          </button>
+          <span class="espaco"></span>
+          <button v-if="guia.indice.value! > 0" type="button" @click="guia.anterior()">
+            {{ t('guia.voltar') }}
+          </button>
+          <button type="button" class="principal" @click="guia.proximo()">
+            {{ ultimo ? t('guia.concluir') : t('guia.proximo') }}
+          </button>
+        </template>
+      </div>
+    </template>
   </BalaoBase>
 </template>

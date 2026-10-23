@@ -3,7 +3,12 @@
     "collect": {
       "startServerCommand": "npx vite preview --port 4173 --strictPort",
       "startServerReadyPattern": "localhost:4173",
-      "url": ["http://localhost:4173/mem-8e-web/", "http://localhost:4173/mem-8e-web/#/sobre"],
+      "url": [
+        "http://localhost:4173/mem-8e-web/",
+        "http://localhost:4173/mem-8e-web/#/sobre",
+        "http://localhost:4173/mem-8e-web/#/documentacao/memoria",
+        "http://localhost:4173/mem-8e-web/#/documentacao/tempo"
+      ],
       "numberOfRuns": 3
     },
     "assert": {

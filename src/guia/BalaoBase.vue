@@ -3,6 +3,10 @@
   elemento apontado (um recorte sobre a página) e fica ao lado dele, com uma
   seta. O conteúdo vem do slot.
 
+  Teclado: F6 alterna o foco entre o balão e a parte apontada, para quem não
+  usa mouse poder fazer o que o balão pede e voltar a ele sem percorrer a
+  página inteira. O slot recebe `irParaAlvo`, para um botão fazer o mesmo.
+
   Não é modal: a página continua utilizável, para o usuário experimentar o
   que o balão sugere sem fechá-lo. A cada mudança de `chave`, o balão se
   reposiciona e o foco vai para o elemento marcado com `data-foco`. Esc
@@ -154,10 +158,48 @@ watch(
   () => void mostrar(),
 )
 
+const SELETOR_FOCAVEL =
+  'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea, a[href], [tabindex]:not([tabindex="-1"])'
+
+/**
+ * Leva o foco para a parte apontada: o controle marcado com
+ * `data-guia-foco="<alvo>"`, se houver; senão, o primeiro controle que está
+ * dentro dela, ou embaixo dela (o alvo pode ser só uma área desenhada por
+ * cima, como a dos sinais de controle).
+ */
+function irParaAlvo() {
+  const el = elementoAlvo()
+  if (!el) return
+  const marcado = document.querySelector<HTMLElement>(`[data-guia-foco="${props.alvo}"]`)
+  if (marcado) {
+    marcado.focus()
+    return
+  }
+  const r = el.getBoundingClientRect()
+  const dentro = (c: Element) => {
+    const q = c.getBoundingClientRect()
+    const x = q.left + q.width / 2
+    const y = q.top + q.height / 2
+    return q.width > 0 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom
+  }
+  const controles = [...document.querySelectorAll<HTMLElement>(SELETOR_FOCAVEL)].filter(
+    (c) => !balao.value?.contains(c) && (el.contains(c) || dentro(c)),
+  )
+  controles[0]?.focus()
+}
+
+function voltarAoBalao() {
+  balao.value?.querySelector<HTMLElement>('[data-foco]')?.focus()
+}
+
 function teclado(evento: KeyboardEvent) {
   if (evento.key === 'Escape') {
     evento.preventDefault()
     emit('fechar')
+  } else if (evento.key === 'F6' && !evento.altKey && !evento.ctrlKey && !evento.metaKey) {
+    evento.preventDefault()
+    if (balao.value?.contains(document.activeElement)) irParaAlvo()
+    else voltarAoBalao()
   }
 }
 
@@ -194,7 +236,7 @@ const recorte = computed(() => {
   }
 })
 
-defineExpose({ posicionar })
+defineExpose({ posicionar, irParaAlvo })
 </script>
 
 <template>
@@ -222,7 +264,7 @@ defineExpose({ posicionar })
     :aria-labelledby="rotulo"
     :aria-describedby="descricao"
   >
-    <slot />
+    <slot :ir-para-alvo="irParaAlvo" />
   </div>
 </template>
 

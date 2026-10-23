@@ -328,7 +328,8 @@
         "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios. Um bom próximo passo são os experimentos \"e se…?\"."
       }
     },
-    "lerMais": "Ler mais na documentação"
+    "lerMais": "Ler mais na documentação",
+    "irPara": "Ir para a parte em destaque (F6; F6 de novo volta aqui)"
   },
   "experimentos": {
     "abrir": "Experimentos “e se…?”",

@@ -87,3 +87,19 @@
   background: none;
   border-color: transparent;
 }
+.balao .ir {
+  margin: 0 0 6px;
+}
+.balao button.ir-para {
+  min-height: 24px;
+  padding: 2px 0;
+  font-size: 0.85rem;
+  color: var(--destaque);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+}
+.balao button.ir-para:hover {
+  background: none;
+  text-decoration-thickness: 2px;
+}
