@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   aplicarEscrita,
@@ -186,8 +185,10 @@ describe('edição direta e programas', () => {
     expect(valorDe(memoria, 0xff)).toBe(0x7f)
   })
 
-  it.each(['teste.bin', 'allopcodes.bin'])('carrega %s do CPU-8E byte a byte', (nome) => {
-    const bytes = new Uint8Array(readFileSync(new URL(`../fixtures/${nome}`, import.meta.url)))
+  it.each([
+    ['um programa curto', Uint8Array.of(0x3a, 0x10, 0xc4, 0xff, 0x00, 0x7e)],
+    ['a memória inteira', Uint8Array.from({ length: TAMANHO }, (_, i) => (i * 37 + 11) & 0xff)],
+  ])('preenche %s byte a byte, a partir de 00', (_, bytes) => {
     const memoria = criarMemoria()
     editarCelula(memoria, 0xfe, 0x55) // sobra de antes: precisa ser apagada
     expect(carregarPrograma(memoria, bytes)).toBe(bytes.length)

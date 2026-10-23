@@ -11,6 +11,7 @@
  */
 
 import { expect, test, type Page } from '@playwright/test'
+import { celula } from './ajudantes'
 import { frases, lerTudo, ligarLeitor, limparFrases } from './leitor-virtual'
 
 test.beforeEach(async ({ page }, info) => {
@@ -25,8 +26,6 @@ const falado = (endereco: number) =>
 /** O conteúdo inicial como aparece na tela. */
 const visivel = (endereco: number) =>
   ((endereco * 0x9d + 0x37) & 0xff).toString(16).toUpperCase().padStart(2, '0')
-
-const celula = (page: Page, endereco: string) => page.locator(`td[data-endereco="${endereco}"]`)
 
 async function lerAPagina(page: Page) {
   await ligarLeitor(page)

@@ -48,10 +48,18 @@ export default defineConfig({
     exclude: ['tests/e2e/**'],
     environment: 'node',
     coverage: {
-      include: ['src/core/**'],
+      // O núcleo e a lógica sem tela: store, experimentos e guia. Os componentes
+      // são cobertos pelos testes de ponta a ponta.
+      include: ['src/core/**', 'src/stores/**', 'src/experimentos/*.ts', 'src/guia/guia.ts'],
       reporter: ['text', 'html'],
-      // Meta do plano para o núcleo (vale a partir da 0.2, quando ele chegar).
-      thresholds: { 'src/core/**': { lines: 95, branches: 90 } },
+      thresholds: {
+        // Meta do plano para o núcleo (desde a 0.2).
+        'src/core/**': { lines: 95, branches: 90 },
+        // Meta da 1.0 para a lógica entre o núcleo e a tela (#36).
+        'src/stores/**': { lines: 90, branches: 85 },
+        'src/experimentos/*.ts': { lines: 90, branches: 85 },
+        'src/guia/guia.ts': { lines: 90, branches: 85 },
+      },
     },
   },
 })

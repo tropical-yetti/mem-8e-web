@@ -4,20 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
-
-async function semViolacoes(page: Page) {
-  const resultado = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze()
-  const graves = resultado.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
-  )
-  expect(
-    graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-  ).toEqual([])
-}
+import { semProblemasGraves } from './ajudantes'
 
 async function escolher(page: Page, titulo: string) {
   await page.getByRole('button', { name: 'Experimentos “e se…?”' }).click()
@@ -38,7 +26,7 @@ test('a lista mostra os cinco experimentos, sem problemas de acessibilidade', as
   await page.getByRole('button', { name: 'Experimentos “e se…?”' }).click()
   const lista = page.getByRole('dialog', { name: 'Experimentos “e se…?”' })
   await expect(lista.getByRole('listitem')).toHaveCount(5)
-  await semViolacoes(page)
+  await semProblemasGraves(page)
   await lista.getByRole('button', { name: 'Fechar' }).click()
   await expect(lista).toBeHidden()
 })
@@ -52,7 +40,7 @@ test('contenção: pergunta, ação e resultado; sair desfaz tudo', async ({ pag
   await expect(balao).toContainText('Pense antes')
   await expect(balao.getByRole('heading')).toBeFocused()
   await expect(mar(page)).toHaveValue('3A')
-  await semViolacoes(page)
+  await semProblemasGraves(page)
 
   await balao.getByRole('button', { name: 'Vamos ver' }).click()
   await expect(balao).toContainText('Passo 1 de 1')
@@ -63,7 +51,7 @@ test('contenção: pergunta, ação e resultado; sair desfaz tudo', async ({ pag
   await expect(balao).toContainText('O que aconteceu')
   await expect(balao).toContainText('0XX1 1XX0')
   await expect(balao).toContainText('Em memórias reais:')
-  await semViolacoes(page)
+  await semProblemasGraves(page)
 
   await balao.getByRole('button', { name: 'Sair', exact: true }).click()
   await expect(balao).toBeHidden()

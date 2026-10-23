@@ -5,21 +5,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
-
-async function auditar(page: Page, onde: string) {
-  const resultado = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze()
-  const graves = resultado.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
-  )
-  expect(
-    graves.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`),
-    onde,
-  ).toEqual([])
-}
+import { expect, test } from '@playwright/test'
+import { semProblemasGraves } from './ajudantes'
 
 test('a página inicial abre em português', async ({ page }) => {
   await page.goto('./')
@@ -68,7 +55,7 @@ for (const tema of ['light', 'dark'] as const) {
       test(`${nome} não tem problemas graves de acessibilidade`, async ({ page }) => {
         await page.goto(caminho)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        await auditar(page, nome)
+        await semProblemasGraves(page, nome)
       })
     }
   })
