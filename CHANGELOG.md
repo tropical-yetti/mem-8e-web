@@ -7,6 +7,10 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.9.0] — 2026-10-23
+
+Experimentos "e se…?" guiados e a memória em arquivo de texto.
+
 ### 2026-10-23 — Experimentos "e se…?"
 
 - Botão **Experimentos "e se…?"**, ao lado de "Ver o guia", com cinco
