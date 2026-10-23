@@ -282,6 +282,11 @@
         "texto": "The 16 × 16 grid is the array itself: the column decoder is on top, the row decoder on the left, and below are the bit lines, the selector and the output buffers. Notice that the whole row is read: all 16 bytes go down, and the selector picks one.",
         "experimente": "click a location to put its address in the MAR; double-click to change its contents."
       },
+      "arquivo": {
+        "titulo": "Keep and share",
+        "texto": "The memory contents can become plain text, with addresses and bytes in hexadecimal. Save it to a file, copy it to send to someone, or open or paste a ready-made text, such as one from an exercise.",
+        "experimente": "click \"Copy text\" and paste it into an editor: each line is an address and 16 bytes."
+      },
       "transacao": {
         "titulo": "Read and write, phase by phase",
         "texto": "Instead of setting the signals by hand, ask for a complete read or write. Each click on \"Next phase\" changes one signal, in the right order, and the text explains what just happened.",
@@ -297,9 +302,14 @@
         "texto": "The memory has its own access time, and the CPU has its own clock. When the memory is slower, the CPU waits extra cycles: wait states. Without waiting, the read latches data that is not valid yet (X).",
         "experimente": "switch to the slow memory and uncheck \"The CPU waits for the memory\". The summary and the diagram show the read going wrong."
       },
+      "experimentos": {
+        "titulo": "\"What if…?\" experiments",
+        "texto": "Five situations that go wrong on purpose: two sides driving the DB, RD and WR together, an address changed in the middle of a read, a CPU that does not wait, and CS off. Each one asks a question, walks you through the steps and explains the result. When you leave, everything goes back to how it was.",
+        "experimente": "open the list and pick \"What if the CPU and the memory both drive the DB?\"."
+      },
       "fim": {
         "titulo": "Done",
-        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises."
+        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises. A good next step is the \"what if…?\" experiments."
       }
     },
     "lerMais": "Read more in the documentation"

@@ -111,5 +111,5 @@ test('abrir o guia encerra o experimento', async ({ page }) => {
   const balao = await escolher(page, 'E se RD e WR forem ligados juntos?')
   await page.getByRole('button', { name: 'Ver o guia' }).click()
   await expect(balao).toBeHidden()
-  await expect(page.getByRole('dialog')).toContainText('1 de 8')
+  await expect(page.getByRole('dialog')).toContainText('1 de 10')
 })

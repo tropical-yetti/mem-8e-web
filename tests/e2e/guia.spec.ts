@@ -14,7 +14,7 @@ test.describe('primeiro acesso', () => {
   test('o guia abre sozinho e percorre todos os passos', async ({ page }) => {
     await page.goto('./')
     const balao = page.getByRole('dialog')
-    await expect(balao).toContainText('1 de 8')
+    await expect(balao).toContainText('1 de 10')
     await expect(page.getByRole('heading', { name: 'A memória, aberta' })).toBeFocused()
 
     await page.getByRole('button', { name: 'Próximo' }).click()
@@ -26,8 +26,8 @@ test.describe('primeiro acesso', () => {
     await expect(balao).toBeVisible()
 
     await page.getByRole('button', { name: 'Voltar' }).click()
-    await expect(balao).toContainText('1 de 8')
-    for (let i = 0; i < 7; i++) await page.getByRole('button', { name: 'Próximo' }).click()
+    await expect(balao).toContainText('1 de 10')
+    for (let i = 0; i < 9; i++) await page.getByRole('button', { name: 'Próximo' }).click()
     await expect(page.getByRole('heading', { name: 'Pronto' })).toBeVisible()
     await page.getByRole('button', { name: 'Começar' }).click()
     await expect(balao).toBeHidden()
@@ -73,7 +73,7 @@ test('o botão "?" abre só o balão daquela parte, e o foco volta para ele', as
   await ajuda.click()
   const balao = page.getByRole('dialog')
   await expect(balao).toContainText('Diagrama de tempo')
-  await expect(balao).not.toContainText('de 8')
+  await expect(balao).not.toContainText('de 10')
   await page.getByRole('button', { name: 'Entendi' }).click()
   await expect(balao).toBeHidden()
   await expect(ajuda).toBeFocused()
@@ -82,7 +82,7 @@ test('o botão "?" abre só o balão daquela parte, e o foco volta para ele', as
 test('"Ver o guia" abre o guia completo de novo', async ({ page }) => {
   await page.goto('./')
   await page.getByRole('button', { name: 'Ver o guia' }).click()
-  await expect(page.getByRole('dialog')).toContainText('1 de 8')
+  await expect(page.getByRole('dialog')).toContainText('1 de 10')
   await page.getByRole('button', { name: 'Pular o guia' }).click()
   await expect(page.getByRole('dialog')).toBeHidden()
 })

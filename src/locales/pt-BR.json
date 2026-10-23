@@ -282,6 +282,11 @@
         "texto": "A grade 16 × 16 é a própria matriz: o decodificador de coluna fica em cima, o de linha à esquerda, e embaixo estão as linhas de bit, o seletor e os buffers de saída. Repare que a linha inteira é lida: os 16 bytes descem, e o seletor escolhe um.",
         "experimente": "clique numa posição para pôr o endereço dela no MAR; dê dois cliques para mudar o conteúdo."
       },
+      "arquivo": {
+        "titulo": "Guardar e compartilhar",
+        "texto": "O conteúdo da memória pode virar um texto simples, com endereço e bytes em hexadecimal. Salve num arquivo, copie para mandar a alguém, ou abra e cole um texto pronto, como o de um exercício.",
+        "experimente": "clique em \"Copiar texto\" e cole num editor: cada linha é um endereço e 16 bytes."
+      },
       "transacao": {
         "titulo": "Ler e escrever, fase a fase",
         "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em \"Próxima fase\" muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
@@ -297,9 +302,14 @@
         "texto": "A memória tem o próprio tempo de acesso, e a CPU tem o próprio clock. Quando a memória é mais lenta, a CPU espera ciclos extras: os wait states. Sem esperar, a leitura captura um dado ainda inválido (X).",
         "experimente": "troque para a memória lenta e desligue \"A CPU espera a memória\". O resumo e o diagrama mostram a leitura dando errado."
       },
+      "experimentos": {
+        "titulo": "Experimentos \"e se…?\"",
+        "texto": "Cinco situações que dão errado de propósito: dois lados dirigindo o BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera e CS desligado. Cada uma faz uma pergunta, conduz os passos e explica o resultado. Ao sair, tudo volta a ser como estava.",
+        "experimente": "abra a lista e escolha \"E se a CPU e a memória dirigirem o BD juntas?\"."
+      },
       "fim": {
         "titulo": "Pronto",
-        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios."
+        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios. Um bom próximo passo são os experimentos \"e se…?\"."
       }
     },
     "lerMais": "Ler mais na documentação"
