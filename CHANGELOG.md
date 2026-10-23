@@ -7,6 +7,13 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Regra de lançamentos
+
+- A `main` passa a receber só lançamentos, que juntam várias versões menores
+  já testadas na `dev`. Correções urgentes saem da `main` como versão de
+  correção. A regra está no CONTRIBUTING e no plano; a 0.9.0 vai para a
+  `main` junto com a 1.0 (#36).
+
 ## [0.9.0] — 2026-10-23
 
 Experimentos "e se…?" guiados e a memória em arquivo de texto.

@@ -177,6 +177,12 @@ O "gabarito" é um modelo trivial, um array de 256 bytes:
 O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 
 - `main` ← `dev` ← um ramo por funcionalidade ou correção.
+- **Lançamentos** (a partir da 1.0): a `main` só recebe lançamentos, que
+  juntam várias versões menores já testadas na `dev`, num único pull request
+  `dev` → `main`, com tag e release. Correções urgentes saem da `main` num
+  ramo `fix/…`, entram nela como versão de correção (1.0.1) e voltam para a
+  `dev`. O passo a passo está no [CONTRIBUTING](../CONTRIBUTING.md). A 0.9.0
+  ficou só na `dev` e vai para a `main` junto com a 1.0.
 - **ADRs** em Markdown (data, proponente, alternativas, motivação, impactos),
   com diagramas Mermaid versionados. Cada ADR é discutida numa issue.
   Primeiras ADRs:
@@ -200,7 +206,7 @@ O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 | 0.7       | Guia de primeiro acesso com balões e ajuda contextual ([#17](https://github.com/tropical-yetti/mem-8e-web/issues/17)).                                                                                                                                                                                                                    | feito    |
 | 0.8       | Documentação no site, pt/en: como a memória funciona + roteiro de aula ([#18](https://github.com/tropical-yetti/mem-8e-web/issues/18)); legendas com o nome dos componentes ao apontar ([#23](https://github.com/tropical-yetti/mem-8e-web/issues/23)); commit no rodapé ([#24](https://github.com/tropical-yetti/mem-8e-web/issues/24)). | feito    |
 | 0.9       | Experimentos "e se…?" guiados (ADR 0005); abrir e salvar a memória em texto (ADR 0006).                                                                                                                                                                                                                                                   | feito    |
-| 1.0       | Revisão final de acessibilidade, testes e lançamento.                                                                                                                                                                                                                                                                                     |          |
+| 1.0       | Revisão final de acessibilidade, testes e lançamento ([#36](https://github.com/tropical-yetti/mem-8e-web/issues/36)); primeira publicação na `main` pela regra de lançamentos.                                                                                                                                                            |          |
 | 1.x / 2.0 | Modos síncrono e DDR simplificados.                                                                                                                                                                                                                                                                                                       |          |
 
 O guia de primeiro acesso e a documentação vieram para antes dos experimentos

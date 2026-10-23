@@ -5,11 +5,24 @@ código precisa ser fácil de ler.
 
 ## Ramos e pull requests
 
-- `main` é o que está publicado no site.
+- `main` é o que está publicado no site. Ela só recebe **lançamentos**, para
+  ficar estável e sem mudanças frequentes.
 - `dev` recebe o trabalho em andamento.
 - Cada funcionalidade ou correção tem o próprio ramo, criado a partir de `dev`
   (`feat/…`, `fix/…`, `docs/…`), e volta para `dev` por pull request.
-- `dev` vai para `main` a cada versão.
+
+### Versões e lançamentos
+
+- **Versões menores** (1.1.0, 1.2.0…) ficam na `dev`: cada uma ganha a sua
+  seção no CHANGELOG e o número no `package.json`, num pull request
+  `chore: versão X.Y.Z` para a `dev`.
+- **Lançamento:** quando um conjunto de versões menores está estável e
+  testado, um único pull request `dev` → `main` publica tudo de uma vez. O
+  lançamento ganha uma tag (`v1.2.0`) e uma release no GitHub.
+- **Correção urgente** (um erro no site publicado): o ramo `fix/…` sai da
+  `main`, vira uma versão de correção (1.0.1) e entra direto na `main`. Em
+  seguida, a `main` é integrada na `dev`, para a correção não se perder no
+  próximo lançamento.
 
 ## Decisões de arquitetura
 
