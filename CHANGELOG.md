@@ -7,6 +7,15 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Revisão dos textos e README
+
+- Aspas padronizadas no estilo tipográfico (“ ”) em toda a interface e na
+  documentação, nos dois idiomas. Os termos técnicos (solto/floating,
+  dirigir/drive, indefinido/undefined, wait state) já eram os mesmos em todo
+  lugar (#36).
+- README com captura de tela nova (um experimento “e se…?”), os experimentos
+  na lista do que dá para fazer e sem o aviso “em construção”.
+
 ### 2026-10-23 — Testes
 
 - A meta de cobertura passa a valer também para a store, os experimentos e o

@@ -103,7 +103,7 @@
     "colar": "Colar texto…",
     "copiar": "Copiar texto",
     "colarTitulo": "Colar o conteúdo da memória",
-    "colarAjuda": "Uma linha por grupo de bytes, em hexadecimal: \"10: 3A FF 00\". O endereço com dois-pontos é opcional; sem ele, os bytes continuam de onde pararam. Use XX para uma célula indefinida e # ou ; para comentários. Abrir substitui a memória inteira: o que não for citado fica em 00.",
+    "colarAjuda": "Uma linha por grupo de bytes, em hexadecimal: “10: 3A FF 00”. O endereço com dois-pontos é opcional; sem ele, os bytes continuam de onde pararam. Use XX para uma célula indefinida e # ou ; para comentários. Abrir substitui a memória inteira: o que não for citado fica em 00.",
     "colarCampo": "Texto com o conteúdo da memória",
     "cancelar": "Cancelar",
     "abrirColado": "Abrir na memória",
@@ -290,8 +290,8 @@
       },
       "sinais": {
         "titulo": "Sinais de controle",
-        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. \"MDR → BD\" faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
-        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também \"MDR → BD\" para ver um conflito."
+        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. “MDR → BD” faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
+        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também “MDR → BD” para ver um conflito."
       },
       "grade": {
         "titulo": "A memória por dentro",
@@ -301,31 +301,31 @@
       "arquivo": {
         "titulo": "Guardar e compartilhar",
         "texto": "O conteúdo da memória pode virar um texto simples, com endereço e bytes em hexadecimal. Salve num arquivo, copie para mandar a alguém, ou abra e cole um texto pronto, como o de um exercício.",
-        "experimente": "clique em \"Copiar texto\" e cole num editor: cada linha é um endereço e 16 bytes."
+        "experimente": "clique em “Copiar texto” e cole num editor: cada linha é um endereço e 16 bytes."
       },
       "transacao": {
         "titulo": "Ler e escrever, fase a fase",
-        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em \"Próxima fase\" muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
-        "experimente": "clique em \"Ler o endereço\" e avance as fases até o MDR receber o dado."
+        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em “Próxima fase” muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
+        "experimente": "clique em “Ler o endereço” e avance as fases até o MDR receber o dado."
       },
       "portas": {
         "titulo": "Em portas lógicas",
         "texto": "Aqui o mesmo circuito aparece em portas AND, OR e NOT: um bit da posição do MAR (o latch que guarda o bit e o caminho até o BD) ou um decodificador 4 → 16. Os fios mudam junto com o resto da tela.",
-        "experimente": "abra a aba \"Decodificador de linha\" e mude um bit do MAR: outra porta acende."
+        "experimente": "abra a aba “Decodificador de linha” e mude um bit do MAR: outra porta acende."
       },
       "tempo": {
         "titulo": "Diagrama de tempo",
         "texto": "A memória tem o próprio tempo de acesso, e a CPU tem o próprio clock. Quando a memória é mais lenta, a CPU espera ciclos extras: os wait states. Sem esperar, a leitura captura um dado ainda inválido (X).",
-        "experimente": "troque para a memória lenta e desligue \"A CPU espera a memória\". O resumo e o diagrama mostram a leitura dando errado."
+        "experimente": "troque para a memória lenta e desligue “A CPU espera a memória”. O resumo e o diagrama mostram a leitura dando errado."
       },
       "experimentos": {
-        "titulo": "Experimentos \"e se…?\"",
+        "titulo": "Experimentos “e se…?”",
         "texto": "Cinco situações que dão errado de propósito: dois lados dirigindo o BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera e CS desligado. Cada uma faz uma pergunta, conduz os passos e explica o resultado. Ao sair, tudo volta a ser como estava.",
-        "experimente": "abra a lista e escolha \"E se a CPU e a memória dirigirem o BD juntas?\"."
+        "experimente": "abra a lista e escolha “E se a CPU e a memória dirigirem o BD juntas?”."
       },
       "fim": {
         "titulo": "Pronto",
-        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios. Um bom próximo passo são os experimentos \"e se…?\"."
+        "texto": "Para rever este guia, use o botão “Ver o guia”. Cada seção também tem um botão “?” que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios. Um bom próximo passo são os experimentos “e se…?”."
       }
     },
     "lerMais": "Ler mais na documentação",

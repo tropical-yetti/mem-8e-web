@@ -60,11 +60,11 @@ Os dois decodificadores só funcionam com o **CS** ligado (entrada EN). O de lin
 
 ## Linhas de bit e seletor {#linhas-de-bit}
 
-Quando uma linha de palavra liga, **a linha inteira é lida**: os 16 bytes dela descem pelas **linhas de bit**, uma por coluna. Na vista "Por dentro", embaixo da grade, aparecem esses 16 bytes.
+Quando uma linha de palavra liga, **a linha inteira é lida**: os 16 bytes dela descem pelas **linhas de bit**, uma por coluna. Na vista “Por dentro”, embaixo da grade, aparecem esses 16 bytes.
 
 O **seletor de coluna** (um multiplexador 16 → 1) usa a saída do decodificador de coluna para escolher um desses 16 bytes. Só esse byte segue adiante.
 
-Ler a linha inteira parece desperdício, mas é assim que as memórias reais funcionam, e é a base das memórias síncronas e da DDR: depois de "abrir" uma linha, ler outras colunas da mesma linha é rápido.
+Ler a linha inteira parece desperdício, mas é assim que as memórias reais funcionam, e é a base das memórias síncronas e da DDR: depois de “abrir” uma linha, ler outras colunas da mesma linha é rápido.
 
 ## Buffers de saída (tri-state) {#buffers}
 

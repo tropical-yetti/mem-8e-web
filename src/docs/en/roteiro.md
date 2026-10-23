@@ -24,7 +24,7 @@ Exercises to do in the simulator, from the simplest to the most involved. The an
 1. With a 50 MHz clock and the medium memory, how many wait states does a read have? How long is the cycle?
 2. Switch the clock to 10 MHz. And now?
 3. With the slow memory and a 100 MHz clock, how many wait states are there? What does that say about using a fast CPU with a slow memory?
-4. Uncheck **"The CPU waits for the memory"**, keep the slow memory and read an address. What does the MDR get?
+4. Uncheck **“The CPU waits for the memory”**, keep the slow memory and read an address. What does the MDR get?
 
 ## 5. In logic gates {#ex-portas}
 
