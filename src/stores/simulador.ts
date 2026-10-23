@@ -6,9 +6,10 @@
  * mexe no sistema, recalcula os fios e incrementa a versão, e os componentes
  * leem o que precisam a partir disso.
  *
- * Uma transação (ler ou escrever) anda uma fase por vez. Mexer à mão no MAR,
- * no MDR ou nos sinais de controle no meio dela a interrompe: o usuário
- * assumiu o controle.
+ * Uma transação (ler ou escrever) anda uma fase por vez. Mexer à mão no MDR
+ * ou nos sinais de controle no meio dela a interrompe: o usuário assumiu o
+ * controle. O MAR é a exceção numa leitura (ADR 0005): trocar o endereço no
+ * meio dela é um dos experimentos, e a leitura continua com o novo endereço.
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -33,6 +34,8 @@ import {
   paraFios,
   paraHex,
   periodoDe,
+  instantesLeitura,
+  type DadosLeitura,
   type LinhaDoTempo,
   type ParametrosTempo,
   type CabecalhoArquivo,
@@ -53,6 +56,30 @@ import {
 export type TipoTransacao = 'ler' | 'escrever'
 export type Sinal = 'cs' | 'rd' | 'wr' | 'cpuDirigeDados'
 
+/** Tudo o que um experimento pode mudar, para devolver como estava no fim (ADR 0005). */
+export interface Fotografia {
+  mar: number
+  mdr: Nivel[]
+  sinais: Record<Sinal, 0 | 1>
+  celulas: Nivel[][]
+  clockMhz: number
+  tipoMemoria: TipoMemoria
+  esperar: boolean
+}
+
+/** A situação inicial de um experimento. O que não for dito fica como está. */
+export interface Situacao {
+  mar?: number
+  mdr?: number
+  /** Conteúdo de algumas posições: endereço → valor. */
+  celulas?: Record<number, number>
+  /** Os sinais citados ligam; os outros desligam. */
+  sinais?: Partial<Record<Sinal, 0 | 1>>
+  clockMhz?: number
+  tipoMemoria?: TipoMemoria
+  esperar?: boolean
+}
+
 interface Transacao {
   tipo: TipoTransacao
   gerador: Generator<Passo<FaseLeitura> | Passo<FaseEscrita>, unknown>
@@ -61,8 +88,12 @@ interface Transacao {
   /** Fases já mostradas (a última é a atual). */
   passos: (Passo<FaseLeitura> | Passo<FaseEscrita>)[]
   terminou: boolean
-  /** O diagrama de tempo desta transação, calculado quando ela começou. */
+  /** O diagrama de tempo desta transação (refeito se o endereço mudar no meio). */
   linha: LinhaDoTempo
+  /** Os tempos com que a transação começou. */
+  tempo: ParametrosTempo
+  /** Os dados da leitura, para refazer o diagrama depois de uma troca de endereço. */
+  dadosLeitura?: DadosLeitura
 }
 
 /**
@@ -156,9 +187,27 @@ export const useSimuladorStore = defineStore('simulador', () => {
   // ---------------------------------------------------------------------
 
   function mudarMar(valor: number) {
-    interromper()
+    if (!trocarEnderecoNaLeitura(valor)) interromper()
     definirMar(sistema, valor)
     atualizar()
+  }
+
+  /**
+   * Numa leitura em andamento, a troca de endereço não interrompe: a próxima
+   * fase já usa o novo endereço, e o diagrama marca a troca no instante dela.
+   * Devolve `false` se não há leitura em andamento.
+   */
+  function trocarEnderecoNaLeitura(valor: number): boolean {
+    const atual = transacao.value
+    if (!atual || atual.tipo !== 'ler' || atual.terminou || !atual.dadosLeitura) return false
+    const endereco = valor & 0xff
+    const proxima = atual.lista[atual.passos.length]!
+    atual.linha = linhaDoTempoLeitura(atual.tempo, atual.dadosLeitura, {
+      t: instantesLeitura(atual.tempo)[proxima]!,
+      endereco: paraHex(paraFios(endereco, 8)),
+      dado: paraHex(lerCelula(sistema.memoria, endereco)),
+    })
+    return true
   }
 
   function alternarBitMar(bit: number) {
@@ -221,6 +270,57 @@ export const useSimuladorStore = defineStore('simulador', () => {
   }
 
   // ---------------------------------------------------------------------
+  // Experimentos: guardar, preparar e restaurar
+  // ---------------------------------------------------------------------
+
+  function fotografar(): Fotografia {
+    return {
+      mar: sistema.mar,
+      mdr: [...sistema.mdr],
+      sinais: {
+        cs: sistema.cs,
+        rd: sistema.rd,
+        wr: sistema.wr,
+        cpuDirigeDados: sistema.cpuDirigeDados,
+      },
+      celulas: sistema.memoria.celulas.map((celula) => [...celula]),
+      clockMhz: clockMhz.value,
+      tipoMemoria: tipoMemoria.value,
+      esperar: esperar.value,
+    }
+  }
+
+  function restaurar(foto: Fotografia) {
+    interromper()
+    sistema.mar = foto.mar
+    sistema.mdr = [...foto.mdr]
+    Object.assign(sistema, foto.sinais)
+    sistema.memoria.celulas = foto.celulas.map((celula) => [...celula])
+    clockMhz.value = foto.clockMhz
+    tipoMemoria.value = foto.tipoMemoria
+    esperar.value = foto.esperar
+    atualizar()
+  }
+
+  /** Põe o simulador numa situação: sem transação, com os sinais pedidos e o resto desligado. */
+  function preparar(situacao: Situacao) {
+    interromper()
+    sistema.cs = situacao.sinais?.cs ?? 0
+    sistema.rd = situacao.sinais?.rd ?? 0
+    sistema.wr = situacao.sinais?.wr ?? 0
+    sistema.cpuDirigeDados = situacao.sinais?.cpuDirigeDados ?? 0
+    for (const [endereco, valor] of Object.entries(situacao.celulas ?? {})) {
+      editarCelula(sistema.memoria, Number(endereco), valor)
+    }
+    if (situacao.mar !== undefined) definirMar(sistema, situacao.mar)
+    if (situacao.mdr !== undefined) definirMdr(sistema, situacao.mdr)
+    if (situacao.clockMhz !== undefined) clockMhz.value = situacao.clockMhz
+    if (situacao.tipoMemoria !== undefined) tipoMemoria.value = situacao.tipoMemoria
+    if (situacao.esperar !== undefined) esperar.value = situacao.esperar
+    atualizar()
+  }
+
+  // ---------------------------------------------------------------------
   // Transações passo a passo
   // ---------------------------------------------------------------------
 
@@ -229,6 +329,11 @@ export const useSimuladorStore = defineStore('simulador', () => {
     const endereco = sistema.mar
     const celula = paraHex(lerCelula(sistema.memoria, endereco))
     const enderecoHex = paraHex(paraFios(endereco, 8))
+    const dadosLeitura: DadosLeitura = {
+      endereco: enderecoHex,
+      dado: celula,
+      mdrAntes: paraHex(sistema.mdr),
+    }
     const transacaoNova: Transacao =
       tipo === 'ler'
         ? {
@@ -237,11 +342,9 @@ export const useSimuladorStore = defineStore('simulador', () => {
             lista: fasesLeitura(p),
             passos: [],
             terminou: false,
-            linha: linhaDoTempoLeitura(p, {
-              endereco: enderecoHex,
-              dado: celula,
-              mdrAntes: paraHex(sistema.mdr),
-            }),
+            linha: linhaDoTempoLeitura(p, dadosLeitura),
+            tempo: p,
+            dadosLeitura,
           }
         : {
             tipo,
@@ -249,6 +352,7 @@ export const useSimuladorStore = defineStore('simulador', () => {
             lista: fasesEscrita(p),
             passos: [],
             terminou: false,
+            tempo: p,
             linha: linhaDoTempoEscrita(p, {
               endereco: enderecoHex,
               dado: paraHex(sistema.mdr),
@@ -355,6 +459,9 @@ export const useSimuladorStore = defineStore('simulador', () => {
     abrirTexto,
     textoDaMemoria,
     reiniciar,
+    fotografar,
+    restaurar,
+    preparar,
     iniciarLeitura: () => iniciar('ler'),
     iniciarEscrita: () => iniciar('escrever'),
     proximaFase,

@@ -120,7 +120,7 @@ const resumo = computed(() => {
   const l = linha.value
   const p = simulador.tempo
   const valores = {
-    valido: ns(dadoValidoEm(p)),
+    valido: ns(l.marcas.find((m) => m.id === 'dadoValido')?.t ?? dadoValidoEm(p)),
     captura: ns(l.marcas.find((m) => m.id === 'captura')?.t ?? 0),
     twp: ns(p.tWP),
     pulso: ns((1 + l.esperas) * l.periodo),
@@ -129,7 +129,15 @@ const resumo = computed(() => {
     ciclos: l.estados.length,
   }
   const chave = l.tipo === 'ler' ? 'leitura' : 'escrita'
-  return t(`tempo.resumo.${chave}${l.certo ? '' : 'Errada'}`, valores)
+  const texto = t(`tempo.resumo.${chave}${l.certo ? '' : 'Errada'}`, valores)
+  if (!l.mudanca) return texto
+  // Endereço trocado no meio da leitura (ADR 0005).
+  const troca = t('tempo.resumo.trocaEndereco', {
+    de: l.sinais[1]?.trechos[0]?.valor ?? '',
+    para: l.mudanca.endereco,
+    t: ns(l.mudanca.t),
+  })
+  return `${troca} ${texto}`
 })
 
 const titulo = computed(() =>

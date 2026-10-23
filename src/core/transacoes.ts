@@ -27,6 +27,7 @@ import {
   escritaCerta,
   esperasEscrita,
   esperasLeitura,
+  instantesLeitura,
   leituraCerta,
   type ParametrosTempo,
 } from './tempo'
@@ -122,26 +123,47 @@ function passo<F extends string>(sistema: Sistema, fase: F): Passo<F> {
  *
  * Com `tempo`, uma memória lenta demais para uma CPU que não espera faz o
  * MDR capturar um BD ainda inválido (X).
+ *
+ * O MAR pode mudar entre uma fase e outra (ADR 0005): a fase seguinte já usa
+ * o novo endereço, e, com `tempo`, a contagem de t_AA recomeça no instante
+ * dessa fase. Se o novo dado não ficar válido a tempo, o MDR captura X.
  */
 export function* ler(
   sistema: Sistema,
   endereco: number,
   tempo?: ParametrosTempo,
 ): Generator<Passo<FaseLeitura>, number | null> {
+  const instantes = tempo ? instantesLeitura(tempo) : {}
+  let ultimoEndereco = endereco
+  /** Instante da última troca de endereço (0: nenhuma). */
+  let mudanca = 0
+  /** Antes de cada fase: o MAR mudou desde a anterior? */
+  const conferirMar = (fase: FaseLeitura) => {
+    if (sistema.mar === ultimoEndereco) return
+    ultimoEndereco = sistema.mar
+    mudanca = instantes[fase] ?? 0
+  }
+
   soltarControles(sistema)
   definirMar(sistema, endereco)
   yield passo(sistema, 'endereco')
 
+  conferirMar('selecao')
   sistema.cs = 1
   yield passo(sistema, 'selecao')
 
+  conferirMar('saida')
   sistema.rd = 1
-  const saida = passo(sistema, 'saida')
-  yield saida
+  yield passo(sistema, 'saida')
 
-  if (tempo && esperasLeitura(tempo) > 0) yield passo(sistema, 'espera')
+  if (tempo && esperasLeitura(tempo) > 0) {
+    conferirMar('espera')
+    yield passo(sistema, 'espera')
+  }
 
-  capturarMdr(sistema, !tempo || leituraCerta(tempo) ? saida.avaliacao.bd : todos('X', LARGURA))
+  conferirMar('captura')
+  const bd = propagar(sistema).bd
+  capturarMdr(sistema, !tempo || leituraCerta(tempo, mudanca) ? bd : todos('X', LARGURA))
   yield passo(sistema, 'captura')
 
   sistema.rd = 0

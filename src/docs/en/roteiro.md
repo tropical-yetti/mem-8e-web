@@ -31,6 +31,10 @@ Exercises to do in the simulator, from the simplest to the most involved. The an
 1. In the row decoder, which inputs does the gate for output `5` get?
 2. Put `3A` in the MAR and turn CS on. In **Bit of address**, choose D0: is the bit line 0 or 1? Check against the value of `M[3A]`.
 
+## 6. “What if…?” experiments {#ex-experimentos}
+
+The **“What if…?” experiments** button, at the top of the simulator, offers five situations that go wrong on purpose: data bus contention, RD and WR together, an address changed in the middle of a read, a CPU that does not wait for a slow memory, and CS off. Each one starts with a question: ask the class to answer before doing the step. When you leave, the simulator goes back to how it was.
+
 ## Answers {#respostas}
 
 **1.** (1) `C4`: row C, column 4; `0F`: row 0, column F. (2) A0 to A3 move the column (by 1, 2, 4 and 8 columns); A4 to A7 move the row. (3) 16 addresses: `30` to `3F`.

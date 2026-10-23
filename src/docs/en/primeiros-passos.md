@@ -57,6 +57,7 @@ CPU-8E `.bin` files do not open here: they are programs, and MEM-8E only shows t
 - [How the memory works](#/documentacao/memoria): every block, from the address to the data.
 - [In logic gates](#/documentacao/portas): the same circuit, gate by gate.
 - [Lesson plan](#/documentacao/roteiro): exercises to do in the simulator.
+- The **“What if…?” experiments** button, at the top of the simulator: five situations that go wrong on purpose, with a question, steps and an explanation.
 
 The **Show the guide** button, on the simulator page, shows the introduction balloons again. Each section also has a **?** button that explains just that part, and hovering (or focusing) an abbreviation shows its full name.
 

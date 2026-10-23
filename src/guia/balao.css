@@ -1,0 +1,89 @@
+/*
+ * O conteúdo dos balões do guia e dos experimentos (BalaoBase.vue). Fica fora
+ * do componente porque o conteúdo vem de um slot.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.balao .contador {
+  margin: 0 0 2px;
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+}
+.balao h2 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+}
+.balao h2:focus {
+  outline: none;
+}
+.balao h2:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+.balao .texto,
+.balao .experimente,
+.balao .observacao {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.balao .experimente,
+.balao .observacao {
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+}
+.balao .experimente {
+  border-left: 3px solid var(--fio-controle);
+  background: color-mix(in srgb, var(--fio-controle) 10%, transparent);
+}
+.balao .observacao {
+  border-left: 3px solid var(--fio-be);
+  background: color-mix(in srgb, var(--fio-be) 10%, transparent);
+}
+.balao .mais {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+}
+.balao .aguardando {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--texto-suave);
+}
+.balao .botoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.balao .espaco {
+  flex: 1;
+}
+.balao button {
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--texto);
+  background: var(--fundo-tabela);
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.balao button:hover {
+  background: var(--fundo-hover);
+}
+.balao button.principal {
+  font-weight: 600;
+  color: var(--sobre-destaque);
+  background: var(--destaque);
+  border-color: var(--destaque);
+}
+.balao button.pular {
+  padding-left: 4px;
+  padding-right: 4px;
+  color: var(--texto-suave);
+  background: none;
+  border-color: transparent;
+}
