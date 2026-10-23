@@ -66,11 +66,32 @@ describe('edições à mão', () => {
     expect(simulador.celulas.every((c) => paraNumero(c) === 0)).toBe(true)
   })
 
-  it('carregar um programa devolve o tamanho', () => {
+  it('abrir um texto substitui a memória inteira', () => {
     const simulador = useSimuladorStore()
-    expect(simulador.carregar(Uint8Array.of(1, 2, 3))).toBe(3)
+    const resultado = simulador.abrirTexto('01 02 03\nF0: XX')
+    expect(resultado.ok && resultado.citadas).toBe(4)
     expect(paraNumero(simulador.celulas[2]!)).toBe(3)
     expect(paraNumero(simulador.celulas[3]!)).toBe(0)
+    expect(simulador.celulas[0xf0]!.every((b) => b === 'X')).toBe(true)
+  })
+
+  it('um texto com erro não muda a memória', () => {
+    const simulador = useSimuladorStore()
+    const antes = simulador.celulas.map((c) => [...c])
+    const resultado = simulador.abrirTexto('00: 01 02\n10: ZZ')
+    expect(resultado.ok).toBe(false)
+    expect(simulador.celulas).toEqual(antes)
+  })
+
+  it('o texto da memória abre de volta igual, com data e versão', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarCelula(0x10, 0xab)
+    const texto = simulador.textoDaMemoria({ data: '2026-10-02', versao: '0.9.0' })
+    expect(texto).toContain('# salvo em 2026-10-02, versão 0.9.0')
+    const antes = simulador.celulas.map((c) => [...c])
+    simulador.reiniciar()
+    simulador.abrirTexto(texto)
+    expect(simulador.celulas).toEqual(antes)
   })
 })
 

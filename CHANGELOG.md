@@ -7,6 +7,17 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-22 — Memória em arquivo de texto
+
+- Botões **Abrir arquivo**, **Salvar arquivo**, **Colar texto** e **Copiar
+  texto**, embaixo da grade (ADR 0006). O conteúdo da memória vira um texto
+  com endereço e bytes em hex, `XX` para célula indefinida e 8 dígitos 0/1/X
+  para uma célula com só alguns bits indefinidos.
+- Abrir substitui a memória inteira. Um texto com erro não muda nada, e a
+  mensagem diz a linha e a coluna do problema.
+- Salvar e abrir de volta dá exatamente a mesma memória, inclusive os X.
+- A página "Primeiros passos" explica o formato.
+
 ### 2026-10-22 — Plano da 0.9
 
 - ADR 0005 (experimentos "e se…?" guiados) e ADR 0006 (conteúdo da memória
