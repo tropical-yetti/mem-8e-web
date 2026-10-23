@@ -7,6 +7,23 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Leitor de tela
+
+- A grade da memória é um widget de grade para o leitor de tela: só a célula
+  com o foco é anunciada, como "Linha A, coluna F: 89, valor hexadecimal
+  8 9", e nunca as 256 em sequência. Células indefinidas dizem quais bits
+  estão indefinidos. Os cabeçalhos e os blocos da vista "por dentro" ficam
+  ocultos, e um resumo diz a linha e a coluna escolhidas e o que os buffers
+  estão fazendo (#36).
+- Os desenhos (portas lógicas e diagrama de tempo) são lidos pela descrição,
+  e não pelo texto de dentro; as seções têm o nome do título, sem o "?" da
+  ajuda; os rótulos dos pinos da memória, que repetiam os dos botões, ficam
+  ocultos.
+- Testes novos com um leitor de tela simulado (Guidepup Virtual Screen
+  Reader) e com a árvore de acessibilidade, no CI de todo pull request.
+- README e página Sobre explicam como a acessibilidade é testada e pedem
+  ajuda a quem usa leitor de tela (#39).
+
 ### 2026-10-23 — Guia com as novidades da 0.9
 
 - O guia de primeiro acesso ganhou dois balões, e agora tem dez: um para

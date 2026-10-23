@@ -22,6 +22,10 @@
     "familiaTitulo": "The 8E family",
     "familia": "It is a sibling of {cpu8eWeb}, the browser version of the {cpu8e} simulator, created at IESB (Brazil) by {autor} and contributors. The memory follows the same 8-bit architecture and the same names (MAR, MDR, address bus, data bus).",
     "versaoTitulo": "This version",
+    "acessibilidadeTitulo": "Accessibility",
+    "acessibilidade": "The site is built to work with the keyboard alone and with a screen reader, and follows the WCAG 2.2 guidelines, level AA. The memory grid announces one cell at a time, never all 256 in a row.",
+    "acessibilidadeTestes": "So far, the tests are automated: axe, the accessibility tree and a simulated screen reader. Nobody who uses a screen reader every day has tested the site yet. If you do, your help is very welcome: {issue}.",
+    "acessibilidadeIssue": "tell us how it went in issue #39",
     "licencaTitulo": "License",
     "licenca": "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
     "garantia": "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
@@ -72,12 +76,24 @@
     "titulo": "Inside the memory (row × column)",
     "ajuda": "Click a location to put its address in the MAR. Double-click, Enter or a hex digit edits its contents. With CS on, the row and column chosen by the decoders light up.",
     "linhaColuna": "Row \\ column",
-    "celula": "Address {endereco}: {valor}",
+    "celula": "Row {linha}, column {coluna}: {visivel}, {valor}",
     "editar": "New value for address {endereco}",
     "vista": "How to show the memory",
     "vistas": {
       "porDentro": "Inside",
       "conteudo": "Contents only"
+    },
+    "valorHex": "hex value {digitos}",
+    "valorIndefinido": "undefined value",
+    "valorBits": "value with undefined bits, from bit 7 to 0: {bits}",
+    "noMar": ", MAR address",
+    "resumo": {
+      "desligada": "CS off: the decoders pick no row and no column, and the output buffers are off.",
+      "ligada": "CS on: the row decoder picks row {linha}, and the column decoder, column {coluna}. {buffers}",
+      "nenhuma": "none",
+      "indefinida": "undefined",
+      "buffersLigados": "The output buffers are on and put {valor} on the DB.",
+      "buffersDesligados": "The output buffers are off."
     }
   },
   "arquivo": {

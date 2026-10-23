@@ -22,6 +22,10 @@
     "familiaTitulo": "Família 8E",
     "familia": "É um projeto irmão do {cpu8eWeb}, versão para navegador do simulador {cpu8e}, criado no IESB por {autor} e colaboradores. A memória segue a mesma arquitetura de 8 bits e os mesmos nomes (MAR, MDR, BE, BD).",
     "versaoTitulo": "Esta versão",
+    "acessibilidadeTitulo": "Acessibilidade",
+    "acessibilidade": "O site é feito para funcionar só com o teclado e com leitor de tela, e segue as diretrizes WCAG 2.2, nível AA. A grade da memória anuncia uma célula por vez, e nunca as 256 em sequência.",
+    "acessibilidadeTestes": "Até agora, os testes são automáticos: o axe, a árvore de acessibilidade e um leitor de tela simulado. Ninguém que usa leitor de tela no dia a dia testou o site ainda. Se você usa, sua ajuda é muito bem-vinda: {issue}.",
+    "acessibilidadeIssue": "conte como foi na issue #39",
     "licencaTitulo": "Licença",
     "licenca": "Este programa é software livre: você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU, conforme publicada pela Free Software Foundation, versão 3 da licença ou (a seu critério) qualquer versão posterior.",
     "garantia": "Este programa é distribuído na esperança de que seja útil, mas SEM NENHUMA GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou de ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.",
@@ -72,12 +76,24 @@
     "titulo": "Memória por dentro (linha × coluna)",
     "ajuda": "Clique numa posição para pôr o endereço dela no MAR. Dois cliques, Enter ou um dígito hexadecimal editam o conteúdo. Com o CS ligado, acendem a linha e a coluna que os decodificadores escolheram.",
     "linhaColuna": "Linha \\ coluna",
-    "celula": "Endereço {endereco}: {valor}",
+    "celula": "Linha {linha}, coluna {coluna}: {visivel}, {valor}",
     "editar": "Novo valor para o endereço {endereco}",
     "vista": "Como mostrar a memória",
     "vistas": {
       "porDentro": "Por dentro",
       "conteudo": "Só o conteúdo"
+    },
+    "valorHex": "valor hexadecimal {digitos}",
+    "valorIndefinido": "valor indefinido",
+    "valorBits": "valor com bits indefinidos, do bit 7 ao 0: {bits}",
+    "noMar": ", endereço do MAR",
+    "resumo": {
+      "desligada": "CS desligado: os decodificadores não escolhem nenhuma linha nem coluna, e os buffers de saída estão desligados.",
+      "ligada": "CS ligado: o decodificador de linha escolhe a linha {linha}, e o de coluna, a coluna {coluna}. {buffers}",
+      "nenhuma": "nenhuma",
+      "indefinida": "indefinida",
+      "buffersLigados": "Os buffers de saída estão ligados e põem {valor} no BD.",
+      "buffersDesligados": "Os buffers de saída estão desligados."
     }
   },
   "arquivo": {

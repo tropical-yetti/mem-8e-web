@@ -81,78 +81,81 @@ const descricao = computed(() => {
 
 <template>
   <svg class="portas" :viewBox="`0 0 ${LARGURA} ${ALTURA}`" role="img" :aria-label="descricao">
-    <!-- Trilhos verticais, com o nome e o valor no alto -->
-    <g v-for="trilho in trilhos" :key="trilho.x">
-      <line
-        class="fio"
-        :class="`nivel-${trilho.nivel}`"
-        :x1="trilho.x"
-        :y1="trilho.nome ? 26 : TOPO_TRILHOS"
-        :x2="trilho.x"
-        :y2="Y0 + 15 * PASSO_PORTA + ALTURA_PORTA"
-      />
-      <text v-if="trilho.nome" :x="trilho.x" y="12" text-anchor="middle" class="forte">
-        {{ trilho.nome }}
-      </text>
-      <text v-if="trilho.nome" :x="trilho.x" y="23" text-anchor="middle" class="suave">
-        {{ trilho.nivel }}
-      </text>
-    </g>
-
-    <!-- NOT de cada bit: desvia do trilho direto e desce como o invertido -->
-    <g v-for="bit in [0, 1, 2, 3]" :key="`not-${bit}`">
-      <polyline
-        class="fio"
-        :class="`nivel-${entradas[bit]}`"
-        :points="`${X0 + bit * PASSO_PAR},34 ${X0 + bit * PASSO_PAR + DISTANCIA_NEG},34 ${X0 + bit * PASSO_PAR + DISTANCIA_NEG},38`"
-      />
-      <circle
-        class="ponto"
-        :class="`nivel-${entradas[bit]}`"
-        :cx="X0 + bit * PASSO_PAR"
-        cy="34"
-        r="2.5"
-      />
-      <path
-        class="porta"
-        :d="trianguloBaixo(X0 + bit * PASSO_PAR + DISTANCIA_NEG - 7, 38, 14, 14)"
-      />
-      <circle class="porta" :cx="X0 + bit * PASSO_PAR + DISTANCIA_NEG" :cy="55" r="3" />
-    </g>
-
-    <!-- 16 portas AND -->
-    <g v-for="porta in portas" :key="porta.i">
-      <template v-for="(fio, j) in porta.fios" :key="j">
+    <!-- Só desenho: o leitor de tela lê a descrição do role="img". -->
+    <g aria-hidden="true">
+      <!-- Trilhos verticais, com o nome e o valor no alto -->
+      <g v-for="trilho in trilhos" :key="trilho.x">
         <line
           class="fio"
-          :class="`nivel-${fio.nivel}`"
-          :x1="fio.x"
-          :y1="fio.y"
-          :x2="X_PORTA"
-          :y2="fio.y"
+          :class="`nivel-${trilho.nivel}`"
+          :x1="trilho.x"
+          :y1="trilho.nome ? 26 : TOPO_TRILHOS"
+          :x2="trilho.x"
+          :y2="Y0 + 15 * PASSO_PORTA + ALTURA_PORTA"
         />
-        <circle class="ponto" :class="`nivel-${fio.nivel}`" :cx="fio.x" :cy="fio.y" r="2" />
-      </template>
-      <path
-        class="porta"
-        :class="`saida-${porta.saida}`"
-        :d="formaE(X_PORTA, porta.y, LARGURA_PORTA, ALTURA_PORTA)"
-      />
-      <line
-        class="fio"
-        :class="`nivel-${porta.saida}`"
-        :x1="X_PORTA + LARGURA_PORTA"
-        :y1="porta.y + ALTURA_PORTA / 2"
-        :x2="X_FIM"
-        :y2="porta.y + ALTURA_PORTA / 2"
-      />
-      <text
-        :x="X_FIM + 4"
-        :y="porta.y + ALTURA_PORTA / 2 + 4"
-        :class="porta.saida === 1 ? 'forte' : 'suave'"
-      >
-        {{ HEX(porta.i) }}={{ porta.saida }}
-      </text>
+        <text v-if="trilho.nome" :x="trilho.x" y="12" text-anchor="middle" class="forte">
+          {{ trilho.nome }}
+        </text>
+        <text v-if="trilho.nome" :x="trilho.x" y="23" text-anchor="middle" class="suave">
+          {{ trilho.nivel }}
+        </text>
+      </g>
+
+      <!-- NOT de cada bit: desvia do trilho direto e desce como o invertido -->
+      <g v-for="bit in [0, 1, 2, 3]" :key="`not-${bit}`">
+        <polyline
+          class="fio"
+          :class="`nivel-${entradas[bit]}`"
+          :points="`${X0 + bit * PASSO_PAR},34 ${X0 + bit * PASSO_PAR + DISTANCIA_NEG},34 ${X0 + bit * PASSO_PAR + DISTANCIA_NEG},38`"
+        />
+        <circle
+          class="ponto"
+          :class="`nivel-${entradas[bit]}`"
+          :cx="X0 + bit * PASSO_PAR"
+          cy="34"
+          r="2.5"
+        />
+        <path
+          class="porta"
+          :d="trianguloBaixo(X0 + bit * PASSO_PAR + DISTANCIA_NEG - 7, 38, 14, 14)"
+        />
+        <circle class="porta" :cx="X0 + bit * PASSO_PAR + DISTANCIA_NEG" :cy="55" r="3" />
+      </g>
+
+      <!-- 16 portas AND -->
+      <g v-for="porta in portas" :key="porta.i">
+        <template v-for="(fio, j) in porta.fios" :key="j">
+          <line
+            class="fio"
+            :class="`nivel-${fio.nivel}`"
+            :x1="fio.x"
+            :y1="fio.y"
+            :x2="X_PORTA"
+            :y2="fio.y"
+          />
+          <circle class="ponto" :class="`nivel-${fio.nivel}`" :cx="fio.x" :cy="fio.y" r="2" />
+        </template>
+        <path
+          class="porta"
+          :class="`saida-${porta.saida}`"
+          :d="formaE(X_PORTA, porta.y, LARGURA_PORTA, ALTURA_PORTA)"
+        />
+        <line
+          class="fio"
+          :class="`nivel-${porta.saida}`"
+          :x1="X_PORTA + LARGURA_PORTA"
+          :y1="porta.y + ALTURA_PORTA / 2"
+          :x2="X_FIM"
+          :y2="porta.y + ALTURA_PORTA / 2"
+        />
+        <text
+          :x="X_FIM + 4"
+          :y="porta.y + ALTURA_PORTA / 2 + 4"
+          :class="porta.saida === 1 ? 'forte' : 'suave'"
+        >
+          {{ HEX(porta.i) }}={{ porta.saida }}
+        </text>
+      </g>
     </g>
   </svg>
 </template>

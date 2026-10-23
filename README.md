@@ -33,6 +33,20 @@ dentro do site, explica como a memória funciona e traz um roteiro de aula com
 exercícios. Veja também o [plano do projeto](docs/PLANO.md) e as
 [decisões de arquitetura](docs/adr/).
 
+## Acessibilidade
+
+O site é feito para funcionar só com o teclado e com leitor de tela, e segue
+as diretrizes WCAG 2.2, nível AA. A grade da memória anuncia uma célula por
+vez ("Linha A, coluna F: 89, valor hexadecimal 8 9"), e nunca as 256 em
+sequência.
+
+Os testes de acessibilidade são automáticos e rodam em todo pull request: o
+[axe](https://github.com/dequelabs/axe-core), a árvore de acessibilidade do
+Playwright e um leitor de tela simulado, o
+[Guidepup Virtual Screen Reader](https://github.com/guidepup/virtual-screen-reader).
+Ninguém que usa leitor de tela no dia a dia testou o site ainda. Se você usa,
+conte como foi na [issue #39](https://github.com/tropical-yetti/mem-8e-web/issues/39).
+
 ## Desenvolvimento
 
 Requer Node.js 22.

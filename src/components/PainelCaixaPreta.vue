@@ -89,7 +89,7 @@ const quemDirige = computed(() =>
       largo
       direcao="cpu"
     />
-    <div class="pino linha-be" data-sigla="pinosA">A7–A0</div>
+    <div class="pino linha-be" aria-hidden="true" data-sigla="pinosA">A7–A0</div>
 
     <!-- MDR ↔ BD -->
     <div class="cpu linha-bd">
@@ -122,7 +122,7 @@ const quemDirige = computed(() =>
       largo
       :direcao="direcaoBd"
     />
-    <div class="pino linha-bd" data-sigla="pinosD">D7–D0</div>
+    <div class="pino linha-bd" aria-hidden="true" data-sigla="pinosD">D7–D0</div>
 
     <!-- Sinais de controle -->
     <template v-for="(controle, i) in CONTROLES" :key="controle.sinal">
@@ -151,7 +151,7 @@ const quemDirige = computed(() =>
         cor="controle"
         direcao="cpu"
       />
-      <div class="pino" :style="{ gridRow: 4 + i }" :data-sigla="controle.sinal">
+      <div class="pino" aria-hidden="true" :style="{ gridRow: 4 + i }" :data-sigla="controle.sinal">
         {{ controle.nome }}
       </div>
     </template>

@@ -10,6 +10,14 @@
   espaço põe o endereço no MAR. Mouse: um clique põe o endereço no MAR,
   dois cliques editam.
 
+  Leitor de tela: a grade é um widget de grade, e só a célula com o foco
+  fica visível para ele, com o rótulo "Linha A, coluna F: valor hexadecimal
+  8 9". As outras 255, os cabeçalhos e os blocos da vista "por dentro" ficam
+  ocultos: ouvir 256 valores em sequência não ajuda ninguém (issue #36). O
+  nome também traz o valor como aparece na tela ("A F: 89, valor hexadecimal
+  8 9"), para quem usa controle por voz. Um
+  resumo curto diz o que os decodificadores e os buffers estão fazendo.
+
   Na vista "por dentro", os blocos da memória aparecem em volta da grade, e
   ela mesma passa a ser a matriz: decodificador de coluna acima,
   decodificador de linha à esquerda, linhas de bit, seletor e buffers abaixo.
@@ -19,7 +27,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { COLUNAS, enderecoDe, LINHAS, paraHex, type Nivel } from '@/core'
+import { COLUNAS, enderecoDe, linhaDe, LINHAS, paraHex, paraNumero, type Nivel } from '@/core'
 import { useSimuladorStore } from '@/stores/simulador'
 import DecodificadorColuna from './porDentro/DecodificadorColuna.vue'
 import DecodificadorLinha from './porDentro/DecodificadorLinha.vue'
@@ -159,22 +167,62 @@ function teclado(evento: KeyboardEvent, endereco: number) {
 }
 
 function clicar(endereco: number) {
-  foco.value = endereco
+  focar(endereco)
   simulador.mudarMar(endereco)
 }
 
-function rotulo(endereco: number): string {
-  return t('grade.celula', {
-    endereco: endereco.toString(16).toUpperCase().padStart(2, '0'),
-    valor: hexDe(endereco),
-  })
+/** Dígitos separados por espaço, para o leitor de tela dizer "oito nove", e não "oitenta e nove". */
+const separar = (texto: string) => [...texto].join(' ')
+
+/** O valor de uma célula, como o leitor de tela deve dizer. */
+function valorFalado(endereco: number): string {
+  const celula = simulador.celulas[endereco]!
+  if (paraNumero(celula) !== null) return t('grade.valorHex', { digitos: separar(hexDe(endereco)) })
+  if (celula.every((bit) => bit === 'X')) return t('grade.valorIndefinido')
+  const bits = [...celula].reverse().join('')
+  return t('grade.valorBits', { bits: separar(bits) })
 }
+
+function rotulo(endereco: number): string {
+  // O texto visível (por exemplo, 37) entra no nome, para quem usa controle por voz (WCAG 2.5.3).
+  const texto = t('grade.celula', {
+    linha: HEX[linhaDe(endereco)],
+    coluna: HEX[endereco % COLUNAS],
+    visivel: hexDe(endereco),
+    valor: valorFalado(endereco),
+  })
+  return endereco === simulador.mar ? `${texto}${t('grade.noMar')}` : texto
+}
+
+/** Só a linha e a célula com o foco ficam visíveis para o leitor de tela. */
+const linhaFoco = computed(() => linhaDe(foco.value))
+
+/** O que a vista "por dentro" mostra, numa frase, para quem não vê os blocos. */
+const resumoPorDentro = computed(() => {
+  if (simulador.sinais.cs !== 1) return t('grade.resumo.desligada')
+  const escolhida = (niveis: readonly Nivel[]) => {
+    if (niveis.includes('X')) return t('grade.resumo.indefinida')
+    const i = niveis.indexOf(1)
+    return i < 0 ? t('grade.resumo.nenhuma') : HEX[i]!
+  }
+  const saida = simulador.avaliacao.interno.saida
+  const buffers = saida.every((bit) => bit === 'Z')
+    ? t('grade.resumo.buffersDesligados')
+    : t('grade.resumo.buffersLigados', { valor: separar(paraHex(saida)) })
+  return t('grade.resumo.ligada', {
+    linha: escolhida(interno.value.linhas),
+    coluna: escolhida(interno.value.colunas),
+    buffers,
+  })
+})
 </script>
 
 <template>
   <section class="grade" :aria-labelledby="'titulo-grade'" data-guia="grade">
     <div class="cabeca">
-      <h2 id="titulo-grade">{{ t('grade.titulo') }} <BotaoAjuda passo="grade" /></h2>
+      <h2 aria-labelledby="titulo-grade">
+        <span id="titulo-grade">{{ t('grade.titulo') }}</span> <BotaoAjuda passo="grade" />
+      </h2>
       <div class="vistas" role="radiogroup" :aria-label="t('grade.vista')">
         <button
           v-for="opcao in ['porDentro', 'conteudo'] as const"
@@ -192,6 +240,7 @@ function rotulo(endereco: number): string {
     <div class="moldura" :class="{ 'por-dentro': vista === 'porDentro' }">
       <DecodificadorColuna
         v-if="vista === 'porDentro'"
+        aria-hidden="true"
         class="dec-coluna"
         :entradas="interno.enderecoColuna"
         :habilita="simulador.sinais.cs"
@@ -199,13 +248,21 @@ function rotulo(endereco: number): string {
       />
       <DecodificadorLinha
         v-if="vista === 'porDentro'"
+        aria-hidden="true"
         class="dec-linha"
         :entradas="interno.enderecoLinha"
         :habilita="simulador.sinais.cs"
         :saidas="interno.linhas"
       />
-      <table class="matriz" aria-describedby="ajuda-grade">
-        <thead>
+      <table
+        class="matriz"
+        role="grid"
+        aria-labelledby="titulo-grade"
+        aria-describedby="ajuda-grade resumo-grade"
+        :aria-rowcount="LINHAS"
+        :aria-colcount="COLUNAS"
+      >
+        <thead aria-hidden="true">
           <tr>
             <th scope="col" class="canto">
               <span class="visualmente-oculto">{{ t('grade.linhaColuna') }}</span>
@@ -221,14 +278,24 @@ function rotulo(endereco: number): string {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="linha in indices(LINHAS)" :key="linha">
-            <th scope="row" :class="classeDe(interno.linhas[linha])">{{ HEX[linha] }}</th>
+          <tr
+            v-for="linha in indices(LINHAS)"
+            :key="linha"
+            :aria-rowindex="linha + 1"
+            :aria-hidden="linha === linhaFoco ? undefined : 'true'"
+          >
+            <th scope="row" aria-hidden="true" :class="classeDe(interno.linhas[linha])">
+              {{ HEX[linha] }}
+            </th>
             <td
               v-for="coluna in indices(COLUNAS)"
               :key="coluna"
               :ref="(el) => (celulasEl[enderecoDe(linha, coluna)] = el as HTMLElement)"
               :class="classesCelula(linha, coluna)"
-              :tabindex="foco === enderecoDe(linha, coluna) && editando === null ? 0 : -1"
+              :data-endereco="HEX[linha]! + HEX[coluna]!"
+              :aria-colindex="coluna + 1"
+              :aria-hidden="foco === enderecoDe(linha, coluna) ? undefined : 'true'"
+              :tabindex="foco === enderecoDe(linha, coluna) && editando === null ? 0 : undefined"
               :aria-label="rotulo(enderecoDe(linha, coluna))"
               :aria-current="enderecoDe(linha, coluna) === simulador.mar ? 'location' : undefined"
               @click="clicar(enderecoDe(linha, coluna))"
@@ -258,8 +325,10 @@ function rotulo(endereco: number): string {
           </tr>
         </tbody>
       </table>
+      <p id="resumo-grade" class="visualmente-oculto">{{ resumoPorDentro }}</p>
       <SaidaMemoria
         v-if="vista === 'porDentro'"
+        aria-hidden="true"
         class="saida"
         :interno="interno"
         :bd="simulador.avaliacao.bd"

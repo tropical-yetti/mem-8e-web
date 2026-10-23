@@ -58,7 +58,10 @@ const resultado = computed(() => {
 
 <template>
   <section class="transacao" aria-labelledby="titulo-transacao" data-guia="transacao">
-    <h2 id="titulo-transacao">{{ t('transacao.titulo') }} <BotaoAjuda passo="transacao" /></h2>
+    <h2 aria-labelledby="titulo-transacao">
+      <span id="titulo-transacao">{{ t('transacao.titulo') }}</span>
+      <BotaoAjuda passo="transacao" />
+    </h2>
 
     <div class="botoes">
       <template v-if="!fases || fases.terminou">
