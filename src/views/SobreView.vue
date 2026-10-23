@@ -3,6 +3,7 @@
 import { I18nT, useI18n } from 'vue-i18n'
 import {
   AUTOR_CPU8E,
+  ISSUE_LEITOR_DE_TELA,
   URL_CODIGO_FONTE,
   URL_CPU8E_ORIGINAL,
   URL_CPU8E_WEB,
@@ -36,6 +37,14 @@ const VERSAO = __VERSAO__
     <p>
       <a :href="URL_CODIGO_FONTE" target="_blank" rel="noopener">{{ t('rodape.codigoFonte') }}</a>
     </p>
+
+    <h2>{{ t('sobre.acessibilidadeTitulo') }}</h2>
+    <p>{{ t('sobre.acessibilidade') }}</p>
+    <I18nT keypath="sobre.acessibilidadeTestes" tag="p" scope="global">
+      <template #issue>
+        <a :href="ISSUE_LEITOR_DE_TELA">{{ t('sobre.acessibilidadeIssue') }}</a>
+      </template>
+    </I18nT>
 
     <h2>{{ t('sobre.licencaTitulo') }}</h2>
     <p>{{ t('sobre.licenca') }}</p>

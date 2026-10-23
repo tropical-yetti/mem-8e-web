@@ -24,12 +24,16 @@ Exercícios para fazer no simulador, do mais simples ao mais elaborado. As respo
 1. Com o clock de 50 MHz e a memória média, quantos wait states tem uma leitura? Quanto dura o ciclo?
 2. Troque o clock para 10 MHz. E agora?
 3. Com a memória lenta e o clock de 100 MHz, quantos wait states há? O que isso diz sobre usar uma CPU rápida com uma memória lenta?
-4. Desmarque **"A CPU espera a memória"**, mantenha a memória lenta e leia um endereço. O que o MDR recebe?
+4. Desmarque **“A CPU espera a memória”**, mantenha a memória lenta e leia um endereço. O que o MDR recebe?
 
 ## 5. Em portas lógicas {#ex-portas}
 
 1. No decodificador de linha, que entradas recebe a porta da saída `5`?
 2. Ponha `3A` no MAR e ligue o CS. No **Bit do endereço**, escolha D0: a linha de bit vale 0 ou 1? Confira com o valor de `M[3A]`.
+
+## 6. Experimentos “e se…?” {#ex-experimentos}
+
+O botão **Experimentos “e se…?”**, no topo do simulador, traz cinco situações que dão errado de propósito: contenção no BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera uma memória lenta e CS desligado. Cada um começa com uma pergunta: peça para a turma responder antes de fazer o passo. Ao sair, o simulador volta a ser como estava.
 
 ## Respostas {#respostas}
 

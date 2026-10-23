@@ -5,17 +5,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
+import { semProblemasGraves, celula, porNoMar } from './ajudantes'
 
 /** Conteúdo inicial do endereço 3A (veja CONTEUDO_INICIAL na store). */
 const M3A = ((0x3a * 0x9d + 0x37) & 0xff).toString(16).toUpperCase().padStart(2, '0')
-
-async function porNoMar(page: Page, valor: string) {
-  const campo = page.getByRole('textbox', { name: 'MAR em hexadecimal' })
-  await campo.fill(valor)
-  await campo.press('Enter')
-}
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./')
@@ -23,31 +17,31 @@ test.beforeEach(async ({ page }) => {
 
 test('mudar um bit do MAR move o endereço marcado na grade', async ({ page }) => {
   await porNoMar(page, '3A')
-  await expect(page.locator('td[aria-current="location"]')).toHaveAttribute(
-    'aria-label',
-    `Endereço 3A: ${M3A}`,
-  )
+  await expect(page.locator('td[aria-current="location"]')).toHaveAttribute('data-endereco', '3A')
+  await expect(celula(page, '3A')).toHaveText(M3A)
   await page.getByRole('button', { name: 'A7 = 0' }).click()
   await expect(page.getByRole('textbox', { name: 'MAR em hexadecimal' })).toHaveValue('BA')
-  await expect(page.locator('td[aria-current="location"]')).toHaveAttribute(
-    'aria-label',
-    /^Endereço BA/,
-  )
+  await expect(page.locator('td[aria-current="location"]')).toHaveAttribute('data-endereco', 'BA')
 })
 
 test('clicar numa posição põe o endereço no MAR', async ({ page }) => {
-  await page.getByRole('cell', { name: /^Endereço 5C/ }).click()
+  await celula(page, '5C').click()
   await expect(page.getByRole('textbox', { name: 'MAR em hexadecimal' })).toHaveValue('5C')
 })
 
 test('editar uma posição pelo teclado', async ({ page }) => {
-  const celula = page.getByRole('cell', { name: /^Endereço 00/ })
-  await celula.click()
-  await celula.press('ArrowRight')
+  await celula(page, '00').click()
+  await celula(page, '00').press('ArrowRight')
   await page.keyboard.press('A')
   await page.keyboard.press('B')
   await page.keyboard.press('Enter')
-  await expect(page.getByRole('cell', { name: 'Endereço 01: AB' })).toBeFocused()
+  await expect(celula(page, '01')).toBeFocused()
+  await expect(celula(page, '01')).toHaveText('AB')
+  // Para o leitor de tela, só a célula do foco existe, com linha, coluna e dígitos separados.
+  await expect(page.getByRole('gridcell')).toHaveCount(1)
+  await expect(page.getByRole('gridcell')).toHaveAccessibleName(
+    'Linha 0, coluna 1: AB, valor hexadecimal A B',
+  )
 })
 
 test('leitura passo a passo, da seleção da linha até o MDR', async ({ page }) => {
@@ -59,8 +53,12 @@ test('leitura passo a passo, da seleção da linha até o MDR', async ({ page })
   )
   await page.getByRole('button', { name: 'Próxima fase' }).click()
   // Com o CS ligado, a linha 3 e a coluna A acendem.
-  await expect(page.getByRole('rowheader', { name: '3' })).toHaveClass(/ativa/)
-  await expect(page.getByRole('columnheader', { name: 'A', exact: true })).toHaveClass(/ativa/)
+  // (Os cabeçalhos ficam ocultos para o leitor de tela: o resumo diz a linha e a coluna.)
+  await expect(page.locator('.matriz tbody th').nth(3)).toHaveClass(/ativa/)
+  await expect(page.locator('.matriz thead th').nth(0xa + 1)).toHaveClass(/ativa/)
+  await expect(page.locator('#resumo-grade')).toHaveText(
+    /o decodificador de linha escolhe a linha 3, e o de coluna, a coluna A/,
+  )
   await page.getByRole('button', { name: 'Ir até o fim' }).click()
   await expect(page.getByText(`Leitura concluída: M[3A] → MDR = ${M3A}.`)).toBeVisible()
   await expect(page.getByRole('textbox', { name: 'MDR em hexadecimal' })).toHaveValue(M3A)
@@ -73,7 +71,7 @@ test('escrita passo a passo grava o MDR na posição do MAR', async ({ page }) =
   await mdr.press('Enter')
   await page.getByRole('button', { name: 'Escrever 3E no endereço C4' }).click()
   for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Próxima fase' }).click()
-  await expect(page.getByRole('cell', { name: 'Endereço C4: 3E' })).toBeVisible()
+  await expect(celula(page, 'C4')).toHaveText('3E')
   await page.getByRole('button', { name: 'Ir até o fim' }).click()
   await expect(page.getByText('Escrita concluída: M[C4] = 3E.')).toBeVisible()
 })
@@ -93,15 +91,7 @@ for (const tema of ['light', 'dark'] as const) {
     await page.getByRole('button', { name: /^Ler o endereço/ }).click()
     await page.getByRole('button', { name: 'Próxima fase' }).click()
     await page.getByRole('button', { name: 'Próxima fase' }).click()
-    const resultado = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze()
-    const graves = resultado.violations.filter(
-      (v) => v.impact === 'serious' || v.impact === 'critical',
-    )
-    expect(
-      graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-    ).toEqual([])
+    await semProblemasGraves(page)
   })
 }
 

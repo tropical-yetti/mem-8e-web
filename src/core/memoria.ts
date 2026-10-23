@@ -94,8 +94,8 @@ export function editarBit(memoria: Memoria, endereco: number, bit: number, nivel
 }
 
 /**
- * Carrega um programa (`.bin` do CPU-8E): zera a memória e copia até 256
- * bytes a partir do endereço 00. Devolve quantos bytes foram copiados.
+ * Preenche a memória com bytes: zera tudo e copia até 256 bytes a partir do
+ * endereço 00. Devolve quantos bytes foram copiados.
  */
 export function carregarPrograma(memoria: Memoria, bytes: Uint8Array): number {
   const tamanho = Math.min(bytes.length, TAMANHO)

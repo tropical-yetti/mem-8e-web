@@ -66,11 +66,32 @@ describe('edições à mão', () => {
     expect(simulador.celulas.every((c) => paraNumero(c) === 0)).toBe(true)
   })
 
-  it('carregar um programa devolve o tamanho', () => {
+  it('abrir um texto substitui a memória inteira', () => {
     const simulador = useSimuladorStore()
-    expect(simulador.carregar(Uint8Array.of(1, 2, 3))).toBe(3)
+    const resultado = simulador.abrirTexto('01 02 03\nF0: XX')
+    expect(resultado.ok && resultado.citadas).toBe(4)
     expect(paraNumero(simulador.celulas[2]!)).toBe(3)
     expect(paraNumero(simulador.celulas[3]!)).toBe(0)
+    expect(simulador.celulas[0xf0]!.every((b) => b === 'X')).toBe(true)
+  })
+
+  it('um texto com erro não muda a memória', () => {
+    const simulador = useSimuladorStore()
+    const antes = simulador.celulas.map((c) => [...c])
+    const resultado = simulador.abrirTexto('00: 01 02\n10: ZZ')
+    expect(resultado.ok).toBe(false)
+    expect(simulador.celulas).toEqual(antes)
+  })
+
+  it('o texto da memória abre de volta igual, com data e versão', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarCelula(0x10, 0xab)
+    const texto = simulador.textoDaMemoria({ data: '2026-10-02', versao: '0.9.0' })
+    expect(texto).toContain('# salvo em 2026-10-02, versão 0.9.0')
+    const antes = simulador.celulas.map((c) => [...c])
+    simulador.reiniciar()
+    simulador.abrirTexto(texto)
+    expect(simulador.celulas).toEqual(antes)
   })
 })
 
@@ -139,12 +160,48 @@ describe('transações passo a passo', () => {
     expect(paraNumero(simulador.celulas[0xc4]!)).toBe(0x3e)
   })
 
-  it('mexer no MAR no meio da transação a interrompe', () => {
+  it('mexer no MAR no meio de uma escrita a interrompe', () => {
     const simulador = useSimuladorStore()
-    simulador.iniciarLeitura()
+    simulador.iniciarEscrita()
     simulador.mudarMar(0x01)
     expect(simulador.fases).toBeNull()
     expect(simulador.proximaFase()).toBe(false)
+  })
+
+  it('trocar o MAR no meio de uma leitura não a interrompe (ADR 0005)', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarCelula(0x10, 0x11)
+    simulador.mudarCelula(0x20, 0x22)
+    simulador.mudarMar(0x10)
+    simulador.iniciarLeitura()
+    // Antes da seleção (10 ns): o novo dado ainda chega a tempo.
+    simulador.mudarMar(0x20)
+    expect(simulador.fases).not.toBeNull()
+    expect(simulador.linhaDoTempo.mudanca).toEqual({ t: 10, endereco: '20', dado: '22' })
+    simulador.concluir()
+    expect(paraNumero(simulador.mdr)).toBe(0x22)
+    expect(simulador.linhaDoTempo.certo).toBe(true)
+  })
+
+  it('trocar o MAR tarde demais numa leitura faz o MDR capturar X', () => {
+    const simulador = useSimuladorStore()
+    simulador.mudarMar(0x10)
+    simulador.iniciarLeitura()
+    simulador.proximaFase() // seleção
+    simulador.proximaFase() // saída: a troca conta a partir da espera (40 ns)
+    simulador.mudarMar(0x20)
+    expect(simulador.linhaDoTempo.mudanca?.t).toBe(40)
+    simulador.concluir()
+    expect(simulador.mdr.every((bit) => bit === 'X')).toBe(true)
+    expect(simulador.linhaDoTempo.certo).toBe(false)
+  })
+
+  it('depois que a leitura terminou, mexer no MAR a encerra', () => {
+    const simulador = useSimuladorStore()
+    simulador.iniciarLeitura()
+    simulador.concluir()
+    simulador.mudarMar(0x01)
+    expect(simulador.fases).toBeNull()
   })
 
   it('editar a memória no meio da transação não a interrompe', () => {

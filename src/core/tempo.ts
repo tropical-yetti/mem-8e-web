@@ -66,13 +66,24 @@ export const TEMPO_PADRAO: ParametrosTempo = {
   esperar: true,
 }
 
-/** Quando o dado fica válido no BD, numa leitura. */
-export function dadoValidoEm(p: ParametrosTempo): number {
+/**
+ * Quando o dado fica válido no BD, numa leitura. Se o endereço mudou no meio
+ * (em `mudancaEndereco`), a contagem de t_AA recomeça dali (ADR 0005).
+ */
+export function dadoValidoEm(p: ParametrosTempo, mudancaEndereco = 0): number {
   // O RD liga no começo de T2 (t = periodo).
-  return Math.max(p.tAA, p.periodo + p.tOE)
+  return Math.max(mudancaEndereco + p.tAA, p.periodo + p.tOE)
 }
 
-/** Wait states de uma leitura: quantos ciclos a mais até o dado ficar válido. */
+/** Instante em que o MDR captura o BD, numa leitura. */
+export function capturaEm(p: ParametrosTempo): number {
+  return (2 + esperasLeitura(p)) * p.periodo
+}
+
+/**
+ * Wait states de uma leitura: quantos ciclos a mais até o dado ficar válido.
+ * São decididos no começo do ciclo; uma troca de endereço depois não os muda.
+ */
 export function esperasLeitura(p: ParametrosTempo): number {
   if (!p.esperar) return 0
   return Math.max(0, Math.ceil((dadoValidoEm(p) - 2 * p.periodo) / p.periodo))
@@ -84,9 +95,28 @@ export function esperasEscrita(p: ParametrosTempo): number {
   return Math.max(0, Math.ceil((p.tWP - p.periodo) / p.periodo))
 }
 
-/** A leitura dá certo: o dado está válido quando o MDR captura. */
-export function leituraCerta(p: ParametrosTempo): boolean {
-  return dadoValidoEm(p) <= (2 + esperasLeitura(p)) * p.periodo
+/**
+ * A leitura dá certo: o dado está válido quando o MDR captura. Uma troca de
+ * endereço depois da captura não atrapalha a leitura que já foi feita.
+ */
+export function leituraCerta(p: ParametrosTempo, mudancaEndereco = 0): boolean {
+  const captura = capturaEm(p)
+  const mudanca = mudancaEndereco > captura ? 0 : mudancaEndereco
+  return dadoValidoEm(p, mudanca) <= captura
+}
+
+/** Instante de cada fase de uma leitura, no diagrama de tempo. */
+export function instantesLeitura(p: ParametrosTempo): Record<string, number> {
+  const P = p.periodo
+  const captura = capturaEm(p)
+  return {
+    endereco: 0,
+    selecao: P / 2,
+    saida: P,
+    espera: 2 * P,
+    captura,
+    liberacao: captura + P / 2,
+  }
 }
 
 /** A escrita dá certo: o pulso de WR é pelo menos t_WP. */
@@ -121,7 +151,7 @@ export interface EstadoClock {
   ate: number
 }
 
-export type IdMarca = 'dadoValido' | 'captura' | 'pulsoMinimo' | 'fimPulso'
+export type IdMarca = 'dadoValido' | 'captura' | 'pulsoMinimo' | 'fimPulso' | 'mudancaEndereco'
 
 export interface Marca {
   id: IdMarca
@@ -139,6 +169,16 @@ export interface LinhaDoTempo {
   marcas: Marca[]
   /** Instante de cada fase da transação passo a passo. */
   instantes: Record<string, number>
+  /** O endereço mudou no meio da leitura (ADR 0005). */
+  mudanca?: MudancaEndereco
+}
+
+export interface MudancaEndereco {
+  /** Quando o MAR mudou. */
+  t: number
+  /** Novo endereço e o conteúdo dele, em hexadecimal. */
+  endereco: string
+  dado: string
 }
 
 /** Junta trechos vizinhos com o mesmo valor e descarta trechos vazios. */
@@ -202,40 +242,73 @@ export interface DadosLeitura {
   mdrAntes: string
 }
 
-export function linhaDoTempoLeitura(p: ParametrosTempo, d: DadosLeitura): LinhaDoTempo {
+export function linhaDoTempoLeitura(
+  p: ParametrosTempo,
+  d: DadosLeitura,
+  mudanca?: MudancaEndereco,
+): LinhaDoTempo {
   const P = p.periodo
   const esperas = esperasLeitura(p)
-  const captura = (2 + esperas) * P
+  const captura = capturaEm(p)
   const desliga = captura + P / 2
   const fim = (3 + esperas) * P
   const valido = dadoValidoEm(p)
-  const certo = valido <= captura
+  const certo = leituraCerta(p, mudanca?.t)
+
+  // O BD de uma leitura: solto, inválido até o dado chegar, o dado, solto de novo.
+  let bd: Trecho[] = [
+    { de: 0, ate: P, valor: 'Z' },
+    // Os buffers ligam com o RD, mas o dado ainda não chegou: o BD é dirigido, porém inválido.
+    { de: P, ate: Math.min(valido, desliga), valor: 'X' },
+    { de: Math.min(valido, desliga), ate: desliga, valor: d.dado },
+    { de: desliga, ate: fim, valor: 'Z' },
+  ]
+  let be: Trecho[] = [{ de: 0, ate: fim, valor: d.endereco }]
+  let validoFinal = valido
+  /** O que o MDR guarda na captura (antes do X de uma leitura errada). */
+  let dadoCapturado = d.dado
+  if (mudanca) {
+    const tm = Math.min(mudanca.t, fim)
+    be = [
+      { de: 0, ate: tm, valor: d.endereco },
+      { de: tm, ate: fim, valor: mudanca.endereco },
+    ]
+    // Com os buffers ligados, o BD fica inválido de novo até o novo dado chegar.
+    const novoValido = dadoValidoEm(p, tm)
+    const antes = bd.map((tr) => ({ ...tr, ate: Math.min(tr.ate, tm) }))
+    const depois: Trecho[] =
+      tm < desliga
+        ? [
+            { de: Math.max(tm, P), ate: Math.min(novoValido, desliga), valor: 'X' },
+            { de: Math.min(novoValido, desliga), ate: desliga, valor: mudanca.dado },
+            { de: desliga, ate: fim, valor: 'Z' },
+          ]
+        : [{ de: tm, ate: fim, valor: 'Z' }]
+    // Antes do RD (tm < P), o trecho Z do começo continua até o RD.
+    if (tm < P) depois.unshift({ de: tm, ate: P, valor: 'Z' })
+    bd = [...antes, ...depois]
+    if (tm <= captura) {
+      validoFinal = novoValido
+      dadoCapturado = mudanca.dado
+    }
+  }
 
   const sinais: SinalNoTempo[] = [
     clock(P, fim),
-    { id: 'be', tipo: 'barramento', trechos: [{ de: 0, ate: fim, valor: d.endereco }] },
+    { id: 'be', tipo: 'barramento', trechos: trechos(be) },
     pulso('cs', P / 2, desliga, fim),
     pulso('rd', P, desliga, fim),
   ]
+  // O READY foi decidido no começo do ciclo, pelo endereço original.
   if (p.esperar) sinais.push(ready(P, valido, fim))
   sinais.push(
-    {
-      id: 'bd',
-      tipo: 'barramento',
-      trechos: trechos([
-        { de: 0, ate: P, valor: 'Z' },
-        // Os buffers ligam com o RD, mas o dado ainda não chegou: o BD é dirigido, porém inválido.
-        { de: P, ate: Math.min(valido, desliga), valor: 'X' },
-        { de: Math.min(valido, desliga), ate: desliga, valor: d.dado },
-        { de: desliga, ate: fim, valor: 'Z' },
-      ]),
-    },
+    { id: 'bd', tipo: 'barramento', trechos: trechos(bd) },
     {
       id: 'mdr',
       tipo: 'barramento',
       trechos: trechos([
         { de: 0, ate: captura, valor: d.mdrAntes },
-        { de: captura, ate: fim, valor: certo ? d.dado : 'X' },
+        { de: captura, ate: fim, valor: certo ? dadoCapturado : 'X' },
       ]),
     },
   )
@@ -249,17 +322,12 @@ export function linhaDoTempoLeitura(p: ParametrosTempo, d: DadosLeitura): LinhaD
     sinais,
     estados: estadosClock(P, esperas),
     marcas: [
-      { id: 'dadoValido', t: valido },
+      ...(mudanca ? [{ id: 'mudancaEndereco' as const, t: Math.min(mudanca.t, fim) }] : []),
+      { id: 'dadoValido', t: validoFinal },
       { id: 'captura', t: captura },
     ],
-    instantes: {
-      endereco: 0,
-      selecao: P / 2,
-      saida: P,
-      espera: 2 * P,
-      captura,
-      liberacao: desliga,
-    },
+    instantes: instantesLeitura(p),
+    ...(mudanca ? { mudanca } : {}),
   }
 }
 

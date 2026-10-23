@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { semProblemasGraves } from './ajudantes'
 
 const PAGINAS = ['primeiros-passos', 'memoria', 'niveis', 'tempo', 'portas', 'roteiro', 'siglas']
 
@@ -51,23 +51,26 @@ test.describe('guia', () => {
   })
 })
 
-for (const tema of ['light', 'dark'] as const) {
-  test.describe(`tema ${tema}`, () => {
-    test.use({ colorScheme: tema })
-    for (const pagina of PAGINAS) {
-      test(`/${pagina} sem problemas graves de acessibilidade`, async ({ page }) => {
-        await page.goto(`./#/documentacao/${pagina}`)
-        await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        const resultado = await new AxeBuilder({ page })
-          .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-          .analyze()
-        const graves = resultado.violations.filter(
-          (v) => v.impact === 'serious' || v.impact === 'critical',
-        )
-        expect(
-          graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-        ).toEqual([])
-      })
-    }
-  })
+// Em português, em todos os navegadores; em inglês (o mesmo HTML com outro texto), só no computador.
+for (const idioma of ['pt-BR', 'en-US'] as const) {
+  for (const tema of ['light', 'dark'] as const) {
+    test.describe(`${idioma}, tema ${tema}`, () => {
+      test.use({ colorScheme: tema, locale: idioma })
+      for (const pagina of PAGINAS) {
+        test(`/${pagina} sem problemas graves de acessibilidade`, async ({ page }, info) => {
+          test.skip(
+            idioma === 'en-US' && info.project.name !== 'computador',
+            'inglês: só no computador',
+          )
+          await page.goto(`./#/documentacao/${pagina}`)
+          await expect(page.locator('html')).toHaveAttribute(
+            'lang',
+            idioma.slice(0, 2) === 'pt' ? 'pt-BR' : 'en',
+          )
+          await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+          await semProblemasGraves(page)
+        })
+      }
+    })
+  }
 }

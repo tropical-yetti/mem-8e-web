@@ -3,6 +3,9 @@
 /** Repositório deste projeto (código-fonte correspondente, exigido pela GPL). */
 export const URL_CODIGO_FONTE = 'https://github.com/tropical-yetti/mem-8e-web'
 
+/** Pedido de ajuda para testar o site com leitores de tela de verdade. */
+export const ISSUE_LEITOR_DE_TELA = `${URL_CODIGO_FONTE}/issues/39`
+
 /** Projeto irmão, de onde vêm a arquitetura de 8 bits e os nomes MAR, MDR, BE e BD. */
 export const URL_CPU8E_WEB = 'https://tropical-yetti.github.io/cpu-8e-web/'
 

@@ -33,11 +33,31 @@ Type `C7` in the **MDR** and use **Write C7 to address 3A**. Step through the ph
 
 Turn on **MDR → DB**, **CS** and **RD** together: the CPU and the memory both drive the DB. The bits where they disagree turn **X**, in red: a **contention**. The [Four levels](#/documentacao/niveis) page explains what that means.
 
+## 6. Keep and share the memory {#arquivo}
+
+Below the grid are the **Open file**, **Save file**, **Paste text** and **Copy text** buttons. The memory contents become plain text that you can open in any editor, send by e-mail or put in a lesson plan:
+
+```text
+# comments start with # or ;
+00: 3A 10 C4 FF
+10: 2A XX 00
+F0: 1X0X0001
+```
+
+- Each line may start with a hex **address** and a colon. Without it, the bytes continue where the previous line left off; the first one goes to `00`.
+- Each **byte** has 2 hex digits. `XX` is an undefined cell, and 8 digits `0`, `1` or `X` (from bit 7 to bit 0) describe a cell with only some bits undefined.
+- **Opening replaces the whole memory:** locations the text does not list become `00`.
+- Text with an error **changes nothing**. The message gives the line and column of the problem: an invalid byte, an address past `FF`, or a location that appears twice.
+- **Saving** writes all 256 locations as 16 lines of 16 bytes. Opening that file again gives exactly the same memory, X cells included.
+
+CPU-8E `.bin` files do not open here: they are programs, and MEM-8E only shows the memory, without running anything.
+
 ## Where to go next
 
 - [How the memory works](#/documentacao/memoria): every block, from the address to the data.
 - [In logic gates](#/documentacao/portas): the same circuit, gate by gate.
 - [Lesson plan](#/documentacao/roteiro): exercises to do in the simulator.
+- The **“What if…?” experiments** button, at the top of the simulator: five situations that go wrong on purpose, with a question, steps and an explanation.
 
 The **Show the guide** button, on the simulator page, shows the introduction balloons again. Each section also has a **?** button that explains just that part, and hovering (or focusing) an abbreviation shows its full name.
 

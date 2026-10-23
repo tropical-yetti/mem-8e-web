@@ -50,7 +50,7 @@ Na escrita, o WR liga no começo de T2 e desliga no começo de T3: um pulso de u
 
 ## Sem wait states {#sem-espera}
 
-Desmarque **"A CPU espera a memória"** e escolha uma memória lenta:
+Desmarque **“A CPU espera a memória”** e escolha uma memória lenta:
 
 - na **leitura**, a CPU captura no fim de T2 mesmo assim, com o dado ainda inválido: o **MDR fica com X**;
 - na **escrita**, o pulso de WR é curto demais, e a **célula fica indefinida (X)**.

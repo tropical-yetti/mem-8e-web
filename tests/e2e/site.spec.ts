@@ -5,21 +5,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
-
-async function auditar(page: Page, onde: string) {
-  const resultado = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze()
-  const graves = resultado.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
-  )
-  expect(
-    graves.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`),
-    onde,
-  ).toEqual([])
-}
+import { expect, test } from '@playwright/test'
+import { semProblemasGraves } from './ajudantes'
 
 test('a página inicial abre em português', async ({ page }) => {
   await page.goto('./')
@@ -33,6 +20,16 @@ test('o idioma troca para inglês e é lembrado', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await page.reload()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Memory simulator')
+})
+
+test.describe('com o navegador em inglês', () => {
+  test.use({ locale: 'en-US' })
+
+  test('a página já começa em inglês, declarada como inglês (WCAG 3.1.1)', async ({ page }) => {
+    await page.goto('./')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Memory simulator')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  })
 })
 
 test('a página Sobre credita o CPU-8E e traz a licença', async ({ page }) => {
@@ -58,7 +55,7 @@ for (const tema of ['light', 'dark'] as const) {
       test(`${nome} não tem problemas graves de acessibilidade`, async ({ page }) => {
         await page.goto(caminho)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        await auditar(page, nome)
+        await semProblemasGraves(page, nome)
       })
     }
   })

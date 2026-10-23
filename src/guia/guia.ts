@@ -14,7 +14,16 @@
 import { computed, ref } from 'vue'
 
 export type IdPasso =
-  'boasVindas' | 'mar' | 'sinais' | 'grade' | 'transacao' | 'portas' | 'tempo' | 'fim'
+  | 'boasVindas'
+  | 'mar'
+  | 'sinais'
+  | 'grade'
+  | 'arquivo'
+  | 'transacao'
+  | 'portas'
+  | 'tempo'
+  | 'experimentos'
+  | 'fim'
 
 export interface Passo {
   id: IdPasso
@@ -29,9 +38,11 @@ export const PASSOS: readonly Passo[] = [
   { id: 'mar', alvo: 'mar', doc: 'memoria#mar' },
   { id: 'sinais', alvo: 'sinais', doc: 'memoria#controle' },
   { id: 'grade', alvo: 'grade', doc: 'memoria#matriz' },
+  { id: 'arquivo', alvo: 'arquivo', doc: 'primeiros-passos#arquivo' },
   { id: 'transacao', alvo: 'transacao', doc: 'tempo#fases' },
   { id: 'portas', alvo: 'portas', doc: 'portas' },
   { id: 'tempo', alvo: 'tempo', doc: 'tempo#wait-states' },
+  { id: 'experimentos', alvo: 'experimentos', doc: 'roteiro#ex-experimentos' },
   { id: 'fim', alvo: 'rever-guia', doc: 'roteiro' },
 ]
 

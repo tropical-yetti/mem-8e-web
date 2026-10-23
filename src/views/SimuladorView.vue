@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import ArquivoMemoria from '@/components/ArquivoMemoria.vue'
 import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
 import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
@@ -10,6 +11,9 @@ import DiagramaTempo from '@/components/DiagramaTempo.vue'
 import { useSimuladorStore } from '@/stores/simulador'
 import BalaoGuia from '@/guia/BalaoGuia.vue'
 import { guiaJaVisto, useGuia } from '@/guia/guia'
+import BalaoExperimento from '@/experimentos/BalaoExperimento.vue'
+import ListaExperimentos from '@/experimentos/ListaExperimentos.vue'
+import { useExperimentos } from '@/experimentos/experimentos'
 
 const simulador = useSimuladorStore()
 const { t } = useI18n()
@@ -17,6 +21,13 @@ const { t } = useI18n()
 const NIVEIS = ['1', '0', 'Z', 'X'] as const
 
 const guia = useGuia()
+const experimentos = useExperimentos()
+
+/** O guia e um experimento não ficam abertos juntos. */
+function reverGuia() {
+  experimentos.sair()
+  guia.iniciar()
+}
 
 // No primeiro acesso, o guia abre sozinho.
 onMounted(() => {
@@ -29,9 +40,12 @@ onMounted(() => {
     <header class="topo">
       <h1>{{ t('simulador.titulo') }}</h1>
       <p class="intro">{{ t('simulador.intro') }}</p>
-      <button type="button" class="rever" data-guia="rever-guia" @click="guia.iniciar()">
-        {{ t('guia.rever') }}
-      </button>
+      <div class="atalhos">
+        <button type="button" class="rever" data-guia="rever-guia" @click="reverGuia">
+          {{ t('guia.rever') }}
+        </button>
+        <ListaExperimentos />
+      </div>
     </header>
 
     <div class="principal">
@@ -48,6 +62,7 @@ onMounted(() => {
       </div>
       <div class="coluna">
         <GradeMemoria />
+        <ArquivoMemoria />
         <button type="button" class="reiniciar" @click="simulador.reiniciar()">
           {{ t('simulador.reiniciar') }}
         </button>
@@ -56,12 +71,15 @@ onMounted(() => {
 
     <DiagramaTempo />
     <BalaoGuia />
+    <BalaoExperimento />
   </div>
 </template>
 
 <style scoped>
 .simulador {
   display: grid;
+  /* Sem isto, a coluna cresce até o conteúdo mais largo e a página rola de lado no celular. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 h1 {
@@ -72,6 +90,11 @@ h1 {
   margin: 4px 0 0;
   max-width: 72ch;
   color: var(--texto-suave);
+}
+.atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
 }
 .rever {
   margin-top: 8px;

@@ -6,11 +6,19 @@
 -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useExperimentos } from '@/experimentos/experimentos'
 import { useGuia, type IdPasso } from './guia'
 
 const props = defineProps<{ passo: IdPasso }>()
 const { t } = useI18n()
 const guia = useGuia()
+const experimentos = useExperimentos()
+
+/** A ajuda de uma parte fecha o experimento em andamento, se houver. */
+function abrir() {
+  experimentos.sair()
+  guia.ajuda(props.passo)
+}
 </script>
 
 <template>
@@ -19,7 +27,7 @@ const guia = useGuia()
     class="ajuda"
     :aria-label="t('guia.ajudaDe', { parte: t(`guia.passos.${props.passo}.titulo`) })"
     :title="t('guia.ajuda')"
-    @click="guia.ajuda(props.passo)"
+    @click="abrir"
   >
     ?
   </button>

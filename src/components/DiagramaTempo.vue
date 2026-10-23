@@ -120,7 +120,7 @@ const resumo = computed(() => {
   const l = linha.value
   const p = simulador.tempo
   const valores = {
-    valido: ns(dadoValidoEm(p)),
+    valido: ns(l.marcas.find((m) => m.id === 'dadoValido')?.t ?? dadoValidoEm(p)),
     captura: ns(l.marcas.find((m) => m.id === 'captura')?.t ?? 0),
     twp: ns(p.tWP),
     pulso: ns((1 + l.esperas) * l.periodo),
@@ -129,7 +129,15 @@ const resumo = computed(() => {
     ciclos: l.estados.length,
   }
   const chave = l.tipo === 'ler' ? 'leitura' : 'escrita'
-  return t(`tempo.resumo.${chave}${l.certo ? '' : 'Errada'}`, valores)
+  const texto = t(`tempo.resumo.${chave}${l.certo ? '' : 'Errada'}`, valores)
+  if (!l.mudanca) return texto
+  // Endereço trocado no meio da leitura (ADR 0005).
+  const troca = t('tempo.resumo.trocaEndereco', {
+    de: l.sinais[1]?.trechos[0]?.valor ?? '',
+    para: l.mudanca.endereco,
+    t: ns(l.mudanca.t),
+  })
+  return `${troca} ${texto}`
 })
 
 const titulo = computed(() =>
@@ -156,7 +164,9 @@ function aoMudarEspera(evento: Event) {
 <template>
   <section class="tempo" aria-labelledby="titulo-tempo" data-guia="tempo">
     <div class="cabeca">
-      <h2 id="titulo-tempo">{{ t('tempo.nome') }} <BotaoAjuda passo="tempo" /></h2>
+      <h2 aria-labelledby="titulo-tempo">
+        <span id="titulo-tempo">{{ t('tempo.nome') }}</span> <BotaoAjuda passo="tempo" />
+      </h2>
       <p class="subtitulo">{{ titulo }}</p>
     </div>
 
@@ -194,125 +204,132 @@ function aoMudarEspera(evento: Event) {
         role="img"
         :aria-label="`${titulo}. ${resumo}`"
       >
-        <defs>
-          <pattern
-            id="hachura-x"
-            width="6"
-            height="6"
-            patternUnits="userSpaceOnUse"
-            patternTransform="rotate(45)"
-          >
-            <rect width="6" height="6" class="fundo-x" />
-            <line x1="0" y1="0" x2="0" y2="6" class="linha-x" />
-          </pattern>
-        </defs>
+        <!-- Só desenho: o leitor de tela lê a descrição do role="img". -->
+        <g aria-hidden="true">
+          <defs>
+            <pattern
+              id="hachura-x"
+              width="6"
+              height="6"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
+            >
+              <rect width="6" height="6" class="fundo-x" />
+              <line x1="0" y1="0" x2="0" y2="6" class="linha-x" />
+            </pattern>
+          </defs>
 
-        <!-- Estados de clock -->
-        <g v-for="(estado, i) in linha.estados" :key="i">
-          <rect
-            class="faixa"
-            :class="{ espera: estado.nome === 'Tw', par: i % 2 === 1 }"
-            :x="x(estado.de)"
-            :y="TOPO - 18"
-            :width="x(estado.ate) - x(estado.de)"
-            :height="altura - TOPO - 4"
-          />
-          <text
-            :x="(x(estado.de) + x(estado.ate)) / 2"
-            :y="TOPO - 5"
-            text-anchor="middle"
-            class="estado"
-          >
-            {{ estado.nome }}
-          </text>
-        </g>
+          <!-- Estados de clock -->
+          <g v-for="(estado, i) in linha.estados" :key="i">
+            <rect
+              class="faixa"
+              :class="{ espera: estado.nome === 'Tw', par: i % 2 === 1 }"
+              :x="x(estado.de)"
+              :y="TOPO - 18"
+              :width="x(estado.ate) - x(estado.de)"
+              :height="altura - TOPO - 4"
+            />
+            <text
+              :x="(x(estado.de) + x(estado.ate)) / 2"
+              :y="TOPO - 5"
+              text-anchor="middle"
+              class="estado"
+            >
+              {{ estado.nome }}
+            </text>
+          </g>
 
-        <!-- Sinais -->
-        <g v-for="(sinal, i) in linha.sinais" :key="sinal.id" :class="classeSinal(sinal.id)">
-          <text
-            :x="X0 - 10"
-            :y="meioDaLinha(i) + 4"
-            text-anchor="end"
-            class="nome-sinal"
-            :data-sigla="sinal.id === 'celula' ? undefined : sinal.id"
-          >
-            {{ nome(sinal.id) }}
-          </text>
-          <path v-if="sinal.tipo === 'bit'" class="onda" :d="caminhoBit(sinal, i)" />
-          <template v-else>
-            <template v-for="(trecho, j) in sinal.trechos" :key="j">
-              <line
-                v-if="trecho.valor === 'Z'"
-                class="solto"
-                :x1="x(trecho.de)"
-                :y1="meioDaLinha(i)"
-                :x2="x(trecho.ate)"
-                :y2="meioDaLinha(i)"
-              />
-              <path v-else-if="trecho.valor === 'X'" class="indefinido" :d="hexagono(trecho, i)" />
-              <template v-else>
-                <path class="valor" :d="hexagono(trecho, i)" />
-                <text
-                  v-if="x(trecho.ate) - x(trecho.de) > 22"
-                  :x="(x(trecho.de) + x(trecho.ate)) / 2"
-                  :y="meioDaLinha(i) + 4"
-                  text-anchor="middle"
-                  class="texto-valor"
-                >
-                  {{ trecho.valor }}
-                </text>
+          <!-- Sinais -->
+          <g v-for="(sinal, i) in linha.sinais" :key="sinal.id" :class="classeSinal(sinal.id)">
+            <text
+              :x="X0 - 10"
+              :y="meioDaLinha(i) + 4"
+              text-anchor="end"
+              class="nome-sinal"
+              :data-sigla="sinal.id === 'celula' ? undefined : sinal.id"
+            >
+              {{ nome(sinal.id) }}
+            </text>
+            <path v-if="sinal.tipo === 'bit'" class="onda" :d="caminhoBit(sinal, i)" />
+            <template v-else>
+              <template v-for="(trecho, j) in sinal.trechos" :key="j">
+                <line
+                  v-if="trecho.valor === 'Z'"
+                  class="solto"
+                  :x1="x(trecho.de)"
+                  :y1="meioDaLinha(i)"
+                  :x2="x(trecho.ate)"
+                  :y2="meioDaLinha(i)"
+                />
+                <path
+                  v-else-if="trecho.valor === 'X'"
+                  class="indefinido"
+                  :d="hexagono(trecho, i)"
+                />
+                <template v-else>
+                  <path class="valor" :d="hexagono(trecho, i)" />
+                  <text
+                    v-if="x(trecho.ate) - x(trecho.de) > 22"
+                    :x="(x(trecho.de) + x(trecho.ate)) / 2"
+                    :y="meioDaLinha(i) + 4"
+                    text-anchor="middle"
+                    class="texto-valor"
+                  >
+                    {{ trecho.valor }}
+                  </text>
+                </template>
               </template>
             </template>
-          </template>
-        </g>
+          </g>
 
-        <!-- Marcas: dado válido, captura, pulso mínimo -->
-        <g
-          v-for="(marca, i) in marcas"
-          :key="marca.id"
-          class="marca"
-          :class="{ errada: marca.errada }"
-        >
-          <line
-            v-if="!marca.depois"
-            :x1="x(marca.t)"
-            :y1="TOPO - 2"
-            :x2="x(marca.t)"
-            :y2="altura - 26"
-          />
-          <text
-            :x="x(marca.tela)"
-            :y="altura - 14 + (i % 2) * 12"
-            :text-anchor="i % 2 && !marca.depois ? 'start' : 'end'"
-            :dx="i % 2 && !marca.depois ? 4 : -4"
+          <!-- Marcas: dado válido, captura, pulso mínimo -->
+          <g
+            v-for="(marca, i) in marcas"
+            :key="marca.id"
+            class="marca"
+            :class="{ errada: marca.errada }"
           >
-            {{ t(`tempo.marcas.${marca.id}`, { t: ns(marca.t) }) }}{{ marca.depois ? ' →' : '' }}
-          </text>
-        </g>
+            <line
+              v-if="!marca.depois"
+              :x1="x(marca.t)"
+              :y1="TOPO - 2"
+              :x2="x(marca.t)"
+              :y2="altura - 26"
+            />
+            <text
+              :x="x(marca.tela)"
+              :y="altura - 14 + (i % 2) * 12"
+              :text-anchor="i % 2 && !marca.depois ? 'start' : 'end'"
+              :dx="i % 2 && !marca.depois ? 4 : -4"
+            >
+              {{ t(`tempo.marcas.${marca.id}`, { t: ns(marca.t) }) }}{{ marca.depois ? ' →' : '' }}
+            </text>
+          </g>
 
-        <!-- Eixo em nanossegundos -->
-        <g class="eixo">
-          <text
-            v-for="tempo in marcasEixo"
-            :key="tempo"
-            :x="x(tempo)"
-            :y="yLinha(linha.sinais.length) + 6"
-            text-anchor="middle"
-          >
-            {{ tempo }}
-          </text>
-          <text :x="X0 - 10" :y="yLinha(linha.sinais.length) + 6" text-anchor="end">ns</text>
-        </g>
+          <!-- Eixo em nanossegundos -->
+          <g class="eixo">
+            <text
+              v-for="tempo in marcasEixo"
+              :key="tempo"
+              :x="x(tempo)"
+              :y="yLinha(linha.sinais.length) + 6"
+              text-anchor="middle"
+            >
+              {{ tempo }}
+            </text>
+            <text :x="X0 - 10" :y="yLinha(linha.sinais.length) + 6" text-anchor="end">ns</text>
+          </g>
 
-        <!-- Cursor da fase atual -->
-        <g v-if="simulador.instanteAtual !== null" class="cursor">
-          <line
-            :x1="x(simulador.instanteAtual)"
-            :y1="TOPO - 18"
-            :x2="x(simulador.instanteAtual)"
-            :y2="yLinha(linha.sinais.length) - 4"
-          />
-          <path :d="`M ${x(simulador.instanteAtual) - 6} ${TOPO - 22} h 12 l -6 8 z`" />
+          <!-- Cursor da fase atual -->
+          <g v-if="simulador.instanteAtual !== null" class="cursor">
+            <line
+              :x1="x(simulador.instanteAtual)"
+              :y1="TOPO - 18"
+              :x2="x(simulador.instanteAtual)"
+              :y2="yLinha(linha.sinais.length) - 4"
+            />
+            <path :d="`M ${x(simulador.instanteAtual) - 6} ${TOPO - 22} h 12 l -6 8 z`" />
+          </g>
         </g>
       </svg>
     </div>
@@ -322,6 +339,8 @@ function aoMudarEspera(evento: Event) {
 <style scoped>
 .tempo {
   display: grid;
+  /* A coluna não cresce além da tela por causa de uma opção longa: o diagrama rola na moldura. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 .cabeca {
@@ -349,6 +368,7 @@ h2 {
 .controles .campo,
 .controles .caixa {
   display: inline-flex;
+  min-width: 0;
   flex-wrap: wrap;
   max-width: 100%;
   align-items: center;
@@ -356,6 +376,8 @@ h2 {
 }
 select {
   max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
   padding: 3px 6px;
   font: inherit;
   color: var(--texto);

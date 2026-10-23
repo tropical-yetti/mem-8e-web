@@ -7,6 +7,122 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.0.0] — 2026-10-23
+
+Primeira versão estável, e a primeira publicada pela regra de lançamentos:
+chega ao site junto com a 0.9.0 (experimentos “e se…?” e memória em texto).
+A 1.0 é a revisão final (#36): o guia apresenta as novidades, a memória é
+lida pelo leitor de tela uma célula por vez, tudo funciona só com o teclado
+e em telas de 320 px, e os testes cobrem também a store, os experimentos e o
+guia.
+
+### 2026-10-23 — Revisão dos textos e README
+
+- Aspas padronizadas no estilo tipográfico (“ ”) em toda a interface e na
+  documentação, nos dois idiomas. Os termos técnicos (solto/floating,
+  dirigir/drive, indefinido/undefined, wait state) já eram os mesmos em todo
+  lugar (#36).
+- README com captura de tela nova (um experimento “e se…?”), os experimentos
+  na lista do que dá para fazer e sem o aviso “em construção”.
+
+### 2026-10-23 — Testes
+
+- A meta de cobertura passa a valer também para a store, os experimentos e o
+  guia (90% das linhas e 85% dos desvios), além do núcleo. O guia ganhou
+  testes próprios (de 17% para 100% das linhas).
+- Os programas `.bin` do CPU-8E saíram dos dados de teste (ADR 0006); o
+  NOTICE foi atualizado.
+- A verificação do axe e os ajudantes da grade, que estavam copiados em vários
+  arquivos de teste, ficam num só, `tests/e2e/ajudantes.ts` (#36).
+
+### 2026-10-23 — Teclado, refluxo e idioma da página
+
+- **F6** alterna o foco entre o balão (do guia ou de um experimento) e a parte
+  da tela que ele aponta, e um botão "Ir para a parte em destaque" faz o
+  mesmo. Antes, quem usa só o teclado precisava percorrer a página inteira
+  para fazer o que o balão pedia e voltar a ele.
+- **Refluxo (WCAG 1.4.10):** em 320 px (ou zoom de 400%) nada rola de lado.
+  Em telas muito estreitas, os bits do MAR e do MDR ficam em duas linhas de
+  4, e os barramentos continuam com nome e valor; as caixas de seleção do
+  diagrama de tempo encolhem.
+- **Idioma da página (WCAG 3.1.1):** quem chega com o navegador em inglês
+  agora recebe a página declarada como inglês desde o início, e não só depois
+  de trocar o idioma à mão.
+- Testes novos: tudo só com o teclado (experimento, guia, colar, diagrama e
+  documentação), refluxo em 320 e 640 px, movimento reduzido e axe na
+  documentação também em inglês. O Lighthouse passa a medir também duas
+  páginas da documentação (#36).
+
+### 2026-10-23 — Leitor de tela
+
+- A grade da memória é um widget de grade para o leitor de tela: só a célula
+  com o foco é anunciada, como "Linha A, coluna F: 89, valor hexadecimal
+  8 9", e nunca as 256 em sequência. Células indefinidas dizem quais bits
+  estão indefinidos. Os cabeçalhos e os blocos da vista "por dentro" ficam
+  ocultos, e um resumo diz a linha e a coluna escolhidas e o que os buffers
+  estão fazendo (#36).
+- Os desenhos (portas lógicas e diagrama de tempo) são lidos pela descrição,
+  e não pelo texto de dentro; as seções têm o nome do título, sem o "?" da
+  ajuda; os rótulos dos pinos da memória, que repetiam os dos botões, ficam
+  ocultos.
+- Testes novos com um leitor de tela simulado (Guidepup Virtual Screen
+  Reader) e com a árvore de acessibilidade, no CI de todo pull request.
+- README e página Sobre explicam como a acessibilidade é testada e pedem
+  ajuda a quem usa leitor de tela (#39).
+
+### 2026-10-23 — Guia com as novidades da 0.9
+
+- O guia de primeiro acesso ganhou dois balões, e agora tem dez: um para
+  guardar e compartilhar a memória em texto e outro para os experimentos
+  "e se…?". O último balão sugere os experimentos como próximo passo (#36).
+
+### 2026-10-23 — Regra de lançamentos
+
+- A `main` passa a receber só lançamentos, que juntam várias versões menores
+  já testadas na `dev`. Correções urgentes saem da `main` como versão de
+  correção. A regra está no CONTRIBUTING e no plano; a 0.9.0 vai para a
+  `main` junto com a 1.0 (#36).
+
+## [0.9.0] — 2026-10-23
+
+Experimentos "e se…?" guiados e a memória em arquivo de texto.
+
+### 2026-10-23 — Experimentos "e se…?"
+
+- Botão **Experimentos "e se…?"**, ao lado de "Ver o guia", com cinco
+  experimentos guiados (ADR 0005): contenção no BD, RD e WR juntos, endereço
+  trocado no meio da leitura, CPU que não espera uma memória lenta e CS
+  desligado.
+- Cada experimento monta a situação, faz uma pergunta, conduz os passos (o
+  balão avança sozinho quando o passo é feito) e explica o resultado. Os que
+  têm diferença para chips de verdade trazem uma observação sobre memórias
+  reais. Sair (ou Esc) devolve o simulador ao estado de antes.
+- Trocar o MAR no meio de uma leitura não cancela mais a transação: a fase
+  seguinte já usa o novo endereço, e a contagem de t_AA recomeça. O diagrama
+  de tempo marca a troca, e o MDR captura X se o novo dado não chegar a
+  tempo. Numa escrita, mudar o MAR continua cancelando.
+- O balão do guia virou uma base comum ao guia e aos experimentos.
+- A página "Como a memória funciona" explica RD e WR juntos e como as
+  memórias reais tratam isso; o roteiro de aula e os primeiros passos citam
+  os experimentos.
+
+### 2026-10-22 — Memória em arquivo de texto
+
+- Botões **Abrir arquivo**, **Salvar arquivo**, **Colar texto** e **Copiar
+  texto**, embaixo da grade (ADR 0006). O conteúdo da memória vira um texto
+  com endereço e bytes em hex, `XX` para célula indefinida e 8 dígitos 0/1/X
+  para uma célula com só alguns bits indefinidos.
+- Abrir substitui a memória inteira. Um texto com erro não muda nada, e a
+  mensagem diz a linha e a coluna do problema.
+- Salvar e abrir de volta dá exatamente a mesma memória, inclusive os X.
+- A página "Primeiros passos" explica o formato.
+
+### 2026-10-22 — Plano da 0.9
+
+- ADR 0005 (experimentos "e se…?" guiados) e ADR 0006 (conteúdo da memória
+  em arquivo de texto) aprovadas nas issues #30 e #31. O formato `.bin` do
+  CPU-8E sai do plano.
+
 ## [0.8.0] — 2026-10-22
 
 Diagrama de tempo e wait states (0.6), guia de primeiro acesso (0.7) e

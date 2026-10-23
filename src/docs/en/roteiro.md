@@ -24,12 +24,16 @@ Exercises to do in the simulator, from the simplest to the most involved. The an
 1. With a 50 MHz clock and the medium memory, how many wait states does a read have? How long is the cycle?
 2. Switch the clock to 10 MHz. And now?
 3. With the slow memory and a 100 MHz clock, how many wait states are there? What does that say about using a fast CPU with a slow memory?
-4. Uncheck **"The CPU waits for the memory"**, keep the slow memory and read an address. What does the MDR get?
+4. Uncheck **“The CPU waits for the memory”**, keep the slow memory and read an address. What does the MDR get?
 
 ## 5. In logic gates {#ex-portas}
 
 1. In the row decoder, which inputs does the gate for output `5` get?
 2. Put `3A` in the MAR and turn CS on. In **Bit of address**, choose D0: is the bit line 0 or 1? Check against the value of `M[3A]`.
+
+## 6. “What if…?” experiments {#ex-experimentos}
+
+The **“What if…?” experiments** button, at the top of the simulator, offers five situations that go wrong on purpose: data bus contention, RD and WR together, an address changed in the middle of a read, a CPU that does not wait for a slow memory, and CS off. Each one starts with a question: ask the class to answer before doing the step. When you leave, the simulator goes back to how it was.
 
 ## Answers {#respostas}
 

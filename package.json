@@ -1,7 +1,7 @@
 {
   "name": "mem-8e-web",
   "private": true,
-  "version": "0.8.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@guidepup/virtual-screen-reader": "^0.33.0",
     "@intlify/unplugin-vue-i18n": "^11.2.5",
     "@playwright/test": "1.64.1",
     "@types/markdown-it": "^14.2.0",

@@ -45,10 +45,11 @@ O uso principal é manual:
 - **Sinais de controle clicáveis** (CS, RD, WR): o aluno monta a transação na
   mão. Também há os botões **Ler** e **Escrever**, que tocam a sequência certa
   passo a passo.
-- **Carregar programa** (`.bin` do CPU-8E) para preencher a memória. Também
-  é possível salvar.
-- **Experimentos "e se…?":** RD e WR juntos, contenção no BD (→ **X**),
-  troca de endereço no meio da leitura.
+- **Abrir e salvar a memória** num arquivo de texto, com endereço e bytes em
+  hex, ou colar e copiar o mesmo texto ([ADR 0006](adr/0006-arquivo-de-memoria-em-texto.md)).
+- **Experimentos "e se…?" guiados** ([ADR 0005](adr/0005-experimentos-guiados.md)):
+  RD e WR juntos, contenção no BD (→ **X**), troca de endereço no meio da
+  leitura, CPU que não espera uma memória lenta e CS desligado.
 
 Todo controle funciona por teclado, e o estado é lido por leitor de tela
 (mesmo padrão do CPU-8E Web).
@@ -144,7 +145,7 @@ src/
     tempo.ts               ← parâmetros de tempo, clock da CPU, linha do tempo
     transacoes.ts          ← ler/escrever como geradores de passos
                              (mesmo padrão `yield` do controle.ts do CPU-8E)
-    arquivo.ts             ← carregar/salvar .bin
+    arquivo.ts             ← abrir/salvar a memória em texto
   stores/simulador.ts
   components/
     PainelCaixaPreta.vue
@@ -165,7 +166,9 @@ O "gabarito" é um modelo trivial, um array de 256 bytes:
 - **Barramento:** BD fica em Z fora de leitura/escrita e vira X em contenção.
 - **Tempo:** captura antes de t_AA dá leitura inválida; com wait states
   suficientes, a leitura sai correta.
-- **Arquivos:** `allopcodes.bin` e `teste.bin` do CPU-8E carregam byte a byte.
+- **Arquivos:** salvar e abrir de volta dá a mesma memória, inclusive com X;
+  um arquivo com erro não muda nada.
+- **Experimentos:** cada um prepara a situação e chega ao resultado esperado.
 - **E2E:** Playwright (edição de MAR, edição de memória, ler, escrever, vistas)
   - axe sem violações.
 
@@ -174,6 +177,12 @@ O "gabarito" é um modelo trivial, um array de 256 bytes:
 O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 
 - `main` ← `dev` ← um ramo por funcionalidade ou correção.
+- **Lançamentos** (a partir da 1.0): a `main` só recebe lançamentos, que
+  juntam várias versões menores já testadas na `dev`, num único pull request
+  `dev` → `main`, com tag e release. Correções urgentes saem da `main` num
+  ramo `fix/…`, entram nela como versão de correção (1.0.1) e voltam para a
+  `dev`. O passo a passo está no [CONTRIBUTING](../CONTRIBUTING.md). A 0.9.0
+  ficou só na `dev` e vai para a `main` junto com a 1.0.
 - **ADRs** em Markdown (data, proponente, alternativas, motivação, impactos),
   com diagramas Mermaid versionados. Cada ADR é discutida numa issue.
   Primeiras ADRs:
@@ -196,8 +205,8 @@ O fluxo é o mesmo do CPU-8E Web 2.0+, aplicado desde o primeiro commit:
 | 0.6       | Diagrama de tempo + clock da CPU + wait states (modo assíncrono).                                                                                                                                                                                                                                                                         | feito    |
 | 0.7       | Guia de primeiro acesso com balões e ajuda contextual ([#17](https://github.com/tropical-yetti/mem-8e-web/issues/17)).                                                                                                                                                                                                                    | feito    |
 | 0.8       | Documentação no site, pt/en: como a memória funciona + roteiro de aula ([#18](https://github.com/tropical-yetti/mem-8e-web/issues/18)); legendas com o nome dos componentes ao apontar ([#23](https://github.com/tropical-yetti/mem-8e-web/issues/23)); commit no rodapé ([#24](https://github.com/tropical-yetti/mem-8e-web/issues/24)). | feito    |
-| 0.9       | Experimentos "e se…?" guiados; carregar e salvar `.bin`.                                                                                                                                                                                                                                                                                  |          |
-| 1.0       | Revisão final de acessibilidade, testes e lançamento.                                                                                                                                                                                                                                                                                     |          |
+| 0.9       | Experimentos "e se…?" guiados (ADR 0005); abrir e salvar a memória em texto (ADR 0006).                                                                                                                                                                                                                                                   | feito    |
+| 1.0       | Revisão final de acessibilidade, testes e lançamento ([#36](https://github.com/tropical-yetti/mem-8e-web/issues/36)); primeira publicação na `main` pela regra de lançamentos.                                                                                                                                                            | feito    |
 | 1.x / 2.0 | Modos síncrono e DDR simplificados.                                                                                                                                                                                                                                                                                                       |          |
 
 O guia de primeiro acesso e a documentação vieram para antes dos experimentos
@@ -209,4 +218,7 @@ porque o site já está publicado: quem chega precisa entender o que fazer.
 - ROM e memória não volátil.
 - Integração com o CPU-8E Web: clicar no bloco Memória e "entrar" no MEM-8E na
   transação corrente.
+- Abrir `.bin` e `.asm` do CPU-8E, junto com essa integração: o programa
+  seria executado pelo núcleo do CPU-8E Web, deixando claro que não é só
+  preencher a memória.
 - Próximo projeto da série: decodificação de instruções.

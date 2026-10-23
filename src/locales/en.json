@@ -22,6 +22,10 @@
     "familiaTitulo": "The 8E family",
     "familia": "It is a sibling of {cpu8eWeb}, the browser version of the {cpu8e} simulator, created at IESB (Brazil) by {autor} and contributors. The memory follows the same 8-bit architecture and the same names (MAR, MDR, address bus, data bus).",
     "versaoTitulo": "This version",
+    "acessibilidadeTitulo": "Accessibility",
+    "acessibilidade": "The site is built to work with the keyboard alone and with a screen reader, and follows the WCAG 2.2 guidelines, level AA. The memory grid announces one cell at a time, never all 256 in a row.",
+    "acessibilidadeTestes": "So far, the tests are automated: axe, the accessibility tree and a simulated screen reader. Nobody who uses a screen reader every day has tested the site yet. If you do, your help is very welcome: {issue}.",
+    "acessibilidadeIssue": "tell us how it went in issue #39",
     "licencaTitulo": "License",
     "licenca": "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
     "garantia": "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
@@ -72,12 +76,49 @@
     "titulo": "Inside the memory (row × column)",
     "ajuda": "Click a location to put its address in the MAR. Double-click, Enter or a hex digit edits its contents. With CS on, the row and column chosen by the decoders light up.",
     "linhaColuna": "Row \\ column",
-    "celula": "Address {endereco}: {valor}",
+    "celula": "Row {linha}, column {coluna}: {visivel}, {valor}",
     "editar": "New value for address {endereco}",
     "vista": "How to show the memory",
     "vistas": {
       "porDentro": "Inside",
       "conteudo": "Contents only"
+    },
+    "valorHex": "hex value {digitos}",
+    "valorIndefinido": "undefined value",
+    "valorBits": "value with undefined bits, from bit 7 to 0: {bits}",
+    "noMar": ", MAR address",
+    "resumo": {
+      "desligada": "CS off: the decoders pick no row and no column, and the output buffers are off.",
+      "ligada": "CS on: the row decoder picks row {linha}, and the column decoder, column {coluna}. {buffers}",
+      "nenhuma": "none",
+      "indefinida": "undefined",
+      "buffersLigados": "The output buffers are on and put {valor} on the DB.",
+      "buffersDesligados": "The output buffers are off."
+    }
+  },
+  "arquivo": {
+    "titulo": "Memory contents as text",
+    "abrir": "Open file…",
+    "salvar": "Save file",
+    "colar": "Paste text…",
+    "copiar": "Copy text",
+    "colarTitulo": "Paste the memory contents",
+    "colarAjuda": "One line per group of bytes, in hexadecimal: “10: 3A FF 00”. The address with a colon is optional; without it, the bytes continue where they left off. Use XX for an undefined cell and # or ; for comments. Opening replaces the whole memory: anything not listed becomes 00.",
+    "colarCampo": "Text with the memory contents",
+    "cancelar": "Cancel",
+    "abrirColado": "Open in memory",
+    "aberto": "No location came from the text: the whole memory is now 00. | 1 location came from the text; the others are now 00. | {n} locations came from the text; the others are now 00.",
+    "salvo": "Memory saved to {nome}.",
+    "copiado": "Memory contents copied. You can paste them into a text editor or back here.",
+    "onde": "Line {linha}, column {coluna}:",
+    "semMudanca": "The memory did not change.",
+    "erros": {
+      "byteInvalido": "“{trecho}” is not a byte. Use 2 hex digits (3A), XX, or 8 digits 0, 1 or X.",
+      "enderecoInvalido": "“{trecho}” is not an address. Before the colon comes a hex address, from 00 to FF.",
+      "foraDaMemoria": "“{trecho}” goes past address FF, the last one in the memory.",
+      "repetido": "location {endereco} had already been given a value.",
+      "muitoGrande": "The file is too large to be the contents of a 256-byte memory.",
+      "copiar": "The browser did not allow copying. Use Save file."
     }
   },
   "transacao": {
@@ -100,7 +141,8 @@
       "captura": {
         "nome": "MDR latches",
         "texto": "The MDR copies what is on the DB: MDR = {mdr}.",
-        "textoErrado": "The CPU does not wait for the memory: at the end of T2 the MDR copies the DB, but the data is not valid yet. MDR = {mdr}: the read went wrong. Turn wait states on or use a faster memory."
+        "textoErrado": "The CPU does not wait for the memory: at the end of T2 the MDR copies the DB, but the data is not valid yet. MDR = {mdr}: the read went wrong. Turn wait states on or use a faster memory.",
+        "textoTrocado": "The address changed in the middle of the read, and the t_AA count started over: the data at the new address was not valid in time. MDR = {mdr}: the read went wrong."
       },
       "liberacao": {
         "nome": "Release",
@@ -211,13 +253,15 @@
       "leitura": "The data becomes valid at {valido}, and the CPU latches it at {captura}. With {esperas}, the read cycle takes {fim} ({ciclos} clock cycles).",
       "leituraErrada": "Read went wrong: the CPU latches at {captura}, before the data is valid ({valido}). The MDR gets X.",
       "escrita": "The cell needs a WR pulse of at least {twp}; with {esperas}, the pulse lasts {pulso}, and the write cycle takes {fim} ({ciclos} clock cycles).",
-      "escritaErrada": "Write went wrong: the WR pulse lasts only {pulso}, less than the {twp} the cell needs. It becomes undefined (X)."
+      "escritaErrada": "Write went wrong: the WR pulse lasts only {pulso}, less than the {twp} the cell needs. It becomes undefined (X).",
+      "trocaEndereco": "The address changed from {de} to {para} at {t}, and the t_AA count started over from there."
     },
     "marcas": {
       "dadoValido": "data valid ({t})",
       "captura": "MDR latches ({t})",
       "pulsoMinimo": "t_WP met ({t})",
-      "fimPulso": "WR off ({t})"
+      "fimPulso": "WR off ({t})",
+      "mudancaEndereco": "MAR changes ({t})"
     },
     "esperas": "no wait states | 1 wait state | {n} wait states",
     "ciclos": "no cycles | 1 cycle | {n} cycles"
@@ -246,35 +290,120 @@
       },
       "sinais": {
         "titulo": "Control signals",
-        "texto": "CS enables the memory, RD asks for a read and WR for a write. \"MDR → DB\" makes the CPU put the MDR on the data bus. The wires show each level: thick is 1, thin is 0, dashed is floating (Z) and red is contention or undefined (X).",
-        "experimente": "turn CS on, then RD. The row and column light up, and the data appears on the DB. Turn \"MDR → DB\" on too to see a contention."
+        "texto": "CS enables the memory, RD asks for a read and WR for a write. “MDR → DB” makes the CPU put the MDR on the data bus. The wires show each level: thick is 1, thin is 0, dashed is floating (Z) and red is contention or undefined (X).",
+        "experimente": "turn CS on, then RD. The row and column light up, and the data appears on the DB. Turn “MDR → DB” on too to see a contention."
       },
       "grade": {
         "titulo": "Inside the memory",
         "texto": "The 16 × 16 grid is the array itself: the column decoder is on top, the row decoder on the left, and below are the bit lines, the selector and the output buffers. Notice that the whole row is read: all 16 bytes go down, and the selector picks one.",
         "experimente": "click a location to put its address in the MAR; double-click to change its contents."
       },
+      "arquivo": {
+        "titulo": "Keep and share",
+        "texto": "The memory contents can become plain text, with addresses and bytes in hexadecimal. Save it to a file, copy it to send to someone, or open or paste a ready-made text, such as one from an exercise.",
+        "experimente": "click “Copy text” and paste it into an editor: each line is an address and 16 bytes."
+      },
       "transacao": {
         "titulo": "Read and write, phase by phase",
-        "texto": "Instead of setting the signals by hand, ask for a complete read or write. Each click on \"Next phase\" changes one signal, in the right order, and the text explains what just happened.",
-        "experimente": "click \"Read address\" and step through the phases until the MDR gets the data."
+        "texto": "Instead of setting the signals by hand, ask for a complete read or write. Each click on “Next phase” changes one signal, in the right order, and the text explains what just happened.",
+        "experimente": "click “Read address” and step through the phases until the MDR gets the data."
       },
       "portas": {
         "titulo": "In logic gates",
         "texto": "Here the same circuit appears as AND, OR and NOT gates: one bit of the MAR location (the latch that holds it and the path to the DB) or a 4 → 16 decoder. The wires change along with the rest of the screen.",
-        "experimente": "open the \"Row decoder\" tab and change a MAR bit: another gate lights up."
+        "experimente": "open the “Row decoder” tab and change a MAR bit: another gate lights up."
       },
       "tempo": {
         "titulo": "Timing diagram",
         "texto": "The memory has its own access time, and the CPU has its own clock. When the memory is slower, the CPU waits extra cycles: wait states. Without waiting, the read latches data that is not valid yet (X).",
-        "experimente": "switch to the slow memory and uncheck \"The CPU waits for the memory\". The summary and the diagram show the read going wrong."
+        "experimente": "switch to the slow memory and uncheck “The CPU waits for the memory”. The summary and the diagram show the read going wrong."
+      },
+      "experimentos": {
+        "titulo": "“What if…?” experiments",
+        "texto": "Five situations that go wrong on purpose: two sides driving the DB, RD and WR together, an address changed in the middle of a read, a CPU that does not wait, and CS off. Each one asks a question, walks you through the steps and explains the result. When you leave, everything goes back to how it was.",
+        "experimente": "open the list and pick “What if the CPU and the memory both drive the DB?”."
       },
       "fim": {
         "titulo": "Done",
-        "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises."
+        "texto": "To see this guide again, use the “Show the guide” button. Each section also has a “?” button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises. A good next step is the “what if…?” experiments."
       }
     },
-    "lerMais": "Read more in the documentation"
+    "lerMais": "Read more in the documentation",
+    "irPara": "Go to the highlighted part (F6; F6 again comes back here)"
+  },
+  "experimentos": {
+    "abrir": "“What if…?” experiments",
+    "titulo": "“What if…?” experiments",
+    "intro": "Each experiment puts the simulator in a situation that goes wrong on purpose. Think about what will happen, do the requested step and see the result. When you leave, everything goes back to how it was.",
+    "fechar": "Close",
+    "pergunta": "Think first",
+    "passo": "Step {n} of {total}",
+    "resultado": "What happened",
+    "memoriaReal": "In real memories:",
+    "aguardando": "Do what the step asks: the balloon moves on by itself.",
+    "vamosVer": "Let’s see",
+    "proximo": "Next",
+    "recomecar": "Start over",
+    "repetir": "Repeat",
+    "concluir": "Leave",
+    "sair": "Leave and undo",
+    "itens": {
+      "contencao": {
+        "titulo": "What if the CPU and the memory both drive the DB?",
+        "resumo": "Data bus contention: two sides putting different values on the same wire.",
+        "pergunta": "The memory is reading address 3A: CS and RD are on, and it puts 5A on the DB. The MDR holds 3C. What happens to the DB if the CPU also puts the MDR on the bus?",
+        "passos": {
+          "ligarMdr": "Turn on the MDR → DB button, on the panel."
+        },
+        "resultado": "The DB shows XX: in binary, 0XX1 1XX0. Where the MDR (0011 1100) and the memory (0101 1010) agree, the wire has the value of both; where they disagree, one side pulls it to 1 and the other to 0, and there is no telling what the wire holds. This is contention. The cell and the MDR did not change: nobody stored the DB.",
+        "real": "two circuits driving the same wire with opposite values are close to a short circuit: the current rises, the chips heat up and can be damaged. That is why outputs to the bus are tri-state, and the CPU’s controller makes sure only one side drives the DB at a time."
+      },
+      "rdWr": {
+        "titulo": "What if RD and WR are turned on together?",
+        "resumo": "The memory gets the order to read and to write at the same time.",
+        "pergunta": "The memory is reading address 3A, which holds 5A: CS and RD are on. The MDR holds 3C. What happens if WR is turned on too?",
+        "passos": {
+          "ligarWr": "Turn on WR, leaving RD on.",
+          "nadaMudou": "It looks like nothing happened: cell 3A still holds 5A. With RD on, the memory puts the cell itself on the DB; with WR on, the same cell copies the DB. It wrote its own value back. Now see what changes when the CPU also drives the DB.",
+          "ligarMdr": "Turn on MDR → DB."
+        },
+        "resultado": "Cell 3A now holds XX (0XX1 1XX0). The CPU put 3C on the DB and the memory put 5A: in the bits where they disagree, the DB became undefined, and WR made the cell store that X. The old value is lost, and the new one was not written either. Even with everything turned off, the cell stays broken.",
+        "real": "in many asynchronous SRAMs, an active WR turns off the output buffers: the chip only writes, and the cell would get the CPU’s 3C, with no conflict. Besides, the CPU’s memory controller never turns RD and WR on at the same time. The simulator gives neither one priority on purpose, so that the conflict shows."
+      },
+      "trocaEndereco": {
+        "titulo": "What if the address changes in the middle of a read?",
+        "resumo": "The MAR changes after the read has started, before the MDR captures the data.",
+        "pergunta": "The CPU is going to read address 10, which holds 11. Address 20 holds 22. If the MAR changes to 20 in the middle of the read, what does the MDR get: 11, 22 or something else?",
+        "passos": {
+          "comecarLeitura": "Click Read address 10.",
+          "ateSaida": "Click Next phase until the “RD on” phase: the data at 10 shows on the DB.",
+          "trocarMar": "Now, in the middle of the read, type 20 in the MAR (and Enter). The read does not stop: the next phase already uses the new address.",
+          "ateFim": "Click Next phase until the end and watch the timing diagram."
+        },
+        "resultado": "The MDR got X: neither 11 nor 22. Changing the MAR started the t_AA count (45 ns) over, and the data at address 20 would only be valid after the capture, at 60 ns. The CPU did not notice the change: the wait states were decided at the start of the cycle. Click Repeat and change the MAR right after starting the read, before “CS on”: then the new data arrives in time.",
+        "resultadoATempo": "The MDR got 22, the data at address 20, and the read looks right. The change came early: even with the t_AA count starting over, the new data was valid before the capture. But the CPU asked for address 10 and got the contents of another one, with no warning. That is why the address has to stay still for the whole cycle.",
+        "resultadoDepois": "The MDR got 11: the change came after the capture, and what was already read does not change. The DB showed the data at 20 for a moment, but nobody stored it. Click Repeat and change the MAR before the MDR captures."
+      },
+      "semEspera": {
+        "titulo": "What if the CPU does not wait for a slow memory?",
+        "resumo": "A 120 ns memory and a 50 MHz CPU that captures the data without wait states.",
+        "pergunta": "The memory is now slow: the data is only valid 120 ns after the address. The CPU, at 50 MHz, captures at the end of T2, at 40 ns, and is set not to wait. What will the MDR get?",
+        "passos": {
+          "lerAteFim": "Click Read address 3A and step through the phases to the end."
+        },
+        "resultado": "The MDR got X. The CPU captured the DB at 40 ns, but the data would only be valid at 120 ns: in the timing diagram, the capture mark comes before the data valid mark. Turn on “The CPU waits for the memory” and read again: with wait states, the cycle gets longer, and the read works.",
+        "real": "this is the memory controller’s job. It knows the memory’s timings (on computer memory modules, they are stored on the module itself) and inserts the waits needed. Timings set too short make the computer unstable, with read errors."
+      },
+      "csDesligado": {
+        "titulo": "What if CS is off?",
+        "resumo": "RD on, but the memory was not selected.",
+        "pergunta": "The MAR holds 3A, and cell 3A holds 5A. If the CPU turns on RD, but not CS, does 5A show on the DB?",
+        "passos": {
+          "ligarRd": "Turn on RD and leave CS off."
+        },
+        "resultado": "No: the DB stays floating (Z), and the grid lights no row and no column. Without CS, the decoders are disabled, with all outputs at 0, and the output buffers only turn on with CS · RD = 1. If the MDR captured now, it would get X: a floating wire can be at any value. CS is the “chip select”: in a computer with several memory chips, only the selected one answers, and the others stay quiet on the bus."
+      }
+    }
   },
   "siglas": {
     "be": {

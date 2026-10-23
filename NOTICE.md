@@ -26,9 +26,10 @@ criado no IESB – Instituto de Educação Superior de Brasília pelo
 [Prof. Joel Guilherme da Silva Filho](http://lattes.cnpq.br/7746085908957322)
 e colaboradores.
 
-- Do **CPU-8E** vêm a arquitetura de 8 bits com memória de 256 bytes, os nomes
-  dos registradores e barramentos (MAR, MDR, BE, BD) e o formato dos programas
-  `.bin`.
+- Do **CPU-8E** vêm a arquitetura de 8 bits com memória de 256 bytes e os
+  nomes dos registradores e barramentos (MAR, MDR, BE, BD). O formato dos
+  programas `.bin` não é usado: a memória é guardada em texto
+  ([ADR 0006](docs/adr/0006-arquivo-de-memoria-em-texto.md)).
 - Do **CPU-8E Web** vêm a estrutura do site, o estilo, as configurações e as
   ferramentas de teste (ver [ADR 0004](docs/adr/0004-reaproveitamento-do-cpu-8e-web.md)).
 
@@ -40,11 +41,9 @@ CPU-8E Simulator
 Copyright 2009/10 Joel Guilherme da Silva Filho (http://lattes.cnpq.br/7746085908957322)
 ```
 
-Na versão atual, nenhum arquivo de código deriva do original. Estes arquivos
-do CPU-8E original estão incluídos sem modificação, como dados de teste:
-
-- `tests/fixtures/teste.bin` e `tests/fixtures/allopcodes.bin`: programas de
-  exemplo, usados para conferir o carregamento de programas.
+Na versão atual, nenhum arquivo deriva do original, e nenhum arquivo do
+CPU-8E original é incluído. (Até a 0.9, os programas de exemplo `teste.bin` e
+`allopcodes.bin` eram usados como dados de teste; saíram na 1.0.)
 
 ## Modificações
 

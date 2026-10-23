@@ -22,6 +22,10 @@
     "familiaTitulo": "Família 8E",
     "familia": "É um projeto irmão do {cpu8eWeb}, versão para navegador do simulador {cpu8e}, criado no IESB por {autor} e colaboradores. A memória segue a mesma arquitetura de 8 bits e os mesmos nomes (MAR, MDR, BE, BD).",
     "versaoTitulo": "Esta versão",
+    "acessibilidadeTitulo": "Acessibilidade",
+    "acessibilidade": "O site é feito para funcionar só com o teclado e com leitor de tela, e segue as diretrizes WCAG 2.2, nível AA. A grade da memória anuncia uma célula por vez, e nunca as 256 em sequência.",
+    "acessibilidadeTestes": "Até agora, os testes são automáticos: o axe, a árvore de acessibilidade e um leitor de tela simulado. Ninguém que usa leitor de tela no dia a dia testou o site ainda. Se você usa, sua ajuda é muito bem-vinda: {issue}.",
+    "acessibilidadeIssue": "conte como foi na issue #39",
     "licencaTitulo": "Licença",
     "licenca": "Este programa é software livre: você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU, conforme publicada pela Free Software Foundation, versão 3 da licença ou (a seu critério) qualquer versão posterior.",
     "garantia": "Este programa é distribuído na esperança de que seja útil, mas SEM NENHUMA GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO ou de ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO.",
@@ -72,12 +76,49 @@
     "titulo": "Memória por dentro (linha × coluna)",
     "ajuda": "Clique numa posição para pôr o endereço dela no MAR. Dois cliques, Enter ou um dígito hexadecimal editam o conteúdo. Com o CS ligado, acendem a linha e a coluna que os decodificadores escolheram.",
     "linhaColuna": "Linha \\ coluna",
-    "celula": "Endereço {endereco}: {valor}",
+    "celula": "Linha {linha}, coluna {coluna}: {visivel}, {valor}",
     "editar": "Novo valor para o endereço {endereco}",
     "vista": "Como mostrar a memória",
     "vistas": {
       "porDentro": "Por dentro",
       "conteudo": "Só o conteúdo"
+    },
+    "valorHex": "valor hexadecimal {digitos}",
+    "valorIndefinido": "valor indefinido",
+    "valorBits": "valor com bits indefinidos, do bit 7 ao 0: {bits}",
+    "noMar": ", endereço do MAR",
+    "resumo": {
+      "desligada": "CS desligado: os decodificadores não escolhem nenhuma linha nem coluna, e os buffers de saída estão desligados.",
+      "ligada": "CS ligado: o decodificador de linha escolhe a linha {linha}, e o de coluna, a coluna {coluna}. {buffers}",
+      "nenhuma": "nenhuma",
+      "indefinida": "indefinida",
+      "buffersLigados": "Os buffers de saída estão ligados e põem {valor} no BD.",
+      "buffersDesligados": "Os buffers de saída estão desligados."
+    }
+  },
+  "arquivo": {
+    "titulo": "Conteúdo da memória em texto",
+    "abrir": "Abrir arquivo…",
+    "salvar": "Salvar arquivo",
+    "colar": "Colar texto…",
+    "copiar": "Copiar texto",
+    "colarTitulo": "Colar o conteúdo da memória",
+    "colarAjuda": "Uma linha por grupo de bytes, em hexadecimal: “10: 3A FF 00”. O endereço com dois-pontos é opcional; sem ele, os bytes continuam de onde pararam. Use XX para uma célula indefinida e # ou ; para comentários. Abrir substitui a memória inteira: o que não for citado fica em 00.",
+    "colarCampo": "Texto com o conteúdo da memória",
+    "cancelar": "Cancelar",
+    "abrirColado": "Abrir na memória",
+    "aberto": "Nenhuma posição veio do texto: a memória toda ficou em 00. | 1 posição veio do texto; as outras ficaram em 00. | {n} posições vieram do texto; as outras ficaram em 00.",
+    "salvo": "Memória salva em {nome}.",
+    "copiado": "Conteúdo da memória copiado. Dá para colar num editor de texto ou de volta aqui.",
+    "onde": "Linha {linha}, coluna {coluna}:",
+    "semMudanca": "A memória não mudou.",
+    "erros": {
+      "byteInvalido": "“{trecho}” não é um byte. Use 2 dígitos hexadecimais (3A), XX ou 8 dígitos 0, 1 ou X.",
+      "enderecoInvalido": "“{trecho}” não é um endereço. Antes dos dois-pontos vem um endereço em hexadecimal, de 00 a FF.",
+      "foraDaMemoria": "“{trecho}” passa do endereço FF, o último da memória.",
+      "repetido": "a posição {endereco} já tinha recebido um valor antes.",
+      "muitoGrande": "O arquivo é grande demais para ser o conteúdo de uma memória de 256 bytes.",
+      "copiar": "O navegador não deixou copiar. Use Salvar arquivo."
     }
   },
   "transacao": {
@@ -100,7 +141,8 @@
       "captura": {
         "nome": "MDR captura",
         "texto": "O MDR copia o que está no BD: MDR = {mdr}.",
-        "textoErrado": "A CPU não espera a memória: no fim de T2 o MDR copia o BD, mas o dado ainda não ficou válido. MDR = {mdr}: a leitura deu errado. Ligue os wait states ou use uma memória mais rápida."
+        "textoErrado": "A CPU não espera a memória: no fim de T2 o MDR copia o BD, mas o dado ainda não ficou válido. MDR = {mdr}: a leitura deu errado. Ligue os wait states ou use uma memória mais rápida.",
+        "textoTrocado": "O endereço mudou no meio da leitura, e a contagem de t_AA recomeçou: o dado do novo endereço não ficou válido a tempo. MDR = {mdr}: a leitura deu errado."
       },
       "liberacao": {
         "nome": "Liberação",
@@ -211,13 +253,15 @@
       "leitura": "O dado fica válido em {valido}, e a CPU o captura em {captura}. Com {esperas}, o ciclo de leitura leva {fim} ({ciclos} ciclos de clock).",
       "leituraErrada": "Leitura errada: a CPU captura em {captura}, antes de o dado ficar válido ({valido}). O MDR fica com X.",
       "escrita": "A célula precisa de um pulso de WR de pelo menos {twp}; com {esperas}, o pulso dura {pulso}, e o ciclo de escrita leva {fim} ({ciclos} ciclos de clock).",
-      "escritaErrada": "Escrita errada: o pulso de WR dura só {pulso}, menos que os {twp} de que a célula precisa. Ela fica indefinida (X)."
+      "escritaErrada": "Escrita errada: o pulso de WR dura só {pulso}, menos que os {twp} de que a célula precisa. Ela fica indefinida (X).",
+      "trocaEndereco": "O endereço mudou de {de} para {para} em {t}, e a contagem de t_AA recomeçou dali."
     },
     "marcas": {
       "dadoValido": "dado válido ({t})",
       "captura": "MDR captura ({t})",
       "pulsoMinimo": "t_WP cumprido ({t})",
-      "fimPulso": "WR desliga ({t})"
+      "fimPulso": "WR desliga ({t})",
+      "mudancaEndereco": "MAR muda ({t})"
     },
     "esperas": "nenhum wait state | 1 wait state | {n} wait states",
     "ciclos": "nenhum ciclo | 1 ciclo | {n} ciclos"
@@ -246,35 +290,120 @@
       },
       "sinais": {
         "titulo": "Sinais de controle",
-        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. \"MDR → BD\" faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
-        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também \"MDR → BD\" para ver um conflito."
+        "texto": "CS liga a memória, RD pede uma leitura e WR, uma escrita. “MDR → BD” faz a CPU pôr o MDR no barramento de dados. Os fios mostram o nível de cada sinal: cheio é 1, fino é 0, tracejado é solto (Z) e vermelho é conflito ou indefinido (X).",
+        "experimente": "ligue o CS e depois o RD. A linha e a coluna acendem, e o dado aparece no BD. Ligue também “MDR → BD” para ver um conflito."
       },
       "grade": {
         "titulo": "A memória por dentro",
         "texto": "A grade 16 × 16 é a própria matriz: o decodificador de coluna fica em cima, o de linha à esquerda, e embaixo estão as linhas de bit, o seletor e os buffers de saída. Repare que a linha inteira é lida: os 16 bytes descem, e o seletor escolhe um.",
         "experimente": "clique numa posição para pôr o endereço dela no MAR; dê dois cliques para mudar o conteúdo."
       },
+      "arquivo": {
+        "titulo": "Guardar e compartilhar",
+        "texto": "O conteúdo da memória pode virar um texto simples, com endereço e bytes em hexadecimal. Salve num arquivo, copie para mandar a alguém, ou abra e cole um texto pronto, como o de um exercício.",
+        "experimente": "clique em “Copiar texto” e cole num editor: cada linha é um endereço e 16 bytes."
+      },
       "transacao": {
         "titulo": "Ler e escrever, fase a fase",
-        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em \"Próxima fase\" muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
-        "experimente": "clique em \"Ler o endereço\" e avance as fases até o MDR receber o dado."
+        "texto": "Em vez de ligar os sinais à mão, peça uma leitura ou uma escrita completa. Cada clique em “Próxima fase” muda um sinal, na ordem certa, e o texto explica o que acabou de acontecer.",
+        "experimente": "clique em “Ler o endereço” e avance as fases até o MDR receber o dado."
       },
       "portas": {
         "titulo": "Em portas lógicas",
         "texto": "Aqui o mesmo circuito aparece em portas AND, OR e NOT: um bit da posição do MAR (o latch que guarda o bit e o caminho até o BD) ou um decodificador 4 → 16. Os fios mudam junto com o resto da tela.",
-        "experimente": "abra a aba \"Decodificador de linha\" e mude um bit do MAR: outra porta acende."
+        "experimente": "abra a aba “Decodificador de linha” e mude um bit do MAR: outra porta acende."
       },
       "tempo": {
         "titulo": "Diagrama de tempo",
         "texto": "A memória tem o próprio tempo de acesso, e a CPU tem o próprio clock. Quando a memória é mais lenta, a CPU espera ciclos extras: os wait states. Sem esperar, a leitura captura um dado ainda inválido (X).",
-        "experimente": "troque para a memória lenta e desligue \"A CPU espera a memória\". O resumo e o diagrama mostram a leitura dando errado."
+        "experimente": "troque para a memória lenta e desligue “A CPU espera a memória”. O resumo e o diagrama mostram a leitura dando errado."
+      },
+      "experimentos": {
+        "titulo": "Experimentos “e se…?”",
+        "texto": "Cinco situações que dão errado de propósito: dois lados dirigindo o BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera e CS desligado. Cada uma faz uma pergunta, conduz os passos e explica o resultado. Ao sair, tudo volta a ser como estava.",
+        "experimente": "abra a lista e escolha “E se a CPU e a memória dirigirem o BD juntas?”."
       },
       "fim": {
         "titulo": "Pronto",
-        "texto": "Para rever este guia, use o botão \"Ver o guia\". Cada seção também tem um botão \"?\" que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios."
+        "texto": "Para rever este guia, use o botão “Ver o guia”. Cada seção também tem um botão “?” que explica só aquela parte, e a Documentação traz cada assunto em detalhe, com um roteiro de exercícios. Um bom próximo passo são os experimentos “e se…?”."
       }
     },
-    "lerMais": "Ler mais na documentação"
+    "lerMais": "Ler mais na documentação",
+    "irPara": "Ir para a parte em destaque (F6; F6 de novo volta aqui)"
+  },
+  "experimentos": {
+    "abrir": "Experimentos “e se…?”",
+    "titulo": "Experimentos “e se…?”",
+    "intro": "Cada experimento põe o simulador numa situação que dá errado de propósito. Pense no que vai acontecer, faça o passo pedido e veja o resultado. Ao sair, tudo volta a ser como estava.",
+    "fechar": "Fechar",
+    "pergunta": "Pense antes",
+    "passo": "Passo {n} de {total}",
+    "resultado": "O que aconteceu",
+    "memoriaReal": "Em memórias reais:",
+    "aguardando": "Faça o que o passo pede: o balão avança sozinho.",
+    "vamosVer": "Vamos ver",
+    "proximo": "Próximo",
+    "recomecar": "Recomeçar",
+    "repetir": "Repetir",
+    "concluir": "Sair",
+    "sair": "Sair e desfazer",
+    "itens": {
+      "contencao": {
+        "titulo": "E se a CPU e a memória dirigirem o BD juntas?",
+        "resumo": "Contenção no barramento de dados: dois lados pondo valores diferentes no mesmo fio.",
+        "pergunta": "A memória está lendo o endereço 3A: CS e RD estão ligados, e ela põe 5A no BD. O MDR tem 3C. O que acontece com o BD se a CPU também puser o MDR no barramento?",
+        "passos": {
+          "ligarMdr": "Ligue o botão MDR → BD, no painel."
+        },
+        "resultado": "O BD mostra XX: em binário, 0XX1 1XX0. Onde o MDR (0011 1100) e a memória (0101 1010) concordam, o fio tem o valor dos dois; onde discordam, um lado puxa para 1 e o outro para 0, e não dá para saber o que o fio vale. É uma contenção. A célula e o MDR não mudaram: ninguém guardou o BD.",
+        "real": "dois circuitos dirigindo o mesmo fio com valores opostos formam quase um curto-circuito: a corrente sobe, os chips esquentam e podem se danificar. Por isso as saídas para o barramento são tri-state, e o controlador da CPU garante que só um lado dirige o BD de cada vez."
+      },
+      "rdWr": {
+        "titulo": "E se RD e WR forem ligados juntos?",
+        "resumo": "A memória recebe ao mesmo tempo a ordem de ler e a de escrever.",
+        "pergunta": "A memória está lendo o endereço 3A, que guarda 5A: CS e RD estão ligados. O MDR tem 3C. O que acontece se o WR também for ligado?",
+        "passos": {
+          "ligarWr": "Ligue o WR, deixando o RD ligado.",
+          "nadaMudou": "Parece que nada aconteceu: a célula 3A continua com 5A. Com RD ligado, a memória põe a própria célula no BD; com WR ligado, a mesma célula copia o BD. Ela regravou o próprio valor. Agora veja o que muda quando a CPU também dirige o BD.",
+          "ligarMdr": "Ligue o MDR → BD."
+        },
+        "resultado": "A célula 3A ficou com XX (0XX1 1XX0). A CPU pôs 3C no BD e a memória pôs 5A: nos bits em que eles discordam, o BD ficou indefinido, e o WR fez a célula guardar esse X. O valor antigo se perdeu, e o novo também não foi gravado. Mesmo desligando tudo, a célula continua estragada.",
+        "real": "em muitas SRAMs assíncronas, WR ativo desliga os buffers de saída: o chip só escreve, e a célula receberia o 3C da CPU, sem conflito. Além disso, o controlador de memória da CPU nunca liga RD e WR ao mesmo tempo. O simulador não dá prioridade a nenhum dos dois de propósito, para o conflito ficar visível."
+      },
+      "trocaEndereco": {
+        "titulo": "E se o endereço mudar no meio da leitura?",
+        "resumo": "O MAR muda depois que a leitura começou, antes de o MDR capturar o dado.",
+        "pergunta": "A CPU vai ler o endereço 10, que guarda 11. O endereço 20 guarda 22. Se o MAR mudar para 20 no meio da leitura, o que o MDR recebe: 11, 22 ou outra coisa?",
+        "passos": {
+          "comecarLeitura": "Clique em Ler o endereço 10.",
+          "ateSaida": "Clique em Próxima fase até a fase “RD liga”: o dado de 10 aparece no BD.",
+          "trocarMar": "Agora, no meio da leitura, digite 20 no MAR (e Enter). A leitura não para: a próxima fase já usa o novo endereço.",
+          "ateFim": "Clique em Próxima fase até o fim e acompanhe o diagrama de tempo."
+        },
+        "resultado": "O MDR ficou com X: nem 11, nem 22. A troca do MAR fez a contagem de t_AA (45 ns) recomeçar, e o dado do endereço 20 só ficaria válido depois da captura, em 60 ns. A CPU não percebeu a troca: os wait states foram decididos no começo do ciclo. Clique em Repetir e troque o MAR logo depois de começar a leitura, antes de “CS liga”: aí o novo dado chega a tempo.",
+        "resultadoATempo": "O MDR ficou com 22, o dado do endereço 20, e a leitura parece certa. A troca veio cedo: mesmo com a contagem de t_AA recomeçando, o novo dado ficou válido antes da captura. Mas a CPU pediu o endereço 10 e recebeu o conteúdo de outro, sem nenhum aviso. É por isso que o endereço precisa ficar parado durante todo o ciclo.",
+        "resultadoDepois": "O MDR ficou com 11: a troca veio depois da captura, e o que já foi lido não muda. O BD ainda mostrou o dado de 20 por um instante, mas ninguém o guardou. Clique em Repetir e troque o MAR antes de o MDR capturar."
+      },
+      "semEspera": {
+        "titulo": "E se a CPU não esperar uma memória lenta?",
+        "resumo": "Uma memória de 120 ns e uma CPU de 50 MHz que captura o dado sem wait states.",
+        "pergunta": "A memória agora é lenta: o dado só fica válido 120 ns depois do endereço. A CPU, a 50 MHz, captura no fim de T2, em 40 ns, e está configurada para não esperar. O que o MDR vai receber?",
+        "passos": {
+          "lerAteFim": "Clique em Ler o endereço 3A e avance as fases até o fim."
+        },
+        "resultado": "O MDR ficou com X. A CPU capturou o BD em 40 ns, mas o dado só ficaria válido em 120 ns: no diagrama de tempo, a marca da captura vem antes da marca do dado válido. Ligue “A CPU espera a memória” e leia de novo: com wait states, o ciclo fica mais longo, e a leitura dá certo.",
+        "real": "quem cuida disso é o controlador de memória. Ele conhece os tempos da memória (nos módulos de computador, eles vêm gravados no próprio módulo) e insere as esperas necessárias. Tempos configurados curtos demais deixam o computador instável, com erros de leitura."
+      },
+      "csDesligado": {
+        "titulo": "E se o CS estiver desligado?",
+        "resumo": "RD ligado, mas a memória não foi selecionada.",
+        "pergunta": "O MAR tem 3A, e a célula 3A guarda 5A. Se a CPU ligar o RD, mas não o CS, o 5A aparece no BD?",
+        "passos": {
+          "ligarRd": "Ligue o RD e deixe o CS desligado."
+        },
+        "resultado": "Não: o BD continua solto (Z), e a grade não acende nenhuma linha nem coluna. Sem o CS, os decodificadores ficam desabilitados, com todas as saídas em 0, e os buffers de saída só ligam com CS · RD = 1. Se o MDR capturasse agora, receberia X: um fio solto pode estar em qualquer valor. O CS é o “chip select”: num computador com vários chips de memória, só o escolhido responde, e os outros ficam calados no barramento."
+      }
+    }
   },
   "siglas": {
     "be": {

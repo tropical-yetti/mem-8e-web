@@ -37,7 +37,9 @@ function teclaAba(evento: KeyboardEvent) {
 
 <template>
   <section class="detalhe" aria-labelledby="titulo-detalhe" data-guia="portas">
-    <h2 id="titulo-detalhe">{{ t('portas.titulo') }} <BotaoAjuda passo="portas" /></h2>
+    <h2 aria-labelledby="titulo-detalhe">
+      <span id="titulo-detalhe">{{ t('portas.titulo') }}</span> <BotaoAjuda passo="portas" />
+    </h2>
     <div class="abas" role="tablist" :aria-label="t('portas.titulo')" @keydown="teclaAba">
       <button
         v-for="opcao in ABAS"
