@@ -328,7 +328,8 @@
         "texto": "To see this guide again, use the \"Show the guide\" button. Each section also has a \"?\" button that explains just that part, and the Documentation covers each topic in detail, with a set of exercises. A good next step is the \"what if…?\" experiments."
       }
     },
-    "lerMais": "Read more in the documentation"
+    "lerMais": "Read more in the documentation",
+    "irPara": "Go to the highlighted part (F6; F6 again comes back here)"
   },
   "experimentos": {
     "abrir": "“What if…?” experiments",

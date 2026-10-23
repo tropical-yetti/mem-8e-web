@@ -7,6 +7,24 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Teclado, refluxo e idioma da página
+
+- **F6** alterna o foco entre o balão (do guia ou de um experimento) e a parte
+  da tela que ele aponta, e um botão "Ir para a parte em destaque" faz o
+  mesmo. Antes, quem usa só o teclado precisava percorrer a página inteira
+  para fazer o que o balão pedia e voltar a ele.
+- **Refluxo (WCAG 1.4.10):** em 320 px (ou zoom de 400%) nada rola de lado.
+  Em telas muito estreitas, os bits do MAR e do MDR ficam em duas linhas de
+  4, e os barramentos continuam com nome e valor; as caixas de seleção do
+  diagrama de tempo encolhem.
+- **Idioma da página (WCAG 3.1.1):** quem chega com o navegador em inglês
+  agora recebe a página declarada como inglês desde o início, e não só depois
+  de trocar o idioma à mão.
+- Testes novos: tudo só com o teclado (experimento, guia, colar, diagrama e
+  documentação), refluxo em 320 e 640 px, movimento reduzido e axe na
+  documentação também em inglês. O Lighthouse passa a medir também duas
+  páginas da documentação (#36).
+
 ### 2026-10-23 — Leitor de tela
 
 - A grade da memória é um widget de grade para o leitor de tela: só a célula

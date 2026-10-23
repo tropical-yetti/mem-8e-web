@@ -339,6 +339,8 @@ function aoMudarEspera(evento: Event) {
 <style scoped>
 .tempo {
   display: grid;
+  /* A coluna não cresce além da tela por causa de uma opção longa: o diagrama rola na moldura. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 .cabeca {
@@ -366,6 +368,7 @@ h2 {
 .controles .campo,
 .controles .caixa {
   display: inline-flex;
+  min-width: 0;
   flex-wrap: wrap;
   max-width: 100%;
   align-items: center;
@@ -373,6 +376,8 @@ h2 {
 }
 select {
   max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
   padding: 3px 6px;
   font: inherit;
   color: var(--texto);

@@ -35,6 +35,16 @@ test('o idioma troca para inglês e é lembrado', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Memory simulator')
 })
 
+test.describe('com o navegador em inglês', () => {
+  test.use({ locale: 'en-US' })
+
+  test('a página já começa em inglês, declarada como inglês (WCAG 3.1.1)', async ({ page }) => {
+    await page.goto('./')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Memory simulator')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  })
+})
+
 test('a página Sobre credita o CPU-8E e traz a licença', async ({ page }) => {
   await page.goto('./#/sobre')
   await expect(page.getByRole('link', { name: 'CPU-8E Web' })).toBeVisible()

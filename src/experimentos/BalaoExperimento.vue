@@ -54,54 +54,65 @@ const rotuloMomento = computed(() => {
     descricao="experimento-texto"
     @fechar="experimentos.sair()"
   >
-    <p class="contador">{{ rotuloMomento }}</p>
-    <h2 id="experimento-titulo" tabindex="-1" data-foco>
-      {{ t(`${base}.titulo`) }}
-    </h2>
-    <p id="experimento-texto" class="texto" aria-live="polite">{{ texto }}</p>
-    <p
-      v-if="experimentos.momento.value.tipo === 'resultado' && experimentos.atual.value.memoriaReal"
-      class="observacao"
-    >
-      <strong>{{ t('experimentos.memoriaReal') }}</strong>
-      {{ t(`${base}.real`) }}
-    </p>
-    <p v-if="experimentos.esperandoAcao.value" class="aguardando">
-      {{ t('experimentos.aguardando') }}
-    </p>
+    <template #default="{ irParaAlvo }">
+      <p class="contador">{{ rotuloMomento }}</p>
+      <h2 id="experimento-titulo" tabindex="-1" data-foco>
+        {{ t(`${base}.titulo`) }}
+      </h2>
+      <p id="experimento-texto" class="texto" aria-live="polite">{{ texto }}</p>
+      <p
+        v-if="
+          experimentos.momento.value.tipo === 'resultado' && experimentos.atual.value.memoriaReal
+        "
+        class="observacao"
+      >
+        <strong>{{ t('experimentos.memoriaReal') }}</strong>
+        {{ t(`${base}.real`) }}
+      </p>
+      <p v-if="experimentos.esperandoAcao.value" class="aguardando">
+        {{ t('experimentos.aguardando') }}
+      </p>
+      <p v-if="experimentos.momento.value.tipo === 'acao' && experimentos.alvo.value" class="ir">
+        <button type="button" class="ir-para" aria-keyshortcuts="F6" @click="irParaAlvo()">
+          {{ t('guia.irPara') }}
+        </button>
+      </p>
 
-    <div class="botoes">
-      <button type="button" class="pular" @click="experimentos.sair()">
-        {{ t('experimentos.sair') }}
-      </button>
-      <span class="espaco"></span>
-      <template v-if="experimentos.momento.value.tipo === 'resultado'">
-        <button type="button" @click="experimentos.repetir()">
-          {{ t('experimentos.repetir') }}
+      <div class="botoes">
+        <button type="button" class="pular" @click="experimentos.sair()">
+          {{ t('experimentos.sair') }}
         </button>
-        <button type="button" class="principal" @click="experimentos.sair()">
-          {{ t('experimentos.concluir') }}
+        <span class="espaco"></span>
+        <template v-if="experimentos.momento.value.tipo === 'resultado'">
+          <button type="button" @click="experimentos.repetir()">
+            {{ t('experimentos.repetir') }}
+          </button>
+          <button type="button" class="principal" @click="experimentos.sair()">
+            {{ t('experimentos.concluir') }}
+          </button>
+        </template>
+        <button
+          v-if="experimentos.momento.value.tipo === 'acao'"
+          type="button"
+          @click="experimentos.repetir()"
+        >
+          {{ t('experimentos.recomecar') }}
         </button>
-      </template>
-      <button
-        v-if="experimentos.momento.value.tipo === 'acao'"
-        type="button"
-        @click="experimentos.repetir()"
-      >
-        {{ t('experimentos.recomecar') }}
-      </button>
-      <button
-        v-if="experimentos.momento.value.tipo !== 'resultado' && !experimentos.esperandoAcao.value"
-        type="button"
-        class="principal"
-        @click="experimentos.proximo()"
-      >
-        {{
-          experimentos.momento.value.tipo === 'pergunta'
-            ? t('experimentos.vamosVer')
-            : t('experimentos.proximo')
-        }}
-      </button>
-    </div>
+        <button
+          v-if="
+            experimentos.momento.value.tipo !== 'resultado' && !experimentos.esperandoAcao.value
+          "
+          type="button"
+          class="principal"
+          @click="experimentos.proximo()"
+        >
+          {{
+            experimentos.momento.value.tipo === 'pergunta'
+              ? t('experimentos.vamosVer')
+              : t('experimentos.proximo')
+          }}
+        </button>
+      </div>
+    </template>
   </BalaoBase>
 </template>

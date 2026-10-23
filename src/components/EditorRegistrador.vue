@@ -182,4 +182,33 @@ function rotuloBit(bit: number): string {
 .grupos span:last-child {
   grid-column: 3;
 }
+
+/* Tela muito estreita (refluxo, WCAG 1.4.10): cada grupo de 4 bits vira uma linha,
+   com o rótulo do grupo ao lado, e o painel cabe sem esconder os barramentos. */
+@media (max-width: 360px) {
+  .registrador {
+    grid-template-columns: auto auto;
+    justify-content: start;
+    column-gap: 6px;
+  }
+  .cabeca {
+    grid-column: 1 / -1;
+  }
+  .bits {
+    grid-template-columns: repeat(4, 24px);
+  }
+  .bit:nth-child(5) {
+    grid-column: 1;
+  }
+  .grupos {
+    grid-template-columns: auto;
+    grid-template-rows: 1.6rem 1.6rem;
+    row-gap: 2px;
+    align-items: center;
+    text-align: left;
+  }
+  .grupos span:last-child {
+    grid-column: auto;
+  }
+}
 </style>

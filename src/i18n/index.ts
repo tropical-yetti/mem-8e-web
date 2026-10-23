@@ -30,12 +30,19 @@ function idiomaDoNavegador(): Idioma {
   return navigator.language.toLowerCase().startsWith('pt') ? 'pt-BR' : 'en'
 }
 
+const idiomaInicial = idiomaSalvo() ?? idiomaDoNavegador()
+
 export const i18n = createI18n({
   legacy: false,
-  locale: idiomaSalvo() ?? idiomaDoNavegador(),
+  locale: idiomaInicial,
   fallbackLocale: 'pt-BR',
   messages: { 'pt-BR': ptBR, en },
 })
+
+// O idioma da página acompanha o do texto desde o início (WCAG 3.1.1): sem isto, quem
+// chega com o navegador em inglês lê o site em inglês, mas declarado como português,
+// e o leitor de tela pronuncia tudo errado.
+document.documentElement.lang = idiomaInicial
 
 /** Troca o idioma da interface e lembra a escolha. */
 export function trocarIdioma(idioma: Idioma): void {

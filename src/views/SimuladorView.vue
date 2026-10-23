@@ -78,6 +78,8 @@ onMounted(() => {
 <style scoped>
 .simulador {
   display: grid;
+  /* Sem isto, a coluna cresce até o conteúdo mais largo e a página rola de lado no celular. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 h1 {
