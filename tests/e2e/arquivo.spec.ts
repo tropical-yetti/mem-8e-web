@@ -5,23 +5,8 @@
  */
 
 import { readFile } from 'node:fs/promises'
-import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
-
-/** Uma posição da grade (o leitor de tela só vê a do foco; o teste encontra todas). */
-const celula = (page: Page, endereco: string) => page.locator(`td[data-endereco="${endereco}"]`)
-
-async function semViolacoes(page: Page) {
-  const resultado = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze()
-  const graves = resultado.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
-  )
-  expect(
-    graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-  ).toEqual([])
-}
+import { expect, test } from '@playwright/test'
+import { semProblemasGraves, celula } from './ajudantes'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./')
@@ -32,7 +17,7 @@ test('colar um texto substitui a memória', async ({ page }) => {
   const janela = page.getByRole('dialog', { name: 'Colar o conteúdo da memória' })
   await expect(janela).toBeVisible()
   await expect(janela.getByRole('textbox')).toBeFocused()
-  await semViolacoes(page)
+  await semProblemasGraves(page)
 
   await janela.getByRole('textbox').fill('# teste\n10: AB CD\nXX')
   await janela.getByRole('button', { name: 'Abrir na memória' }).click()
@@ -57,7 +42,7 @@ test('um texto com erro mostra linha e coluna e não muda a memória', async ({ 
     'Linha 2, coluna 8: “G7” não é um byte. Use 2 dígitos hexadecimais (3A), XX ou 8 dígitos 0, 1 ou X. A memória não mudou.',
   )
   await expect(janela.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true')
-  await semViolacoes(page)
+  await semProblemasGraves(page)
 
   await janela.getByRole('button', { name: 'Cancelar' }).click()
   await expect(janela).toBeHidden()

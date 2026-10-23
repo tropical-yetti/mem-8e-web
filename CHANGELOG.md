@@ -7,6 +7,16 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Testes
+
+- A meta de cobertura passa a valer também para a store, os experimentos e o
+  guia (90% das linhas e 85% dos desvios), além do núcleo. O guia ganhou
+  testes próprios (de 17% para 100% das linhas).
+- Os programas `.bin` do CPU-8E saíram dos dados de teste (ADR 0006); o
+  NOTICE foi atualizado.
+- A verificação do axe e os ajudantes da grade, que estavam copiados em vários
+  arquivos de teste, ficam num só, `tests/e2e/ajudantes.ts` (#36).
+
 ### 2026-10-23 — Teclado, refluxo e idioma da página
 
 - **F6** alterna o foco entre o balão (do guia ou de um experimento) e a parte

@@ -55,10 +55,17 @@ Antes de abrir um pull request:
 npm run format:check
 npm run lint
 npm run typecheck
-npm test
+npm run test:cobertura   # os testes, com a meta de cobertura
 npm run build
 npm run test:e2e   # abre o site num navegador de verdade
 ```
+
+Metas de cobertura (o CI falha abaixo delas): o núcleo (`src/core/`), com 95%
+das linhas e 90% dos desvios; a store, os experimentos e o guia, com 90% e
+85%. Os componentes são cobertos pelos testes de ponta a ponta, que também
+conferem a acessibilidade (axe), o teclado, o refluxo em telas estreitas e o
+que um leitor de tela simulado anunciaria. Os ajudantes comuns desses testes
+ficam em `tests/e2e/ajudantes.ts`.
 
 ## Licença e autoria
 

@@ -5,20 +5,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
+import { semProblemasGraves, celula, porNoMar } from './ajudantes'
 
 /** Conteúdo inicial do endereço 3A (veja CONTEUDO_INICIAL na store). */
 const M3A = ((0x3a * 0x9d + 0x37) & 0xff).toString(16).toUpperCase().padStart(2, '0')
-
-/** Uma posição da grade (o leitor de tela só vê a do foco; o teste encontra todas). */
-const celula = (page: Page, endereco: string) => page.locator(`td[data-endereco="${endereco}"]`)
-
-async function porNoMar(page: Page, valor: string) {
-  const campo = page.getByRole('textbox', { name: 'MAR em hexadecimal' })
-  await campo.fill(valor)
-  await campo.press('Enter')
-}
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./')
@@ -100,15 +91,7 @@ for (const tema of ['light', 'dark'] as const) {
     await page.getByRole('button', { name: /^Ler o endereço/ }).click()
     await page.getByRole('button', { name: 'Próxima fase' }).click()
     await page.getByRole('button', { name: 'Próxima fase' }).click()
-    const resultado = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze()
-    const graves = resultado.violations.filter(
-      (v) => v.impact === 'serious' || v.impact === 'critical',
-    )
-    expect(
-      graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-    ).toEqual([])
+    await semProblemasGraves(page)
   })
 }
 

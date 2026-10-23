@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { semProblemasGraves } from './ajudantes'
 
 const PAGINAS = ['primeiros-passos', 'memoria', 'niveis', 'tempo', 'portas', 'roteiro', 'siglas']
 
@@ -68,15 +68,7 @@ for (const idioma of ['pt-BR', 'en-US'] as const) {
             idioma.slice(0, 2) === 'pt' ? 'pt-BR' : 'en',
           )
           await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-          const resultado = await new AxeBuilder({ page })
-            .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-            .analyze()
-          const graves = resultado.violations.filter(
-            (v) => v.impact === 'serious' || v.impact === 'critical',
-          )
-          expect(
-            graves.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
-          ).toEqual([])
+          await semProblemasGraves(page)
         })
       }
     })
