@@ -25,6 +25,7 @@ construção)
 - **Ver em portas lógicas** um bit da memória e os decodificadores 4 → 16.
 - **Comparar o ciclo de memória com o da CPU** no diagrama de tempo, com wait states.
 - **Editar a memória** pela grade, com o mouse ou o teclado.
+- **Guardar e compartilhar a memória** num arquivo de texto, com endereço e bytes em hex, ou colando e copiando o mesmo texto.
 
 Na primeira visita, um guia com balões apresenta cada parte da tela. A
 [documentação](https://tropical-yetti.github.io/mem-8e-web/#/documentacao),

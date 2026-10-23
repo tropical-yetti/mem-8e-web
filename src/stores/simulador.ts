@@ -21,10 +21,12 @@ import {
   definirMar,
   definirMdr,
   editarCelula,
+  escreverTexto,
   escrever,
   fasesEscrita,
   fasesLeitura,
   ler,
+  lerTexto,
   linhaDoTempoEscrita,
   linhaDoTempoLeitura,
   MEMORIAS,
@@ -33,6 +35,8 @@ import {
   periodoDe,
   type LinhaDoTempo,
   type ParametrosTempo,
+  type CabecalhoArquivo,
+  type ResultadoLeitura,
   type TipoMemoria,
   LARGURA,
   lerCelula,
@@ -190,11 +194,23 @@ export const useSimuladorStore = defineStore('simulador', () => {
     atualizar()
   }
 
-  function carregar(bytes: Uint8Array): number {
-    interromper()
-    const tamanho = carregarPrograma(sistema.memoria, bytes)
-    atualizar()
-    return tamanho
+  /**
+   * Abre o conteúdo da memória em texto (ADR 0006). Com erro, nada muda; sem
+   * erro, a memória inteira é substituída.
+   */
+  function abrirTexto(texto: string): ResultadoLeitura {
+    const resultado = lerTexto(texto)
+    if (resultado.ok) {
+      interromper()
+      sistema.memoria.celulas = resultado.celulas
+      atualizar()
+    }
+    return resultado
+  }
+
+  /** A memória inteira em texto, pronta para salvar ou copiar. */
+  function textoDaMemoria(cabecalho: CabecalhoArquivo = {}): string {
+    return escreverTexto(sistema.memoria, cabecalho)
   }
 
   /** Memória zerada, registradores zerados e sinais desligados. */
@@ -336,7 +352,8 @@ export const useSimuladorStore = defineStore('simulador', () => {
     alternarBitMdr,
     alternarSinal,
     mudarCelula,
-    carregar,
+    abrirTexto,
+    textoDaMemoria,
     reiniciar,
     iniciarLeitura: () => iniciar('ler'),
     iniciarEscrita: () => iniciar('escrever'),

@@ -80,6 +80,31 @@
       "conteudo": "Só o conteúdo"
     }
   },
+  "arquivo": {
+    "titulo": "Conteúdo da memória em texto",
+    "abrir": "Abrir arquivo…",
+    "salvar": "Salvar arquivo",
+    "colar": "Colar texto…",
+    "copiar": "Copiar texto",
+    "colarTitulo": "Colar o conteúdo da memória",
+    "colarAjuda": "Uma linha por grupo de bytes, em hexadecimal: \"10: 3A FF 00\". O endereço com dois-pontos é opcional; sem ele, os bytes continuam de onde pararam. Use XX para uma célula indefinida e # ou ; para comentários. Abrir substitui a memória inteira: o que não for citado fica em 00.",
+    "colarCampo": "Texto com o conteúdo da memória",
+    "cancelar": "Cancelar",
+    "abrirColado": "Abrir na memória",
+    "aberto": "Nenhuma posição veio do texto: a memória toda ficou em 00. | 1 posição veio do texto; as outras ficaram em 00. | {n} posições vieram do texto; as outras ficaram em 00.",
+    "salvo": "Memória salva em {nome}.",
+    "copiado": "Conteúdo da memória copiado. Dá para colar num editor de texto ou de volta aqui.",
+    "onde": "Linha {linha}, coluna {coluna}:",
+    "semMudanca": "A memória não mudou.",
+    "erros": {
+      "byteInvalido": "“{trecho}” não é um byte. Use 2 dígitos hexadecimais (3A), XX ou 8 dígitos 0, 1 ou X.",
+      "enderecoInvalido": "“{trecho}” não é um endereço. Antes dos dois-pontos vem um endereço em hexadecimal, de 00 a FF.",
+      "foraDaMemoria": "“{trecho}” passa do endereço FF, o último da memória.",
+      "repetido": "a posição {endereco} já tinha recebido um valor antes.",
+      "muitoGrande": "O arquivo é grande demais para ser o conteúdo de uma memória de 256 bytes.",
+      "copiar": "O navegador não deixou copiar. Use Salvar arquivo."
+    }
+  },
   "transacao": {
     "titulo": "Transação passo a passo",
     "inicio": "Escolha um endereço no MAR e comece uma leitura ou uma escrita. Para escrever, ponha antes o dado no MDR.",

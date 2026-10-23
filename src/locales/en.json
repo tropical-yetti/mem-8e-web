@@ -80,6 +80,31 @@
       "conteudo": "Contents only"
     }
   },
+  "arquivo": {
+    "titulo": "Memory contents as text",
+    "abrir": "Open file…",
+    "salvar": "Save file",
+    "colar": "Paste text…",
+    "copiar": "Copy text",
+    "colarTitulo": "Paste the memory contents",
+    "colarAjuda": "One line per group of bytes, in hexadecimal: \"10: 3A FF 00\". The address with a colon is optional; without it, the bytes continue where they left off. Use XX for an undefined cell and # or ; for comments. Opening replaces the whole memory: anything not listed becomes 00.",
+    "colarCampo": "Text with the memory contents",
+    "cancelar": "Cancel",
+    "abrirColado": "Open in memory",
+    "aberto": "No location came from the text: the whole memory is now 00. | 1 location came from the text; the others are now 00. | {n} locations came from the text; the others are now 00.",
+    "salvo": "Memory saved to {nome}.",
+    "copiado": "Memory contents copied. You can paste them into a text editor or back here.",
+    "onde": "Line {linha}, column {coluna}:",
+    "semMudanca": "The memory did not change.",
+    "erros": {
+      "byteInvalido": "“{trecho}” is not a byte. Use 2 hex digits (3A), XX, or 8 digits 0, 1 or X.",
+      "enderecoInvalido": "“{trecho}” is not an address. Before the colon comes a hex address, from 00 to FF.",
+      "foraDaMemoria": "“{trecho}” goes past address FF, the last one in the memory.",
+      "repetido": "location {endereco} had already been given a value.",
+      "muitoGrande": "The file is too large to be the contents of a 256-byte memory.",
+      "copiar": "The browser did not allow copying. Use Save file."
+    }
+  },
   "transacao": {
     "titulo": "Step-by-step transaction",
     "inicio": "Pick an address in the MAR and start a read or a write. To write, put the data in the MDR first.",

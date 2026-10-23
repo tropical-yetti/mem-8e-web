@@ -33,6 +33,25 @@ Digite `C7` no **MDR** e use **Escrever C7 no endereço 3A**. Avance as fases e 
 
 Ligue ao mesmo tempo **MDR → BD**, **CS** e **RD**: a CPU e a memória dirigem o BD juntas. Os bits em que elas discordam ficam em **X**, em vermelho: é uma **contenção**. A página [Os quatro níveis](#/documentacao/niveis) explica o que isso significa.
 
+## 6. Guarde e compartilhe a memória {#arquivo}
+
+Embaixo da grade ficam os botões **Abrir arquivo**, **Salvar arquivo**, **Colar texto** e **Copiar texto**. O conteúdo da memória vira um texto simples, que dá para abrir em qualquer editor, mandar por e-mail ou pôr num roteiro de aula:
+
+```text
+# comentários começam com # ou ;
+00: 3A 10 C4 FF
+10: 2A XX 00
+F0: 1X0X0001
+```
+
+- Cada linha pode começar com um **endereço** em hexadecimal e dois-pontos. Sem ele, os bytes continuam de onde a linha anterior parou; o primeiro vai para `00`.
+- Cada **byte** tem 2 dígitos hexadecimais. `XX` é uma célula indefinida, e 8 dígitos `0`, `1` ou `X` (do bit 7 ao bit 0) descrevem uma célula com só alguns bits indefinidos.
+- **Abrir substitui a memória inteira:** as posições que o texto não cita ficam em `00`.
+- Um texto com erro **não muda nada**. A mensagem diz a linha e a coluna do problema: um byte inválido, um endereço depois de `FF` ou uma posição que aparece duas vezes.
+- **Salvar** escreve as 256 posições em 16 linhas de 16 bytes. Abrir esse arquivo de volta dá exatamente a mesma memória, inclusive os X.
+
+Os arquivos `.bin` do CPU-8E não abrem aqui: eles são programas, e o MEM-8E só mostra a memória, sem executar nada.
+
 ## Para continuar
 
 - [Como a memória funciona](#/documentacao/memoria): cada bloco, do endereço ao dado.

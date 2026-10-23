@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import ArquivoMemoria from '@/components/ArquivoMemoria.vue'
 import ControleTransacao from '@/components/ControleTransacao.vue'
 import GradeMemoria from '@/components/GradeMemoria.vue'
 import PainelCaixaPreta from '@/components/PainelCaixaPreta.vue'
@@ -48,6 +49,7 @@ onMounted(() => {
       </div>
       <div class="coluna">
         <GradeMemoria />
+        <ArquivoMemoria />
         <button type="button" class="reiniciar" @click="simulador.reiniciar()">
           {{ t('simulador.reiniciar') }}
         </button>
