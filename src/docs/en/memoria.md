@@ -27,6 +27,20 @@ The DB is shared: sometimes the CPU drives it, sometimes the memory. When nobody
 
 The CPU-8E hides these signals. Here you can set them by hand, even in wrong combinations, to see what happens.
 
+## RD and WR at the same time {#rd-wr}
+
+In the simulator, turning RD and WR on together gives neither one priority: the output buffers put the cell on the DB, and the same cell copies the DB.
+
+- If only the memory drives the DB, the cell writes its own value back, and nothing changes on the screen.
+- If the CPU also drives the DB (MDR → DB), there is contention: where the MDR and the cell disagree, the DB becomes X, and the cell stores the X.
+
+The model works this way on purpose, so that the conflict shows. **In real memories**, it is different:
+
+- in many asynchronous SRAMs, an active WR turns off the output buffers, and the chip only writes;
+- the CPU’s memory controller never turns RD and WR on at the same time, and that is the right way to avoid the conflict.
+
+The “What if RD and WR are turned on together?” experiment, under the **“What if…?” experiments** button in the simulator, shows both cases step by step.
+
 ## The array: row × column {#matriz}
 
 The 256 locations are not in a single line. They form an **array of 16 rows by 16 columns**, and the address is split in two:

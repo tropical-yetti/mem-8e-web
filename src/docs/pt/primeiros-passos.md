@@ -57,6 +57,7 @@ Os arquivos `.bin` do CPU-8E não abrem aqui: eles são programas, e o MEM-8E s�
 - [Como a memória funciona](#/documentacao/memoria): cada bloco, do endereço ao dado.
 - [Em portas lógicas](#/documentacao/portas): o mesmo circuito, porta por porta.
 - [Roteiro de aula](#/documentacao/roteiro): exercícios para fazer no simulador.
+- O botão **Experimentos “e se…?”**, no topo do simulador: cinco situações que dão errado de propósito, com pergunta, passos e explicação.
 
 O botão **Ver o guia**, na página do simulador, mostra de novo os balões de apresentação. Cada seção também tem um botão **?** com a explicação só daquela parte, e passar o mouse (ou o foco) sobre uma sigla mostra o nome completo dela.
 

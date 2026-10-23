@@ -43,8 +43,9 @@ const FASES_QUE_ERRAM = ['captura', 'fimEscrita']
 const explicacao = computed(() => {
   const f = fases.value
   if (!f || !faseAtual.value) return t('transacao.inicio')
-  const variante =
-    errada.value && FASES_QUE_ERRAM.includes(faseAtual.value) ? 'textoErrado' : 'texto'
+  let variante = errada.value && FASES_QUE_ERRAM.includes(faseAtual.value) ? 'textoErrado' : 'texto'
+  // Errou porque o endereço mudou no meio da leitura (ADR 0005), e não por falta de espera.
+  if (variante === 'textoErrado' && simulador.linhaDoTempo.mudanca) variante = 'textoTrocado'
   return t(`transacao.${f.tipo}.${faseAtual.value}.${variante}`, valores.value)
 })
 

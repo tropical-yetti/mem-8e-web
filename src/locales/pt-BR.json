@@ -125,7 +125,8 @@
       "captura": {
         "nome": "MDR captura",
         "texto": "O MDR copia o que está no BD: MDR = {mdr}.",
-        "textoErrado": "A CPU não espera a memória: no fim de T2 o MDR copia o BD, mas o dado ainda não ficou válido. MDR = {mdr}: a leitura deu errado. Ligue os wait states ou use uma memória mais rápida."
+        "textoErrado": "A CPU não espera a memória: no fim de T2 o MDR copia o BD, mas o dado ainda não ficou válido. MDR = {mdr}: a leitura deu errado. Ligue os wait states ou use uma memória mais rápida.",
+        "textoTrocado": "O endereço mudou no meio da leitura, e a contagem de t_AA recomeçou: o dado do novo endereço não ficou válido a tempo. MDR = {mdr}: a leitura deu errado."
       },
       "liberacao": {
         "nome": "Liberação",
@@ -236,13 +237,15 @@
       "leitura": "O dado fica válido em {valido}, e a CPU o captura em {captura}. Com {esperas}, o ciclo de leitura leva {fim} ({ciclos} ciclos de clock).",
       "leituraErrada": "Leitura errada: a CPU captura em {captura}, antes de o dado ficar válido ({valido}). O MDR fica com X.",
       "escrita": "A célula precisa de um pulso de WR de pelo menos {twp}; com {esperas}, o pulso dura {pulso}, e o ciclo de escrita leva {fim} ({ciclos} ciclos de clock).",
-      "escritaErrada": "Escrita errada: o pulso de WR dura só {pulso}, menos que os {twp} de que a célula precisa. Ela fica indefinida (X)."
+      "escritaErrada": "Escrita errada: o pulso de WR dura só {pulso}, menos que os {twp} de que a célula precisa. Ela fica indefinida (X).",
+      "trocaEndereco": "O endereço mudou de {de} para {para} em {t}, e a contagem de t_AA recomeçou dali."
     },
     "marcas": {
       "dadoValido": "dado válido ({t})",
       "captura": "MDR captura ({t})",
       "pulsoMinimo": "t_WP cumprido ({t})",
-      "fimPulso": "WR desliga ({t})"
+      "fimPulso": "WR desliga ({t})",
+      "mudancaEndereco": "MAR muda ({t})"
     },
     "esperas": "nenhum wait state | 1 wait state | {n} wait states",
     "ciclos": "nenhum ciclo | 1 ciclo | {n} ciclos"
@@ -300,6 +303,80 @@
       }
     },
     "lerMais": "Ler mais na documentação"
+  },
+  "experimentos": {
+    "abrir": "Experimentos “e se…?”",
+    "titulo": "Experimentos “e se…?”",
+    "intro": "Cada experimento põe o simulador numa situação que dá errado de propósito. Pense no que vai acontecer, faça o passo pedido e veja o resultado. Ao sair, tudo volta a ser como estava.",
+    "fechar": "Fechar",
+    "pergunta": "Pense antes",
+    "passo": "Passo {n} de {total}",
+    "resultado": "O que aconteceu",
+    "memoriaReal": "Em memórias reais:",
+    "aguardando": "Faça o que o passo pede: o balão avança sozinho.",
+    "vamosVer": "Vamos ver",
+    "proximo": "Próximo",
+    "recomecar": "Recomeçar",
+    "repetir": "Repetir",
+    "concluir": "Sair",
+    "sair": "Sair e desfazer",
+    "itens": {
+      "contencao": {
+        "titulo": "E se a CPU e a memória dirigirem o BD juntas?",
+        "resumo": "Contenção no barramento de dados: dois lados pondo valores diferentes no mesmo fio.",
+        "pergunta": "A memória está lendo o endereço 3A: CS e RD estão ligados, e ela põe 5A no BD. O MDR tem 3C. O que acontece com o BD se a CPU também puser o MDR no barramento?",
+        "passos": {
+          "ligarMdr": "Ligue o botão MDR → BD, no painel."
+        },
+        "resultado": "O BD mostra XX: em binário, 0XX1 1XX0. Onde o MDR (0011 1100) e a memória (0101 1010) concordam, o fio tem o valor dos dois; onde discordam, um lado puxa para 1 e o outro para 0, e não dá para saber o que o fio vale. É uma contenção. A célula e o MDR não mudaram: ninguém guardou o BD.",
+        "real": "dois circuitos dirigindo o mesmo fio com valores opostos formam quase um curto-circuito: a corrente sobe, os chips esquentam e podem se danificar. Por isso as saídas para o barramento são tri-state, e o controlador da CPU garante que só um lado dirige o BD de cada vez."
+      },
+      "rdWr": {
+        "titulo": "E se RD e WR forem ligados juntos?",
+        "resumo": "A memória recebe ao mesmo tempo a ordem de ler e a de escrever.",
+        "pergunta": "A memória está lendo o endereço 3A, que guarda 5A: CS e RD estão ligados. O MDR tem 3C. O que acontece se o WR também for ligado?",
+        "passos": {
+          "ligarWr": "Ligue o WR, deixando o RD ligado.",
+          "nadaMudou": "Parece que nada aconteceu: a célula 3A continua com 5A. Com RD ligado, a memória põe a própria célula no BD; com WR ligado, a mesma célula copia o BD. Ela regravou o próprio valor. Agora veja o que muda quando a CPU também dirige o BD.",
+          "ligarMdr": "Ligue o MDR → BD."
+        },
+        "resultado": "A célula 3A ficou com XX (0XX1 1XX0). A CPU pôs 3C no BD e a memória pôs 5A: nos bits em que eles discordam, o BD ficou indefinido, e o WR fez a célula guardar esse X. O valor antigo se perdeu, e o novo também não foi gravado. Mesmo desligando tudo, a célula continua estragada.",
+        "real": "em muitas SRAMs assíncronas, WR ativo desliga os buffers de saída: o chip só escreve, e a célula receberia o 3C da CPU, sem conflito. Além disso, o controlador de memória da CPU nunca liga RD e WR ao mesmo tempo. O simulador não dá prioridade a nenhum dos dois de propósito, para o conflito ficar visível."
+      },
+      "trocaEndereco": {
+        "titulo": "E se o endereço mudar no meio da leitura?",
+        "resumo": "O MAR muda depois que a leitura começou, antes de o MDR capturar o dado.",
+        "pergunta": "A CPU vai ler o endereço 10, que guarda 11. O endereço 20 guarda 22. Se o MAR mudar para 20 no meio da leitura, o que o MDR recebe: 11, 22 ou outra coisa?",
+        "passos": {
+          "comecarLeitura": "Clique em Ler o endereço 10.",
+          "ateSaida": "Clique em Próxima fase até a fase “RD liga”: o dado de 10 aparece no BD.",
+          "trocarMar": "Agora, no meio da leitura, digite 20 no MAR (e Enter). A leitura não para: a próxima fase já usa o novo endereço.",
+          "ateFim": "Clique em Próxima fase até o fim e acompanhe o diagrama de tempo."
+        },
+        "resultado": "O MDR ficou com X: nem 11, nem 22. A troca do MAR fez a contagem de t_AA (45 ns) recomeçar, e o dado do endereço 20 só ficaria válido depois da captura, em 60 ns. A CPU não percebeu a troca: os wait states foram decididos no começo do ciclo. Clique em Repetir e troque o MAR logo depois de começar a leitura, antes de “CS liga”: aí o novo dado chega a tempo.",
+        "resultadoATempo": "O MDR ficou com 22, o dado do endereço 20, e a leitura parece certa. A troca veio cedo: mesmo com a contagem de t_AA recomeçando, o novo dado ficou válido antes da captura. Mas a CPU pediu o endereço 10 e recebeu o conteúdo de outro, sem nenhum aviso. É por isso que o endereço precisa ficar parado durante todo o ciclo.",
+        "resultadoDepois": "O MDR ficou com 11: a troca veio depois da captura, e o que já foi lido não muda. O BD ainda mostrou o dado de 20 por um instante, mas ninguém o guardou. Clique em Repetir e troque o MAR antes de o MDR capturar."
+      },
+      "semEspera": {
+        "titulo": "E se a CPU não esperar uma memória lenta?",
+        "resumo": "Uma memória de 120 ns e uma CPU de 50 MHz que captura o dado sem wait states.",
+        "pergunta": "A memória agora é lenta: o dado só fica válido 120 ns depois do endereço. A CPU, a 50 MHz, captura no fim de T2, em 40 ns, e está configurada para não esperar. O que o MDR vai receber?",
+        "passos": {
+          "lerAteFim": "Clique em Ler o endereço 3A e avance as fases até o fim."
+        },
+        "resultado": "O MDR ficou com X. A CPU capturou o BD em 40 ns, mas o dado só ficaria válido em 120 ns: no diagrama de tempo, a marca da captura vem antes da marca do dado válido. Ligue “A CPU espera a memória” e leia de novo: com wait states, o ciclo fica mais longo, e a leitura dá certo.",
+        "real": "quem cuida disso é o controlador de memória. Ele conhece os tempos da memória (nos módulos de computador, eles vêm gravados no próprio módulo) e insere as esperas necessárias. Tempos configurados curtos demais deixam o computador instável, com erros de leitura."
+      },
+      "csDesligado": {
+        "titulo": "E se o CS estiver desligado?",
+        "resumo": "RD ligado, mas a memória não foi selecionada.",
+        "pergunta": "O MAR tem 3A, e a célula 3A guarda 5A. Se a CPU ligar o RD, mas não o CS, o 5A aparece no BD?",
+        "passos": {
+          "ligarRd": "Ligue o RD e deixe o CS desligado."
+        },
+        "resultado": "Não: o BD continua solto (Z), e a grade não acende nenhuma linha nem coluna. Sem o CS, os decodificadores ficam desabilitados, com todas as saídas em 0, e os buffers de saída só ligam com CS · RD = 1. Se o MDR capturasse agora, receberia X: um fio solto pode estar em qualquer valor. O CS é o “chip select”: num computador com vários chips de memória, só o escolhido responde, e os outros ficam calados no barramento."
+      }
+    }
   },
   "siglas": {
     "be": {

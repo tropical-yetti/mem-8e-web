@@ -27,6 +27,20 @@ O BD é compartilhado: ora a CPU o dirige, ora a memória. Quando ninguém dirig
 
 O CPU-8E esconde esses sinais. Aqui você pode ligá-los à mão, inclusive em combinações erradas, para ver o que acontece.
 
+## RD e WR ao mesmo tempo {#rd-wr}
+
+No simulador, ligar RD e WR juntos não dá prioridade a nenhum dos dois: os buffers de saída põem a célula no BD, e a mesma célula copia o BD.
+
+- Se só a memória dirige o BD, a célula regrava o próprio valor, e nada muda na tela.
+- Se a CPU também dirige o BD (MDR → BD), há contenção: onde o MDR e a célula discordam, o BD fica em X, e a célula guarda o X.
+
+O modelo é assim de propósito, para o conflito ficar visível. **Em memórias reais**, é diferente:
+
+- em muitas SRAMs assíncronas, WR ativo desliga os buffers de saída, e o chip só escreve;
+- o controlador de memória da CPU nunca liga RD e WR ao mesmo tempo, e esse é o jeito certo de evitar o conflito.
+
+O experimento “E se RD e WR forem ligados juntos?”, no botão **Experimentos “e se…?”** do simulador, mostra os dois casos passo a passo.
+
 ## A matriz: linha × coluna {#matriz}
 
 As 256 posições não ficam numa fila. Elas formam uma **matriz de 16 linhas por 16 colunas**, e o endereço se divide em dois:

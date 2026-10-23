@@ -31,6 +31,10 @@ Exercícios para fazer no simulador, do mais simples ao mais elaborado. As respo
 1. No decodificador de linha, que entradas recebe a porta da saída `5`?
 2. Ponha `3A` no MAR e ligue o CS. No **Bit do endereço**, escolha D0: a linha de bit vale 0 ou 1? Confira com o valor de `M[3A]`.
 
+## 6. Experimentos “e se…?” {#ex-experimentos}
+
+O botão **Experimentos “e se…?”**, no topo do simulador, traz cinco situações que dão errado de propósito: contenção no BD, RD e WR juntos, endereço trocado no meio da leitura, CPU que não espera uma memória lenta e CS desligado. Cada um começa com uma pergunta: peça para a turma responder antes de fazer o passo. Ao sair, o simulador volta a ser como estava.
+
 ## Respostas {#respostas}
 
 **1.** (1) `C4`: linha C, coluna 4; `0F`: linha 0, coluna F. (2) A0 a A3 movem a coluna (1, 2, 4 e 8 colunas); A4 a A7 movem a linha. (3) 16 endereços: `30` a `3F`.

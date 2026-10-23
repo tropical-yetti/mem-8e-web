@@ -7,6 +7,25 @@ as versões seguem o [versionamento semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### 2026-10-23 — Experimentos "e se…?"
+
+- Botão **Experimentos "e se…?"**, ao lado de "Ver o guia", com cinco
+  experimentos guiados (ADR 0005): contenção no BD, RD e WR juntos, endereço
+  trocado no meio da leitura, CPU que não espera uma memória lenta e CS
+  desligado.
+- Cada experimento monta a situação, faz uma pergunta, conduz os passos (o
+  balão avança sozinho quando o passo é feito) e explica o resultado. Os que
+  têm diferença para chips de verdade trazem uma observação sobre memórias
+  reais. Sair (ou Esc) devolve o simulador ao estado de antes.
+- Trocar o MAR no meio de uma leitura não cancela mais a transação: a fase
+  seguinte já usa o novo endereço, e a contagem de t_AA recomeça. O diagrama
+  de tempo marca a troca, e o MDR captura X se o novo dado não chegar a
+  tempo. Numa escrita, mudar o MAR continua cancelando.
+- O balão do guia virou uma base comum ao guia e aos experimentos.
+- A página "Como a memória funciona" explica RD e WR juntos e como as
+  memórias reais tratam isso; o roteiro de aula e os primeiros passos citam
+  os experimentos.
+
 ### 2026-10-22 — Memória em arquivo de texto
 
 - Botões **Abrir arquivo**, **Salvar arquivo**, **Colar texto** e **Copiar
